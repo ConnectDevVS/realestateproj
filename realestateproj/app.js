@@ -3,6 +3,9 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+const env = process.env.NODE_ENV || "development";
+const envPath = `.env.${env}`;
+var dotenConfig = require("dotenv").config({ path: envPath });
 
 var indexRouter = require("./routes/index");
 /*************ROUTES FOR VERSION 1 ************/
@@ -33,6 +36,7 @@ app.use("/v1/users", v1UserRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
+    console.log(dotenConfig);
     next(createError(404));
 });
 
