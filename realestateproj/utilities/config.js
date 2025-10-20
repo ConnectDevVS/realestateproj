@@ -4,4 +4,10 @@
  * Purpose    : Holds Configuration Settings for the App
  */
 
-var dotenConfig = require("dotenv").config({ path: `.env.${process.env.NODE_ENV}` });
+const config = {};
+
+var envFunc = function returnConfigForEnv() {
+    return config;
+};
+
+module.exports = envFunc();
