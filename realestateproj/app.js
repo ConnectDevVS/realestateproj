@@ -9,8 +9,8 @@ var dotenConfig = require("dotenv").config({ path: envPath });
 
 var indexRouter = require("./routes/index");
 /*************ROUTES FOR VERSION 1 ************/
-var v1AuthRouter = require("./routes/v1/auth");
-var v1UserRouter = require("./routes/v1/users");
+var v1AuthRouter = require("./routes/api/v1/auth");
+var v1UserRouter = require("./routes/api/v1/users");
 
 /*************ROUTES FOR VERSION 1 ************/
 
@@ -31,8 +31,8 @@ app.use("/", indexRouter);
 /*************ROUTES FOR VERSION 1 ************/
 
 app.use("/", indexRouter);
-app.use("/auth", v1AuthRouter);
-app.use("/v1/users", v1UserRouter);
+app.use("/api/v1/auth", v1AuthRouter);
+app.use("/api/v1/users", v1UserRouter);
 
 /*********************************************/
 
