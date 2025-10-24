@@ -6,6 +6,8 @@ var logger = require("morgan");
 const env = process.env.NODE_ENV || "development";
 const envPath = `.env.${env}`;
 var dotenConfig = require("dotenv").config({ path: envPath });
+const connectDB = require("./db/connection");
+const tenantMiddleware = require("./middlewares/tenant.middleware");
 
 var indexRouter = require("./routes/index");
 /*************ROUTES FOR VERSION 1 ************/
@@ -15,6 +17,7 @@ var v1UserRouter = require("./routes/api/v1/users");
 /*************ROUTES FOR VERSION 1 ************/
 
 var app = express();
+connectDB().then(() => console.log("🚀DB connection establised"));
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -26,6 +29,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
+// Apply tenant middleware globally (before routes)
+app.use(tenantMiddleware);
 app.use("/", indexRouter);
 
 /*************ROUTES FOR VERSION 1 ************/
@@ -36,9 +41,8 @@ app.use("/api/v1/users", v1UserRouter);
 
 /*********************************************/
 
-// catch 404 and forward to error handler
+//catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    console.log(dotenConfig);
     next(createError(404));
 });
 

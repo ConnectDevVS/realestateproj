@@ -5,31 +5,51 @@ let responseBuilder = require("../../../utilities/response-builder");
 const ERROR = require("../../../utilities/error");
 const CONSTANTS = require("../../../utilities/constants");
 
+const {
+    findUsersForTenant,
+    createUserForTenant,
+    findUserWithUserName,
+} = require("../../../services/user.services");
+
 router.get("/", function (req, res, next) {
     res.json({ "CONSTANTS.SUCCESS": "yay" });
 });
 
-router.post("/", function (req, res, next) {
+router.post("/", async (req, res, next) => {
     let reqBody = {
         name: req.body.name,
+        username: req.body.username,
         role: req.body.role,
         phone_no: req.body.phone_no,
         email: req.body.email,
     };
-    let { name, role, phone_no, email } = reqBody;
+    let { name, role, phone_no, email, username } = reqBody;
 
-    if (helper.isEmpty(name) || helper.isEmpty(role) || helper.isEmpty(email)) {
+    if (
+        helper.isEmpty(username) ||
+        helper.isEmpty(name) ||
+        helper.isEmpty(role) ||
+        helper.isEmpty(email)
+    ) {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
             CONSTANTS.MISSING_PARAMETERS
         );
     }
-    if (helper.isEmpty(phone_no)) {
-        phone_no = "";
-    }
 
-    return responseBuilder.sendSuccessResponse(res, reqBody);
+    const existingUser = await findUserWithUserName(username);
+    if (existingUser && existingUser.username === username) {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.USERNAME_EXISTS,
+            CONSTANTS.USERNAME_EXISTS
+        );
+    }
+    const user = await createUserForTenant(req.tenantId, reqBody);
+    if (user) {
+        return responseBuilder.sendSuccessResponse(res, user);
+    }
 });
 
 module.exports = router;

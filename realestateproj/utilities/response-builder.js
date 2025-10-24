@@ -2,24 +2,24 @@ const constants = require("../utilities/constants");
 
 function sendSuccessResponse(res, data) {
     let response = {
-        status: true,
-        results: data,
+        success: true,
+        data: data,
     };
-    res.status(200).json(data);
+    res.status(200).json(response);
     return;
 }
 
 function sendErrorResponse(res, code, msg, obj) {
     let errObj = {
-        error_code: code,
-        error_msg: msg,
+        error_code: code || 500,
+        error_msg: msg || constants.SOMETHING_WENT_WRONG,
     };
     if (obj) {
         errObj.error_obj = obj;
     }
 
     let response = {
-        status: false,
+        success: false,
         error: errObj,
     };
     res.status(400).json(response);
@@ -28,7 +28,7 @@ function sendErrorResponse(res, code, msg, obj) {
 
 function sendServerError(res, err) {
     let response = {
-        status: false,
+        success: false,
         error: {
             error_msg: constants.SERVER_ERROR,
             error: err,

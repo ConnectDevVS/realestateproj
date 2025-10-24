@@ -1,6 +1,16 @@
 const roles = {
-    SUPER_ADMIN: "SUPER-ADMIN",
-    MOBILE_APP_USER: "MOBILE_APP_USER",
+    SUPER_ADMIN: "SUPER_ADMIN",
+    ADMIN: "ADMIN",
+    SUPERVISOR: "SUPERVISOR",
+    ACCOUNTS: "ACCOUNTS",
+    SUB_CONTRACTOR: "SUB_CONTRACTOR",
+    PURCHASE_MANAGER: "PURCHASE_MANAGER",
+    CUSTOMER: "CUSTOMER",
+};
+
+const userStatus = {
+    ACTIVE: "ACTIVE",
+    INACTIVE: "INACTIVE",
 };
 
 const scope = {
@@ -10,5 +20,5 @@ const scope = {
 
 module.exports = {
     roles: roles,
-    scope: scope,
+    userStatus: userStatus,
 };

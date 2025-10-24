@@ -1,4 +1,4 @@
-/* File Name  : constants.js
+/* File Name  : error.js
  * Created By : Vishnu Satheesh
  * Date       : Oct 20 2025
  * Purpose    : Holds common error codes for the App
@@ -10,5 +10,7 @@ module.exports = Object.freeze({
     NO_ERROR: 0,
     SERVER_ERROR: 100,
     MISSING_PARAMETERS: 101,
+    USERNAME_EXISTS: 102,
     NOT_VALID_ID: 103,
+    SOMETHING_WENT_WRONG: 500,
 });

@@ -10,9 +10,13 @@
  */
 
 module.exports = Object.freeze({
-    SUCCESS: "Sucess",
+    SUCCESS: "sucess",
+    ERROR: "error",
+    FAILED: "failed",
+    SOMETHING_WENT_WRONG: "Something went wrong",
     SERVER_ERROR: "Server error occured",
     MISSING_PARAMETERS: "Missing parameters",
+    USERNAME_EXISTS: "Username ealready exist",
     NOT_VALID_ID: "Not a valid id",
     UPLOAD_FAILED: "Upload failed",
     UNSUPPORTED_MIME_TYPE: "Only images are allowed, unsupported file type",
