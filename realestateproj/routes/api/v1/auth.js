@@ -4,16 +4,16 @@ let helper = require("../../../utilities/helper");
 let responseBuilder = require("../../../utilities/response-builder");
 const ERROR = require("../../../utilities/error");
 const CONSTANTS = require("../../../utilities/constants");
+const { findUserWithUserName } = require("../../../services/user.services");
 
-router.post("/setpassword", function (req, res, next) {
+router.post("/set-password", async (req, res, next) => {
     let reqBody = {
-        phone_no: req.body.ph_no,
+        username: req.body.username,
         password: req.body.password,
-        otp: req.body.otp,
     };
-    let { phone_no, password, otp } = reqBody;
+    let { username, password } = reqBody;
 
-    if (helper.isEmpty(phone_no) || helper.isEmpty(password) || helper.isEmpty(otp)) {
+    if (helper.isEmpty(username) || helper.isEmpty(password)) {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
@@ -21,7 +21,21 @@ router.post("/setpassword", function (req, res, next) {
         );
     }
 
-    return responseBuilder.sendSuccessResponse(res, { user: "new user" });
+    let existingUser = await findUserWithUserName(username);
+    existingUser.password = password;
+
+    try {
+        await existingUser.save();
+        return responseBuilder.sendSuccessResponse(res, existingUser);
+    } catch (err) {
+        console.log(err);
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.FAILED_TO_SET_PASSWORD,
+            CONSTANTS.FAILED_TO_SET_PASSWORD,
+            err
+        );
+    }
 });
 
 module.exports = router;

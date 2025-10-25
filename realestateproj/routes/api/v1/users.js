@@ -11,10 +11,6 @@ const {
     findUserWithUserName,
 } = require("../../../services/user.services");
 
-router.get("/", function (req, res, next) {
-    res.json({ "CONSTANTS.SUCCESS": "yay" });
-});
-
 router.post("/", async (req, res, next) => {
     let reqBody = {
         name: req.body.name,
@@ -49,6 +45,33 @@ router.post("/", async (req, res, next) => {
     const user = await createUserForTenant(req.tenantId, reqBody);
     if (user) {
         return responseBuilder.sendSuccessResponse(res, user);
+    }
+});
+
+router.post("/check-user", async (req, res, next) => {
+    let reqBody = {
+        username: req.body.username,
+    };
+    let { username } = reqBody;
+
+    if (helper.isEmpty(username)) {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.MISSING_PARAMETERS,
+            CONSTANTS.MISSING_PARAMETERS
+        );
+    }
+
+    const existingUser = await findUserWithUserName(username);
+    var data = {};
+    if (existingUser && existingUser.username === username) {
+        return responseBuilder.sendSuccessResponse(res, null);
+    } else {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.USERNAME_DOESNT_EXISTS,
+            CONSTANTS.USERNAME_DOESNT_EXISTS
+        );
     }
 });
 

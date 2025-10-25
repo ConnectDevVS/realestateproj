@@ -3,7 +3,7 @@ const constants = require("../utilities/constants");
 function sendSuccessResponse(res, data) {
     let response = {
         success: true,
-        data: data,
+        ...(data && { data }), // add data object if data is non-null
     };
     res.status(200).json(response);
     return;
