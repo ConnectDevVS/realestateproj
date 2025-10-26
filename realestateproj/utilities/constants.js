@@ -19,7 +19,6 @@ module.exports = Object.freeze({
     USERNAME_EXISTS: "Username ealready exist",
     USERNAME_DOESNT_EXISTS: "User does not exist",
     FAILED_TO_SET_PASSWORD: "Failed to set password",
-    NOT_VALID_ID: "Not a valid id",
-    UPLOAD_FAILED: "Upload failed",
-    UNSUPPORTED_MIME_TYPE: "Only images are allowed, unsupported file type",
+    INVALID_CREDENTIALS: "Invalid credentials",
+    FAILED_TO_LOGIN: "Failed to login",
 });

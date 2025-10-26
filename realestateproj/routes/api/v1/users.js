@@ -4,7 +4,8 @@ let helper = require("../../../utilities/helper");
 let responseBuilder = require("../../../utilities/response-builder");
 const ERROR = require("../../../utilities/error");
 const CONSTANTS = require("../../../utilities/constants");
-
+const { sendOTP } = require("../../../services/email.services");
+const { generateOtp } = require("../../../utilities/otp");
 const {
     findUsersForTenant,
     createUserForTenant,
@@ -64,8 +65,27 @@ router.post("/check-user", async (req, res, next) => {
 
     const existingUser = await findUserWithUserName(username);
     var data = {};
-    if (existingUser && existingUser.username === username) {
-        return responseBuilder.sendSuccessResponse(res, null);
+    if (existingUser && existingUser.username === username && existingUser.email) {
+        try {
+            let otp = generateOtp();
+            existingUser.otp = otp;
+
+            sendOTP(otp, existingUser.email);
+            await existingUser.save();
+            return responseBuilder.sendSuccessResponse(
+                res,
+                existingUser,
+                "Otp will be removed from API response "
+            );
+        } catch (err) {
+            console.log(err);
+            return responseBuilder.sendErrorResponse(
+                res,
+                ERROR.FAILED_TO_SET_PASSWORD,
+                CONSTANTS.FAILED_TO_SET_PASSWORD,
+                err
+            );
+        }
     } else {
         return responseBuilder.sendErrorResponse(
             res,

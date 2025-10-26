@@ -26,17 +26,10 @@ const UserSchema = createBaseSchema(
         },
         phone_no: { type: String, default: null },
         email: { type: String, default: null, trim: true },
+        access_token: { type: String, default: null },
         password: {
             type: String,
-            validate: {
-                validator: function (value) {
-                    return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/.test(
-                        value
-                    );
-                },
-                message:
-                    "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character.",
-            },
+            minlength: 8,
         },
         otp: {
             type: String,
@@ -59,7 +52,7 @@ UserSchema.index({ tenantId: 1, username: 1 }, { unique: true });
 
 // Hide secure fields
 UserSchema.plugin(hideSecureFieldsPlugin, {
-    fields: ["otp", "password", "__v", "createdAt", "updatedAt", "tenantId"],
+    fields: ["password", "__v", "createdAt", "updatedAt", "tenantId"],
 });
 
 // Add tenant enforcement plugin
@@ -68,8 +61,8 @@ UserSchema.plugin(tenantPlugin);
 // hash password before saving
 UserSchema.pre("save", async function (next) {
     if (!this.isModified("password")) return next();
-
     this.password = await bcrypt.hash(this.password, 12);
+
     next();
 });
 

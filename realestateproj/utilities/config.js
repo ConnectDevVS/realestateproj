@@ -4,10 +4,7 @@
  * Purpose    : Holds Configuration Settings for the App
  */
 
-const config = {};
-
-var envFunc = function returnConfigForEnv() {
-    return config;
-};
-
-module.exports = envFunc();
+module.exports = Object.freeze({
+    JWT_EXPIRES_IN: "1d",
+    JWT_SECRET: "HomesyAPIs",
+});

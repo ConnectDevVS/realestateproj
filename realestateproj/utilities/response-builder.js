@@ -1,8 +1,9 @@
 const constants = require("../utilities/constants");
 
-function sendSuccessResponse(res, data) {
+function sendSuccessResponse(res, data, message = null) {
     let response = {
         success: true,
+        ...(message && { message }), // add message object if message is non-null
         ...(data && { data }), // add data object if data is non-null
     };
     res.status(200).json(response);
