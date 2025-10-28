@@ -52,7 +52,7 @@ UserSchema.index({ tenantId: 1, username: 1 }, { unique: true });
 
 // Hide secure fields
 UserSchema.plugin(hideSecureFieldsPlugin, {
-    fields: ["password", "__v", "createdAt", "updatedAt", "tenantId"],
+    fields: ["password", "__v", "createdAt", "updatedAt"],
 });
 
 // Add tenant enforcement plugin

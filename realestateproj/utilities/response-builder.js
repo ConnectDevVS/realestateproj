@@ -1,4 +1,5 @@
 const constants = require("../utilities/constants");
+const helper = require("./helper");
 
 function sendSuccessResponse(res, data, message = null) {
     let response = {
@@ -15,6 +16,10 @@ function sendErrorResponse(res, code, msg, obj) {
         error_code: code || 500,
         error_msg: msg || constants.SOMETHING_WENT_WRONG,
     };
+    if (obj instanceof Error) {
+        obj = { message: obj.message };
+    }
+
     if (obj) {
         errObj.error_obj = obj;
     }
