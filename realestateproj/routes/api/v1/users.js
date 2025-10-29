@@ -14,7 +14,6 @@ const {
     findUserById,
     findUserAndUpdateById,
 } = require("../../../services/user.services");
-const { findByIdAndUpdate } = require("../../../models/user.model");
 
 router.get("/", async (req, res, next) => {
     const { username, name, email, role, status } = req.query;

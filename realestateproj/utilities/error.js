@@ -17,5 +17,6 @@ module.exports = Object.freeze({
     FAILED_TO_LOGIN: 106,
     USER_NOT_FOUND: 107,
     FAILED_TO_UPDATE_USER: 108,
+    PROJECT_NAME_EXISTS: 109,
     SOMETHING_WENT_WRONG: 500,
 });

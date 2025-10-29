@@ -22,5 +22,6 @@ module.exports = Object.freeze({
     INVALID_CREDENTIALS: "Invalid credentials",
     FAILED_TO_LOGIN: "Failed to login",
     USER_NOT_FOUND: "User not found",
+    PROJECT_NAME_EXISTS: "Project name already exists",
     FAILED_TO_UPDATE_USER: "Failed to update user",
 });

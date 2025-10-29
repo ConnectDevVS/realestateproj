@@ -8,9 +8,18 @@ const roles = {
     CUSTOMER: "CUSTOMER",
 };
 
-const userStatus = {
+const status = {
     ACTIVE: "ACTIVE",
     INACTIVE: "INACTIVE",
+};
+const currency = {
+    INR: "INR",
+};
+const projectStatus = {
+    ONGOING: "ONGOING",
+    ONHOLD: "ONHOLD",
+    COMPLETED: "COMPLETED",
+    ABANDONED: "ABANDONED",
 };
 
 const scope = {
@@ -20,5 +29,7 @@ const scope = {
 
 module.exports = {
     roles: roles,
-    userStatus: userStatus,
+    status: status,
+    projectStatus: projectStatus,
+    currency: currency,
 };
