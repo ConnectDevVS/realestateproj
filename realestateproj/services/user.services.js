@@ -1,5 +1,6 @@
 const UserModel = require("../models/user.model");
 const helper = require("../utilities/helper");
+const { status: userStatus } = require("../utilities/roles");
 
 async function findUserWithUserName(username, tenantId) {
     return await UserModel.findOne({ username: username }, null, { tenantId });
@@ -21,9 +22,10 @@ async function createUserForTenant(tenantId, userData) {
  * @param {Object} filters - Example: { username, name, email, role, status }
  * @returns {Promise<Array>} List of users matching filters
  */
-async function findUsersByFilters(tenantId, filters) {
+async function findUsersForTenantByFilters(tenantId, filters) {
     const query = Object.fromEntries(Object.entries(filters).filter(([_, value]) => value != null));
     query.tenantId = tenantId;
+    query.status = userStatus.ACTIVE;
     return await UserModel.find(query, null, { tenantId });
 }
 
@@ -68,7 +70,7 @@ module.exports = {
     findUsersForTenant,
     createUserForTenant,
     findUserWithUserName,
-    findUsersByFilters,
+    findUsersForTenantByFilters,
     findUserById,
     findUserAndUpdateById,
 };

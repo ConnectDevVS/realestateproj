@@ -7,6 +7,7 @@ const CONSTANTS = require("../../../utilities/constants");
 const {
     createProjectForTenant,
     findProjectWithTitle,
+    findProjetcsForTenantByFilters,
 } = require("../../../services/project.services");
 
 router.post("/", async (req, res, next) => {
@@ -63,6 +64,15 @@ router.post("/", async (req, res, next) => {
             CONSTANTS.FAILED_TO_UPDATE_USER,
             err
         );
+    }
+});
+
+router.get("/", async (req, res, next) => {
+    const { p_status, title } = req.query;
+
+    const projects = await findProjetcsForTenantByFilters(req.tenantId, { p_status, title });
+    if (projects) {
+        return responseBuilder.sendSuccessResponse(res, projects);
     }
 });
 

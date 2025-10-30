@@ -10,20 +10,19 @@ const {
     findUsersForTenant,
     createUserForTenant,
     findUserWithUserName,
-    findUsersByFilters,
+    findUsersForTenantByFilters,
     findUserById,
     findUserAndUpdateById,
 } = require("../../../services/user.services");
 
 router.get("/", async (req, res, next) => {
-    const { username, name, email, role, status } = req.query;
+    const { username, name, email, role } = req.query;
 
-    const users = await findUsersByFilters(req.tenantId, {
+    const users = await findUsersForTenantByFilters(req.tenantId, {
         username,
         name,
         email,
         role,
-        status,
     });
     if (users) {
         return responseBuilder.sendSuccessResponse(res, users);

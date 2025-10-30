@@ -12,13 +12,12 @@ const ProjectSchema = createBaseSchema(
         p_status: {
             type: String,
             enum: [
-                projectStatus.ACTIVE,
                 projectStatus.ONGOING,
                 projectStatus.ONHOLD,
                 projectStatus.COMPLETED,
                 projectStatus.ABANDONED,
             ],
-            default: projectStatus.ACTIVE,
+            default: projectStatus.ONGOING,
         },
         customer: { type: String, required: true },
         location: { type: String, required: true },
