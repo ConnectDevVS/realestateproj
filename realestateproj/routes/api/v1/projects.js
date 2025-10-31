@@ -8,6 +8,7 @@ const {
     createProjectForTenant,
     findProjectWithTitle,
     findProjetcsForTenantByFilters,
+    findProjectForTenantById,
 } = require("../../../services/project.services");
 
 router.post("/", async (req, res, next) => {
@@ -73,6 +74,21 @@ router.get("/", async (req, res, next) => {
     const projects = await findProjetcsForTenantByFilters(req.tenantId, { p_status, title });
     if (projects) {
         return responseBuilder.sendSuccessResponse(res, projects);
+    }
+});
+
+router.get("/:id", async (req, res, next) => {
+    const { id } = req.params;
+
+    const user = await findProjectForTenantById(req.tenantId, id);
+    if (user) {
+        return responseBuilder.sendSuccessResponse(res, user);
+    } else {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.PROJECT_NOT_FOUND,
+            CONSTANTS.PROJECT_NOT_FOUND
+        );
     }
 });
 

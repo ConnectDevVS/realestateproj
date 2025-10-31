@@ -23,5 +23,6 @@ module.exports = Object.freeze({
     FAILED_TO_LOGIN: "Failed to login",
     USER_NOT_FOUND: "User not found",
     PROJECT_NAME_EXISTS: "Project name already exists",
+    PROJECT_NOT_FOUND: "Project not found",
     FAILED_TO_UPDATE_USER: "Failed to update user",
 });

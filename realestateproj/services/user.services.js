@@ -41,7 +41,9 @@ async function findUserById(tenantId, userId) {
         return false;
     }
 
-    const user = await UserModel.findOne({ _id: userId }, null, { tenantId });
+    const user = await UserModel.findOne({ _id: userId, status: userStatus.ACTIVE }, null, {
+        tenantId,
+    });
 
     return user;
 }
