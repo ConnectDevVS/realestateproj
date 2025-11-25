@@ -9,6 +9,7 @@ const {
     findProjectWithTitle,
     findProjetcsForTenantByFilters,
     findProjectForTenantById,
+    findProjectForTenantByCustomerId,
 } = require("../../../services/project.services");
 
 router.post("/", async (req, res, next) => {
@@ -24,16 +25,19 @@ router.post("/", async (req, res, next) => {
     };
     let { title, p_status, customer, location, start_date, end_date, estimate, image } = reqBody;
 
-    if (
-        helper.isEmpty(title) ||
-        helper.isEmpty(p_status) ||
-        helper.isEmpty(customer) ||
-        helper.isEmpty(location)
-    ) {
+    if (helper.isEmpty(title) || helper.isEmpty(p_status) || helper.isEmpty(location)) {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
             CONSTANTS.MISSING_PARAMETERS
+        );
+    }
+
+    if (!helper.isEmpty(customer) && !helper.isValidMongoId(customer)) {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.INVALID_CUSTOMER,
+            CONSTANTS.INVALID_CUSTOMER
         );
     }
 
@@ -80,9 +84,24 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
     const { id } = req.params;
 
-    const user = await findProjectForTenantById(req.tenantId, id);
-    if (user) {
-        return responseBuilder.sendSuccessResponse(res, user);
+    const project = await findProjectForTenantById(req.tenantId, id);
+    if (project) {
+        return responseBuilder.sendSuccessResponse(res, project);
+    } else {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.PROJECT_NOT_FOUND,
+            CONSTANTS.PROJECT_NOT_FOUND
+        );
+    }
+});
+
+router.get("/customer/:id", async (req, res, next) => {
+    const { id } = req.params;
+
+    const projects = await findProjectForTenantByCustomerId(req.tenantId, id);
+    if (projects) {
+        return responseBuilder.sendSuccessResponse(res, projects);
     } else {
         return responseBuilder.sendErrorResponse(
             res,

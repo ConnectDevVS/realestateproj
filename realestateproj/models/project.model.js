@@ -19,7 +19,7 @@ const ProjectSchema = createBaseSchema(
             ],
             default: projectStatus.ONGOING,
         },
-        customer: { type: String, required: true },
+        customer: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
         location: { type: String, required: true },
         start_date: { type: Date, default: null },
         end_date: { type: Date, default: null },

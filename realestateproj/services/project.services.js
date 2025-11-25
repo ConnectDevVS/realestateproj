@@ -23,7 +23,10 @@ async function findProjetcsForTenantByFilters(tenantId, filters) {
     query.tenantId = tenantId;
     query.status = projectActiveStatus.ACTIVE;
     console.log(query);
-    let projects = await ProjectModel.find(query, null, { tenantId });
+    let projects = await ProjectModel.find(query, null, { tenantId }).populate(
+        "customer",
+        "name username email -_id"
+    );
     console.log("projectActiveStatus.ACTIVE:", projectActiveStatus.ACTIVE);
     const counts = await ProjectModel.aggregate([
         { $match: { status: projectActiveStatus.ACTIVE } },
@@ -48,13 +51,34 @@ async function findProjectForTenantById(tenantId, projectId) {
         return false;
     }
 
-    const user = await ProjectModel.findOne(
+    const project = await ProjectModel.findOne(
         { _id: projectId, status: projectActiveStatus.ACTIVE },
         null,
         { tenantId }
-    );
+    ).populate("customer", "name username email -_id");
 
-    return user;
+    return project;
+}
+
+/**
+ * Finds a project user by their ObjectId
+ *
+ * @param {String} tenantId - The tenant ID
+ * @param {String} customerId - The MongoDB ObjectId of the customer
+ * @returns {Promise<Object|null>} The project document or null if not found
+ */
+async function findProjectForTenantByCustomerId(tenantId, customerId) {
+    if (!helper.isValidMongoId(customerId)) {
+        return false;
+    }
+
+    const projects = await ProjectModel.find(
+        { customer: customerId, status: projectActiveStatus.ACTIVE },
+        null,
+        { tenantId }
+    ).populate("customer", "name username email -_id");
+
+    return projects;
 }
 
 module.exports = {
@@ -62,4 +86,5 @@ module.exports = {
     findProjectWithTitle,
     findProjetcsForTenantByFilters,
     findProjectForTenantById,
+    findProjectForTenantByCustomerId,
 };
