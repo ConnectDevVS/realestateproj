@@ -102,6 +102,14 @@ function isValidMongoId(id) {
     return ObjectId.isValid(id);
 }
 
+function errorToObject(err) {
+    const plain = {};
+    Object.getOwnPropertyNames(err).forEach((key) => {
+        plain[key] = err[key];
+    });
+    return plain;
+}
+
 module.exports = {
     logg: logg,
     isEmpty: isEmpty,
@@ -111,4 +119,5 @@ module.exports = {
     returnBrowserType: returnBrowserType,
     clearSpecialCharactersFromString: clearSpecialCharactersFromString,
     isValidMongoId: isValidMongoId,
+    errorToObject: errorToObject,
 };

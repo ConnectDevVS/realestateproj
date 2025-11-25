@@ -5,7 +5,7 @@ const { createBaseSchema } = require("./base.model");
 const tenantPlugin = require("../plugins/tenant.plugin");
 const hideSecureFieldsPlugin = require("../plugins/hidesecurefields.plugin");
 const { roles } = require("../utilities/roles");
-const { userStatus } = require("../utilities/roles");
+const { status } = require("../utilities/roles");
 
 const UserSchema = createBaseSchema(
     {
@@ -37,8 +37,8 @@ const UserSchema = createBaseSchema(
         },
         status: {
             type: String,
-            enum: [userStatus.ACTIVE, userStatus.INACTIVE],
-            default: userStatus.ACTIVE,
+            enum: [status.ACTIVE, status.INACTIVE],
+            default: status.ACTIVE,
         },
     },
     {
@@ -52,7 +52,7 @@ UserSchema.index({ tenantId: 1, username: 1 }, { unique: true });
 
 // Hide secure fields
 UserSchema.plugin(hideSecureFieldsPlugin, {
-    fields: ["password", "__v", "createdAt", "updatedAt", "tenantId"],
+    fields: ["tenantId", "password", "__v", "createdAt", "updatedAt"],
 });
 
 // Add tenant enforcement plugin

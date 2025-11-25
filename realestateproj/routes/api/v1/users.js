@@ -10,7 +10,39 @@ const {
     findUsersForTenant,
     createUserForTenant,
     findUserWithUserName,
+    findUsersForTenantByFilters,
+    findUserById,
+    findUserAndUpdateById,
 } = require("../../../services/user.services");
+
+router.get("/", async (req, res, next) => {
+    const { username, name, email, role } = req.query;
+
+    const users = await findUsersForTenantByFilters(req.tenantId, {
+        username,
+        name,
+        email,
+        role,
+    });
+    if (users) {
+        return responseBuilder.sendSuccessResponse(res, users);
+    }
+});
+
+router.get("/:id", async (req, res, next) => {
+    const { id } = req.params;
+
+    const user = await findUserById(req.tenantId, id);
+    if (user) {
+        return responseBuilder.sendSuccessResponse(res, user);
+    } else {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.USER_NOT_FOUND,
+            CONSTANTS.USER_NOT_FOUND
+        );
+    }
+});
 
 router.post("/", async (req, res, next) => {
     let reqBody = {
@@ -35,7 +67,7 @@ router.post("/", async (req, res, next) => {
         );
     }
 
-    const existingUser = await findUserWithUserName(username);
+    const existingUser = await findUserWithUserName(username, req.tenantId);
     if (existingUser && existingUser.username === username) {
         return responseBuilder.sendErrorResponse(
             res,
@@ -91,6 +123,32 @@ router.post("/check-user", async (req, res, next) => {
             res,
             ERROR.USERNAME_DOESNT_EXISTS,
             CONSTANTS.USERNAME_DOESNT_EXISTS
+        );
+    }
+});
+
+router.post("/set-user-status", async (req, res, next) => {
+    let { id, status } = req.body;
+    if (helper.isEmpty(id) || helper.isEmpty(status)) {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.MISSING_PARAMETERS,
+            CONSTANTS.MISSING_PARAMETERS
+        );
+    }
+
+    try {
+        let isSuccess = await findUserAndUpdateById(req.tenantId, id, { status: status });
+        if (!isSuccess) {
+            throw new Error(CONSTANTS.USER_NOT_FOUND);
+        }
+        return responseBuilder.sendSuccessResponse(res);
+    } catch (err) {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.FAILED_TO_UPDATE_USER,
+            CONSTANTS.FAILED_TO_UPDATE_USER,
+            err
         );
     }
 });
