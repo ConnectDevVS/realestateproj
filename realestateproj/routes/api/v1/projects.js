@@ -10,6 +10,7 @@ const {
     findProjetcsForTenantByFilters,
     findProjectForTenantById,
     findProjectForTenantByCustomerId,
+    updateProjectById,
 } = require("../../../services/project.services");
 
 router.post("/", async (req, res, next) => {
@@ -49,13 +50,8 @@ router.post("/", async (req, res, next) => {
     }
 
     try {
-        const existingProject = await findProjectWithTitle(title, req.tenantId);
+        let existingProject = await findProjectWithId(id, req.tenantId);
         if (existingProject && existingProject.title === title) {
-            return responseBuilder.sendErrorResponse(
-                res,
-                ERROR.PROJECT_NAME_EXISTS,
-                CONSTANTS.PROJECT_NAME_EXISTS
-            );
         }
 
         const project = await createProjectForTenant(req.tenantId, reqBody);
@@ -76,9 +72,8 @@ router.get("/", async (req, res, next) => {
     const { p_status, title } = req.query;
 
     const projects = await findProjetcsForTenantByFilters(req.tenantId, { p_status, title });
-    if (projects) {
-        return responseBuilder.sendSuccessResponse(res, projects);
-    }
+
+    return responseBuilder.sendSuccessResponse(res, projects);
 });
 
 router.get("/:id", async (req, res, next) => {
@@ -107,6 +102,41 @@ router.get("/customer/:id", async (req, res, next) => {
             res,
             ERROR.PROJECT_NOT_FOUND,
             CONSTANTS.PROJECT_NOT_FOUND
+        );
+    }
+});
+
+router.put("/", async (req, res, next) => {
+    let reqBody = {
+        id: req.body.id,
+        title: req.body.title,
+        p_status: req.body.p_status,
+        customer: req.body.customer,
+        location: req.body.location,
+        start_date: req.body.start_date,
+        end_date: req.body.end_date,
+        estimate: req.body.estimate,
+        image: req.body.image,
+    };
+
+    try {
+        const updatedProject = await updateProjectById(reqBody, req.tenantId);
+
+        if (updatedProject && updatedProject.title.length > 0) {
+            return responseBuilder.sendSuccessResponse(res, updatedProject);
+        } else {
+            return responseBuilder.sendErrorResponse(
+                res,
+                ERROR.FAILED_TO_UPDATE_PROJECT,
+                CONSTANTS.FAILED_TO_UPDATE_PROJECT
+            );
+        }
+    } catch (err) {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.FAILED_TO_UPDATE_PROJECT,
+            CONSTANTS.FAILED_TO_UPDATE_PROJECT,
+            err
         );
     }
 });

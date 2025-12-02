@@ -36,6 +36,12 @@ function isEmpty(str) {
     else return true;
 }
 
+function validateObjectIdArray(members) {
+    if (!Array.isArray(members)) return false;
+
+    return members.every((id) => mongoose.Types.ObjectId.isValid(id));
+}
+
 function arrayContains(needle, arrhaystack) {
     return arrhaystack.indexOf(needle) > -1;
 }
@@ -120,4 +126,5 @@ module.exports = {
     clearSpecialCharactersFromString: clearSpecialCharactersFromString,
     isValidMongoId: isValidMongoId,
     errorToObject: errorToObject,
+    validateObjectIdArray: validateObjectIdArray,
 };

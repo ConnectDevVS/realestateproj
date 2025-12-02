@@ -26,4 +26,9 @@ module.exports = Object.freeze({
     PROJECT_NOT_FOUND: "Project not found",
     INVALID_CUSTOMER: "Invalid customer Id",
     FAILED_TO_UPDATE_USER: "Failed to update user",
+    FAILED_TO_UPDATE_PROJECT: "Failed to update project",
+    FAILED_TO_CREATE_TEAM: "Failed to create team",
+    TEAM_NOT_FOUND: "Team not found",
+    FAILED_TO_UPDATE_TEAM: "Failed to update team",
+    MEMBERS_CANNOT_BE_EMPTY: "Members cannot be empty",
 });

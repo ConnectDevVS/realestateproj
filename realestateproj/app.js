@@ -14,6 +14,7 @@ var indexRouter = require("./routes/index");
 var v1AuthRouter = require("./routes/api/v1/auth");
 var v1UserRouter = require("./routes/api/v1/users");
 var v1ProjectRouter = require("./routes/api/v1/projects");
+var v1TeamRouter = require("./routes/api/v1/team");
 
 /*************ROUTES FOR VERSION 1 ************/
 
@@ -40,6 +41,8 @@ app.use("/", indexRouter);
 app.use("/api/v1/auth", v1AuthRouter);
 app.use("/api/v1/users", v1UserRouter);
 app.use("/api/v1/projects", v1ProjectRouter);
+app.use("/api/v1/team", v1TeamRouter);
+
 /*********************************************/
 
 //catch 404 and forward to error handler
