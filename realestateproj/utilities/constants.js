@@ -31,4 +31,10 @@ module.exports = Object.freeze({
     TEAM_NOT_FOUND: "Team not found",
     FAILED_TO_UPDATE_TEAM: "Failed to update team",
     MEMBERS_CANNOT_BE_EMPTY: "Members cannot be empty",
+    STAGES_NOT_FOUND: "Stages not found",
+    FAILED_TO_CREATE_TRANSACTION: "Failed to create transaction",
+    TRANSACTIONS_NOT_FOUND: "Transaction(s) not found",
+    FAILED_TO_UPDATE_TRANSACTION: "Failed to update transaction",
+    FAILED_TO_CREATE_STAGE: "Failed to create stage",
+    FAILED_TO_UPDATE_STAGE: "Failed to update stage",
 });

@@ -85,9 +85,10 @@ router.get("/:id", async (req, res, next) => {
     }
 });
 
-router.put("/", async (req, res, next) => {
+router.put("/:id", async (req, res, next) => {
+    const { id } = req.params;
+
     let reqBody = {
-        id: req.body.id,
         members: req.body.members,
         p_id: req.body.p_id,
     };
@@ -109,7 +110,7 @@ router.put("/", async (req, res, next) => {
     }
 
     try {
-        const updatedTeam = await findTeamAndUpdateById(reqBody, req.tenantId);
+        const updatedTeam = await findTeamAndUpdateById(req.tenantId, reqBody.id, reqBody);
 
         if (updatedTeam && updatedTeam.members.length > 0) {
             return responseBuilder.sendSuccessResponse(res, updatedTeam);
