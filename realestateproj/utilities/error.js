@@ -37,4 +37,5 @@ module.exports = Object.freeze({
     FAILED_TO_DELETE_REQUEST: 126,
 
     SOMETHING_WENT_WRONG: 500,
+    FAILED_TO_UPLOAD_IMAGE: 700,
 });

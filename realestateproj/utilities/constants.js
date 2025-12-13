@@ -41,4 +41,5 @@ module.exports = Object.freeze({
     FAILED_TO_UPDATE_REQUEST: "Failed to update request",
     REQUEST_NOT_FOUND: "Request(s) not found",
     FAILED_TO_DELETE_REQUEST: "Failed to delete request",
+    FAILED_TO_UPLOAD_IMAGE: "Failed to upload image",
 });
