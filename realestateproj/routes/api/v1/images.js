@@ -20,6 +20,7 @@ router.post("/upload-image", upload.single("image"), async (req, res, next) => {
             CONSTANTS.MISSING_PARAMETERS
         );
     }
+
     if (helper.isEmpty(reqBody.s_id)) {
         reqBody.s_id = null;
     }

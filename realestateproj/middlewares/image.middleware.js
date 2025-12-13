@@ -4,7 +4,16 @@ const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 
 // Base directory outside project
-const BASE_UPLOAD_DIR = path.join(__dirname, "../../uploads/images");
+const BASE_UPLOAD_DIR_LOCAL = path.join(__dirname, "../../uploads/images");
+const BASE_UPLOAD_DIR_SERVER = path.join(__dirname, "../uploads/images");
+
+function returnBaseDirectory(req) {
+    if (req.app.get("env") === "development") {
+        return BASE_UPLOAD_DIR_LOCAL;
+    } else {
+        return BASE_UPLOAD_DIR_SERVER;
+    }
+}
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -13,8 +22,7 @@ const storage = multer.diskStorage({
             return cb(new Error("Tenant ID missing"), null);
         }
         try {
-            const tenantDir = path.join(BASE_UPLOAD_DIR, tenantId);
-
+            const tenantDir = path.join(returnBaseDirectory(req), tenantId);
             if (!fs.existsSync(tenantDir)) {
                 fs.mkdirSync(tenantDir, { recursive: true });
             }
