@@ -12,9 +12,13 @@ const tenantMiddleware = require("./middlewares/tenant.middleware");
 var indexRouter = require("./routes/index");
 /*************ROUTES FOR VERSION 1 ************/
 var v1AuthRouter = require("./routes/api/v1/auth");
+var v1GlobalConfig = require("./routes/api/v1/globalconfig");
 var v1UserRouter = require("./routes/api/v1/users");
 var v1ProjectRouter = require("./routes/api/v1/projects");
-
+var v1TeamRouter = require("./routes/api/v1/team");
+var v1StageRouter = require("./routes/api/v1/stage");
+var v1TransactionRouter = require("./routes/api/v1/transaction");
+var v1RequestRouter = require("./routes/api/v1/requests");
 /*************ROUTES FOR VERSION 1 ************/
 
 var app = express();
@@ -37,9 +41,15 @@ app.use("/", indexRouter);
 /*************ROUTES FOR VERSION 1 ************/
 
 app.use("/", indexRouter);
+app.use("/api/v1/globalconfig", v1GlobalConfig);
 app.use("/api/v1/auth", v1AuthRouter);
 app.use("/api/v1/users", v1UserRouter);
 app.use("/api/v1/projects", v1ProjectRouter);
+app.use("/api/v1/team", v1TeamRouter);
+app.use("/api/v1/stage", v1StageRouter);
+app.use("/api/v1/transaction", v1TransactionRouter);
+app.use("/api/v1/requests", v1RequestRouter);
+
 /*********************************************/
 
 //catch 404 and forward to error handler

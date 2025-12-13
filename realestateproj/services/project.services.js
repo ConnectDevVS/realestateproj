@@ -6,6 +6,26 @@ const { projectStatus } = require("../utilities/roles");
 async function findProjectWithTitle(title, tenantId) {
     return await ProjectModel.findOne({ title: title }, null, { tenantId });
 }
+async function updateProjectById(reqBody, tenantId) {
+    const { id, ...fields } = reqBody;
+    // Remove null or undefined fields
+    const updateData = Object.fromEntries(
+        Object.entries(fields).filter(([_, value]) => value != null)
+    );
+
+    if (!helper.isValidMongoId(id)) {
+        return false;
+    }
+
+    if (!helper.isEmpty(reqBody.customer) && !helper.isValidMongoId(reqBody.customer)) {
+        return false;
+    }
+    return await ProjectModel.findByIdAndUpdate(id, updateData, {
+        new: true,
+        runValidators: true,
+        tenantId,
+    });
+}
 async function createProjectForTenant(tenantId, userData) {
     return await ProjectModel.create({ ...userData, tenantId });
 }
@@ -25,11 +45,12 @@ async function findProjetcsForTenantByFilters(tenantId, filters) {
     console.log(query);
     let projects = await ProjectModel.find(query, null, { tenantId }).populate(
         "customer",
-        "name username email -_id"
+        "name username email" //-_id
     );
     console.log("projectActiveStatus.ACTIVE:", projectActiveStatus.ACTIVE);
     const counts = await ProjectModel.aggregate([
         { $match: { status: projectActiveStatus.ACTIVE } },
+        { $match: query },
         { $group: { _id: "$p_status", count: { $sum: 1 } } },
         { $group: { _id: null, totalCount: { $sum: "$count" }, breakdown: { $push: "$$ROOT" } } },
     ]);
@@ -55,7 +76,7 @@ async function findProjectForTenantById(tenantId, projectId) {
         { _id: projectId, status: projectActiveStatus.ACTIVE },
         null,
         { tenantId }
-    ).populate("customer", "name username email -_id");
+    ).populate("customer", "name username email "); //-_id
 
     return project;
 }
@@ -76,7 +97,7 @@ async function findProjectForTenantByCustomerId(tenantId, customerId) {
         { customer: customerId, status: projectActiveStatus.ACTIVE },
         null,
         { tenantId }
-    ).populate("customer", "name username email -_id");
+    ).populate("customer", "name username email "); //-_id
 
     return projects;
 }
@@ -87,4 +108,5 @@ module.exports = {
     findProjetcsForTenantByFilters,
     findProjectForTenantById,
     findProjectForTenantByCustomerId,
+    updateProjectById,
 };
