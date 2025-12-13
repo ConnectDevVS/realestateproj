@@ -57,7 +57,7 @@ router.post("/", async (req, res, next) => {
 
 router.get("/project/:id", async (req, res, next) => {
     const { id } = req.params;
-    const transacions = await findAllTransactionForProject(req.tenantId, id);
+    const transacions = await findAllTransactionForProject(id, req.tenantId);
     if (transacions) {
         return responseBuilder.sendSuccessResponse(res, transacions);
     } else {
@@ -99,7 +99,7 @@ router.put("/:id", async (req, res, next) => {
     };
 
     if (
-        helper.isValidMongoId(id) ||
+        !helper.isValidMongoId(id) ||
         helper.isEmpty(reqBody.p_id) ||
         helper.isEmpty(reqBody.amount) ||
         helper.isEmpty(reqBody.from) ||

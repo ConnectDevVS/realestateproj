@@ -50,7 +50,7 @@ const TransactionSchema = createBaseSchema(
 
 // Hide secure fields
 TransactionSchema.plugin(hideSecureFieldsPlugin, {
-    fields: ["tenantId", "__v", "updatedAt"],
+    fields: ["tenantId", "__v"],
 });
 
 // Add tenant enforcement plugin

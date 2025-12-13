@@ -17,7 +17,9 @@ async function findAllTransactionForProject(projectId, tenantId) {
     query.tenantId = tenantId;
     query.p_id = projectId;
     query.status = transactionStatus.ACTIVE;
-    return await TransactionModel.find(query, null, { tenantId });
+    return await TransactionModel.find(query, null, { tenantId })
+        .populate("from", "name username")
+        .populate("to", "name username");
 }
 
 /**
@@ -33,7 +35,7 @@ async function findTransactionById(tenantId, transacionId) {
     }
 
     const transacion = await TransactionModel.findOne(
-        { _id: transacionId, status: transacionStatus.ACTIVE },
+        { _id: transacionId, status: transactionStatus.ACTIVE },
         null,
         {
             tenantId,
@@ -57,10 +59,7 @@ async function findTransactionAndUpdateById(tenantId, transactionId, updateOptio
     const transaction = await TransactionModel.findOneAndUpdate(
         { _id: transactionId },
         updateOptions,
-        {
-            runValidators: true,
-            tenantId,
-        }
+        { new: true, runValidators: true, tenantId }
     );
 
     return transaction;

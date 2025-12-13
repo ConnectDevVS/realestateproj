@@ -50,8 +50,13 @@ router.post("/", async (req, res, next) => {
     }
 
     try {
-        let existingProject = await findProjectWithId(id, req.tenantId);
+        let existingProject = await findProjectWithTitle(title, req.tenantId);
         if (existingProject && existingProject.title === title) {
+            return responseBuilder.sendErrorResponse(
+                res,
+                ERROR.PROJECT_NAME_EXISTS,
+                CONSTANTS.PROJECT_NAME_EXISTS
+            );
         }
 
         const project = await createProjectForTenant(req.tenantId, reqBody);
@@ -61,8 +66,8 @@ router.post("/", async (req, res, next) => {
     } catch (err) {
         return responseBuilder.sendErrorResponse(
             res,
-            ERROR.FAILED_TO_UPDATE_USER,
-            CONSTANTS.FAILED_TO_UPDATE_USER,
+            ERROR.FAILED_TO_CREATE_PROJECT,
+            CONSTANTS.FAILED_TO_CREATE_PROJECT,
             err
         );
     }

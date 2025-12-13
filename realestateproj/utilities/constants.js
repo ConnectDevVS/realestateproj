@@ -37,4 +37,8 @@ module.exports = Object.freeze({
     FAILED_TO_UPDATE_TRANSACTION: "Failed to update transaction",
     FAILED_TO_CREATE_STAGE: "Failed to create stage",
     FAILED_TO_UPDATE_STAGE: "Failed to update stage",
+    FAILED_TO_CREATE_REQUEST: "Failed to create request",
+    FAILED_TO_UPDATE_REQUEST: "Failed to update request",
+    REQUEST_NOT_FOUND: "Request(s) not found",
+    FAILED_TO_DELETE_REQUEST: "Failed to delete request",
 });

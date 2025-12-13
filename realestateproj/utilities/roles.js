@@ -54,6 +54,16 @@ const transactionType = {
     ADDITIONAL: "ADDITIONAL",
 };
 
+const quantityMetric = {
+    BAGS: "BAGS",
+    PACKS: "PACKS",
+    COUNT: "COUNT",
+    LITRE: "LITRE",
+    MILLILITRE: "MILLILITRE",
+    KILOGRAM: "KILOGRAM",
+    GRAM: "GRAM",
+};
+
 module.exports = {
     roles: roles,
     status: status,
@@ -63,4 +73,5 @@ module.exports = {
     requestStatus: requestStatus,
     paymentMode: paymentMode,
     transactionType: transactionType,
+    quantityMetric: quantityMetric,
 };
