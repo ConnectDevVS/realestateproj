@@ -1,13 +1,27 @@
 const UserModel = require("../models/user.model");
 const helper = require("../utilities/helper");
 const { status: userStatus } = require("../utilities/roles");
+const { roles } = require("../utilities/roles");
 
 async function findUserWithUserName(username, tenantId) {
-    return await UserModel.findOne({ username: username }, null, { tenantId });
+    return await UserModel.findOne(
+        { username: username, role: { $ne: roles.SUPER_ADMIN }, status: userStatus.ACTIVE },
+        null,
+        {
+            tenantId,
+        }
+    );
 }
 
 async function findUsersForTenant(tenantId) {
-    return await UserModel.find({}, null, { tenantId });
+    return await UserModel.find(
+        {
+            role: { $ne: roles.SUPER_ADMIN },
+            status: userStatus.ACTIVE,
+        },
+        null,
+        { tenantId }
+    );
 }
 
 async function createUserForTenant(tenantId, userData) {

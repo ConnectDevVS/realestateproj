@@ -3,7 +3,13 @@ const mongoose = require("mongoose");
 const { createBaseSchema } = require("./base.model");
 const tenantPlugin = require("../plugins/tenant.plugin");
 const hideSecureFieldsPlugin = require("../plugins/hidesecurefields.plugin");
-const { paymentStatus, paymentMode, transactionType, status } = require("../utilities/roles");
+const {
+    paymentStatus,
+    paymentMode,
+    transactionType,
+    status,
+    currency,
+} = require("../utilities/roles");
 const CONSTANTS = require("../utilities/constants");
 
 const TransactionSchema = createBaseSchema(
@@ -40,6 +46,11 @@ const TransactionSchema = createBaseSchema(
             type: String,
             enum: [status.ACTIVE, status.INACTIVE],
             default: status.ACTIVE,
+        },
+        currency: {
+            type: String,
+
+            default: currency.INR,
         },
     },
     {

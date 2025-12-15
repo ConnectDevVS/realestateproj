@@ -40,7 +40,11 @@ async function findTransactionById(tenantId, transacionId) {
         {
             tenantId,
         }
-    );
+    )
+        .populate("p_id", "title")
+        .populate("stage_id", "title")
+        .populate("from", "name email")
+        .populate("to", "name email");
     return transacion;
 }
 

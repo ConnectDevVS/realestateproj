@@ -20,7 +20,7 @@ var v1StageRouter = require("./routes/api/v1/stage");
 var v1TransactionRouter = require("./routes/api/v1/transaction");
 var v1RequestRouter = require("./routes/api/v1/requests");
 var v1ImagesRouter = require("./routes/api/v1/images");
-
+var v1InvoicesRouter = require("./routes/api/v1/invoices");
 /*************ROUTES FOR VERSION 1 ************/
 
 var app = express();
@@ -52,6 +52,7 @@ app.use("/api/v1/stage", v1StageRouter);
 app.use("/api/v1/transaction", v1TransactionRouter);
 app.use("/api/v1/requests", v1RequestRouter);
 app.use("/api/v1/images", v1ImagesRouter);
+app.use("/api/v1/invoices", v1InvoicesRouter);
 
 /*********************************************/
 
