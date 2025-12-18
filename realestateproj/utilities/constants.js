@@ -43,4 +43,8 @@ module.exports = Object.freeze({
     FAILED_TO_DELETE_REQUEST: "Failed to delete request",
     FAILED_TO_UPLOAD_IMAGE: "Failed to upload image",
     ERROR_GENERATING_INVOICE: "Error occured while generating invoice",
+    FAILED_TO_CREATE_SUBCONTRACT: "Failed to create subcontract",
+    SUBCONTRACT_NOT_FOUND: "Subcontract not found",
+    FAILED_TO_UPDATE_SUBCONTRACT: "Failed to update subcontract",
+    SUB_CON_COMMENT_CANNOT_BE_EMPTY: "Subcontractor comment cannot be empty",
 });
