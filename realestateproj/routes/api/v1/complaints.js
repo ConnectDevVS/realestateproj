@@ -17,7 +17,6 @@ const {
 router.post("/", async (req, res, next) => {
     let reqBody = {
         pid: req.body.pid,
-        sid: req.body.sid,
         uid: req.body.uid,
         title: req.body.title,
         description: req.body.description,
