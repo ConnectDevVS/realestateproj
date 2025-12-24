@@ -17,6 +17,7 @@ const {
 router.post("/", async (req, res, next) => {
     let reqBody = {
         pid: req.body.pid,
+        sid: req.body.sid,
         uid: req.body.uid,
         title: req.body.title,
         description: req.body.description,
@@ -25,7 +26,6 @@ router.post("/", async (req, res, next) => {
 
     if (
         helper.isEmpty(reqBody.pid) ||
-        helper.isEmpty(reqBody.sid) ||
         helper.isEmpty(reqBody.uid) ||
         helper.isEmpty(reqBody.title) ||
         helper.isEmpty(reqBody.description)
