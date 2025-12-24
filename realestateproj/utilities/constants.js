@@ -47,4 +47,8 @@ module.exports = Object.freeze({
     SUBCONTRACT_NOT_FOUND: "Subcontract not found",
     FAILED_TO_UPDATE_SUBCONTRACT: "Failed to update subcontract",
     SUB_CON_COMMENT_CANNOT_BE_EMPTY: "Subcontractor comment cannot be empty",
+    FAILED_TO_CREATE_COMPLAINT: "Failed to create complaint",
+    FAILED_TO_UPDATE_COMPLAINT: "Failed to update complaint",
+    COMPLAINT_COMMENT_CANNOT_BE_EMPTY: "complaint comment cannot be empty",
+    COMPLAINT_NOT_FOUND: "Complaint not found",
 });

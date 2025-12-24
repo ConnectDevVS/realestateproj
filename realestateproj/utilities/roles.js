@@ -64,6 +64,11 @@ const quantityMetric = {
     GRAM: "GRAM",
 };
 
+const complaintStatus = {
+    OPEN: "OPEN",
+    CLOSED: "CLOSED",
+};
+
 module.exports = {
     roles: roles,
     status: status,
@@ -74,4 +79,5 @@ module.exports = {
     paymentMode: paymentMode,
     transactionType: transactionType,
     quantityMetric: quantityMetric,
+    complaintStatus: complaintStatus,
 };

@@ -5,14 +5,14 @@ let responseBuilder = require("../../../utilities/response-builder");
 const ERROR = require("../../../utilities/error");
 const CONSTANTS = require("../../../utilities/constants");
 const {
-    createSubcontract,
-    findSubContractByProjectId,
-    findSubContractByStageId,
-    findSubcontractById,
-    findSubContractAndUpdateById,
-    deleteSubContractById,
-    findSubContractAndUpdateCommentsById,
-} = require("../../../services/subcontract.services.js");
+    createComplaint,
+    findComplaintByProjectId,
+    findComplaintByStageId,
+    findComplaintById,
+    findComplaintAndUpdateById,
+    deleteComplaintById,
+    findComplaintAndUpdateCommentsById,
+} = require("../../../services/complaint.services.js");
 
 router.post("/", async (req, res, next) => {
     let reqBody = {
@@ -21,6 +21,7 @@ router.post("/", async (req, res, next) => {
         uid: req.body.uid,
         title: req.body.title,
         description: req.body.description,
+        images: req.body.images,
     };
 
     if (
@@ -38,15 +39,15 @@ router.post("/", async (req, res, next) => {
     }
 
     try {
-        const subcontract = await createSubcontract(req.tenantId, reqBody);
-        if (subcontract) {
-            return responseBuilder.sendSuccessResponse(res, subcontract);
+        const complaint = await createComplaint(req.tenantId, reqBody);
+        if (complaint) {
+            return responseBuilder.sendSuccessResponse(res, complaint);
         }
     } catch (err) {
         return responseBuilder.sendErrorResponse(
             res,
-            ERROR.FAILED_TO_CREATE_SUBCONTRACT,
-            CONSTANTS.FAILED_TO_CREATE_SUBCONTRACT,
+            ERROR.FAILED_TO_CREATE_COMPLAINT,
+            CONSTANTS.FAILED_TO_CREATE_COMPLAINT,
             err
         );
     }
@@ -54,27 +55,27 @@ router.post("/", async (req, res, next) => {
 
 router.get("/project/:id", async (req, res, next) => {
     const { id } = req.params;
-    const subcontract = await findSubContractByProjectId(id, req.tenantId);
-    if (subcontract) {
-        return responseBuilder.sendSuccessResponse(res, subcontract);
+    const complaint = await findComplaintByProjectId(id, req.tenantId);
+    if (complaint) {
+        return responseBuilder.sendSuccessResponse(res, complaint);
     } else {
         return responseBuilder.sendErrorResponse(
             res,
-            ERROR.SUBCONTRACT_NOT_FOUND,
-            CONSTANTS.SUBCONTRACT_NOT_FOUND
+            ERROR.COMPLAINT_NOT_FOUND,
+            CONSTANTS.COMPLAINT_NOT_FOUND
         );
     }
 });
 router.get("/stage/:id", async (req, res, next) => {
     const { id } = req.params;
-    const subcontract = await findSubContractByStageId(id, req.tenantId);
-    if (subcontract) {
-        return responseBuilder.sendSuccessResponse(res, subcontract);
+    const complaint = await findComplaintByStageId(id, req.tenantId);
+    if (complaint) {
+        return responseBuilder.sendSuccessResponse(res, complaint);
     } else {
         return responseBuilder.sendErrorResponse(
             res,
-            ERROR.SUBCONTRACT_NOT_FOUND,
-            CONSTANTS.SUBCONTRACT_NOT_FOUND
+            ERROR.COMPLAINT_NOT_FOUND,
+            CONSTANTS.COMPLAINT_NOT_FOUND
         );
     }
 });
@@ -82,14 +83,14 @@ router.get("/stage/:id", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
     const { id } = req.params;
 
-    const subcontract = await findSubcontractById(req.tenantId, id);
-    if (subcontract) {
-        return responseBuilder.sendSuccessResponse(res, subcontract);
+    const complaint = await findComplaintById(req.tenantId, id);
+    if (complaint) {
+        return responseBuilder.sendSuccessResponse(res, complaint);
     } else {
         return responseBuilder.sendErrorResponse(
             res,
-            ERROR.SUBCONTRACT_NOT_FOUND,
-            CONSTANTS.SUBCONTRACT_NOT_FOUND
+            ERROR.COMPLAINT_NOT_FOUND,
+            CONSTANTS.COMPLAINT_NOT_FOUND
         );
     }
 });
@@ -100,14 +101,14 @@ router.put("/:id", async (req, res, next) => {
         uid: req.body.uid,
         title: req.body.title,
         description: req.body.description,
-        progress: req.body.progress,
+        images: req.body.image,
+        c_status: req.body.c_status,
     };
 
     if (
         helper.isEmpty(reqBody.uid) ||
         helper.isEmpty(reqBody.title) ||
-        helper.isEmpty(reqBody.description) ||
-        helper.isEmpty(reqBody.progress)
+        helper.isEmpty(reqBody.description)
     ) {
         return responseBuilder.sendErrorResponse(
             res,
@@ -117,22 +118,22 @@ router.put("/:id", async (req, res, next) => {
     }
 
     try {
-        const updatedSubContract = await findSubContractAndUpdateById(req.tenantId, id, reqBody);
+        const updatedComplaint = await findComplaintAndUpdateById(req.tenantId, id, reqBody);
 
-        if (updatedSubContract) {
-            return responseBuilder.sendSuccessResponse(res, updatedSubContract);
+        if (updatedComplaint) {
+            return responseBuilder.sendSuccessResponse(res, updatedComplaint);
         } else {
             return responseBuilder.sendErrorResponse(
                 res,
-                ERROR.FAILED_TO_UPDATE_SUBCONTRACT,
-                CONSTANTS.FAILED_TO_UPDATE_SUBCONTRACT
+                ERROR.FAILED_TO_UPDATE_COMPLAINT,
+                CONSTANTS.FAILED_TO_UPDATE_COMPLAINT
             );
         }
     } catch (err) {
         return responseBuilder.sendErrorResponse(
             res,
-            ERROR.FAILED_TO_UPDATE_SUBCONTRACT,
-            CONSTANTS.FAILED_TO_UPDATE_SUBCONTRACT,
+            ERROR.FAILED_TO_UPDATE_COMPLAINT,
+            CONSTANTS.FAILED_TO_UPDATE_COMPLAINT,
             err
         );
     }
@@ -154,26 +155,26 @@ router.put("/comment/:id", async (req, res, next) => {
     }
 
     try {
-        const updatedSubContract = await findSubContractAndUpdateCommentsById(
+        const updatedComplaint = await findComplaintAndUpdateCommentsById(
             req.tenantId,
             id,
             reqBody
         );
 
-        if (updatedSubContract) {
-            return responseBuilder.sendSuccessResponse(res, updatedSubContract);
+        if (updatedComplaint) {
+            return responseBuilder.sendSuccessResponse(res, updatedComplaint);
         } else {
             return responseBuilder.sendErrorResponse(
                 res,
-                ERROR.FAILED_TO_UPDATE_SUBCONTRACT,
-                CONSTANTS.FAILED_TO_UPDATE_SUBCONTRACT
+                ERROR.FAILED_TO_UPDATE_COMPLAINT,
+                CONSTANTS.FAILED_TO_UPDATE_COMPLAINT
             );
         }
     } catch (err) {
         return responseBuilder.sendErrorResponse(
             res,
-            ERROR.FAILED_TO_UPDATE_SUBCONTRACT,
-            CONSTANTS.FAILED_TO_UPDATE_SUBCONTRACT,
+            ERROR.FAILED_TO_UPDATE_COMPLAINT,
+            CONSTANTS.FAILED_TO_UPDATE_COMPLAINT,
             err
         );
     }
@@ -182,14 +183,14 @@ router.put("/comment/:id", async (req, res, next) => {
 router.delete("/:id", async (req, res, next) => {
     const { id } = req.params;
 
-    const updatedSubContract = await deleteSubContractById(id, req.tenantId);
-    if (updatedSubContract) {
+    const updatedComplaint = await deleteComplaintById(id, req.tenantId);
+    if (updatedComplaint) {
         return responseBuilder.sendSuccessResponse(res);
     } else {
         return responseBuilder.sendErrorResponse(
             res,
-            ERROR.SUBCONTRACT_NOT_FOUND,
-            CONSTANTS.SUBCONTRACT_NOT_FOUND
+            ERROR.COMPLAINT_NOT_FOUND,
+            CONSTANTS.COMPLAINT_NOT_FOUND
         );
     }
 });

@@ -3,10 +3,10 @@ const mongoose = require("mongoose");
 const { createBaseSchema } = require("./base.model");
 const tenantPlugin = require("../plugins/tenant.plugin");
 const hideSecureFieldsPlugin = require("../plugins/hidesecurefields.plugin");
-const { status } = require("../utilities/roles");
+const { status, complaintStatus } = require("../utilities/roles");
 const CONSTANTS = require("../utilities/constants");
 
-const SubContractCommentSchema = new mongoose.Schema({
+const ComplaintCommentSchema = new mongoose.Schema({
     comment: {
         type: String,
         required: true,
@@ -24,7 +24,7 @@ const SubContractCommentSchema = new mongoose.Schema({
     },
 });
 
-const ProjectSubContractSchema = createBaseSchema(
+const ComplaintSchema = createBaseSchema(
     {
         title: {
             type: String,
@@ -52,20 +52,18 @@ const ProjectSubContractSchema = createBaseSchema(
             ref: "User",
             required: true,
         },
-        date: {
-            type: Date,
-            required: true,
-            default: Date.now, // UTC
-        },
-        progress: {
-            type: Number,
-            required: false,
-            min: 0,
-            max: 100,
-        },
         comments: {
-            type: [SubContractCommentSchema],
+            type: [ComplaintCommentSchema],
             default: [],
+        },
+        images: {
+            type: [String],
+            required: false,
+        },
+        c_status: {
+            type: String,
+            enum: [complaintStatus.OPEN, complaintStatus.CLOSED],
+            default: complaintStatus.OPEN,
         },
         status: {
             type: String,
@@ -81,12 +79,12 @@ const ProjectSubContractSchema = createBaseSchema(
 );
 
 // Hide secure fields
-ProjectSubContractSchema.plugin(hideSecureFieldsPlugin, {
-    fields: ["tenantId", "__v", "createdAt", "updatedAt"],
+ComplaintSchema.plugin(hideSecureFieldsPlugin, {
+    fields: ["tenantId", "__v"],
 });
 
 // Add tenant enforcement plugin
-ProjectSubContractSchema.plugin(tenantPlugin);
+ComplaintSchema.plugin(tenantPlugin);
 
-const ProjectSubContractModel = mongoose.model("SubContract", ProjectSubContractSchema);
-module.exports = ProjectSubContractModel;
+const ComplaintModel = mongoose.model("Complaint", ComplaintSchema);
+module.exports = ComplaintModel;

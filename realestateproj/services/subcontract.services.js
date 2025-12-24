@@ -76,15 +76,16 @@ async function findSubContractAndUpdateCommentsById(tenantId, subcontractId, com
         return false;
     }
 
-    if (!comment || !comment.trim()) {
+    if (!comment.comment || !comment.comment.trim()) {
         throw new Error({
             error: ERROR.SUB_CON_COMMENT_CANNOT_BE_EMPTY,
             message: CONSTANTS.SUBCONTRACT_NOT_FOUND,
         });
     }
     const commentObj = {
-        comment: comment.trim(),
+        comment: comment.comment.trim(),
         time: new Date(), // UTC
+        uid: comment.uid,
     };
 
     const subcontract = await ProjectSubContractModel.findOneAndUpdate(
