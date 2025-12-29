@@ -122,6 +122,7 @@ router.put("/", async (req, res, next) => {
         end_date: req.body.end_date,
         estimate: req.body.estimate,
         image: req.body.image,
+        progress: req.body.progress,
     };
 
     try {
