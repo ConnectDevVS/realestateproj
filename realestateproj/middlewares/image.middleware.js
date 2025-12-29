@@ -4,8 +4,8 @@ const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 
 // Base directory outside project
-const BASE_UPLOAD_DIR_LOCAL = path.join(__dirname, "../../uploads/images");
-const BASE_UPLOAD_DIR_SERVER = path.join(__dirname, "../uploads/images");
+const BASE_UPLOAD_DIR_LOCAL = path.join(__dirname, "../../uploads/documents");
+const BASE_UPLOAD_DIR_SERVER = path.join(__dirname, "../uploads/documents");
 
 function returnBaseDirectory(req) {
     if (req.app.get("env") === "development") {
@@ -48,6 +48,11 @@ const allowedMimeTypes = [
     "image/heic",
     "image/heif",
     "image/jpg",
+
+    // Documents
+    "application/pdf",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // DOCX
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // XLSX
 ];
 
 const upload = multer({

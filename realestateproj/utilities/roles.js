@@ -69,6 +69,12 @@ const complaintStatus = {
     CLOSED: "CLOSED",
 };
 
+const fileTypes = {
+    IMAGE: "IMAGE",
+    CONSTRUCTION_FILES: "CONSTRUCTION_FILE",
+    CONTRACT_FILES: "CONTRACT_FILE",
+};
+
 module.exports = {
     roles: roles,
     status: status,
@@ -80,4 +86,5 @@ module.exports = {
     transactionType: transactionType,
     quantityMetric: quantityMetric,
     complaintStatus: complaintStatus,
+    fileTypes: fileTypes,
 };

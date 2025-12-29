@@ -42,6 +42,7 @@ module.exports = Object.freeze({
     REQUEST_NOT_FOUND: "Request(s) not found",
     FAILED_TO_DELETE_REQUEST: "Failed to delete request",
     FAILED_TO_UPLOAD_IMAGE: "Failed to upload image",
+    FAILED_TO_UPLOAD_DOCUMENT: "Failed to upload document",
     ERROR_GENERATING_INVOICE: "Error occured while generating invoice",
     FAILED_TO_CREATE_SUBCONTRACT: "Failed to create subcontract",
     SUBCONTRACT_NOT_FOUND: "Subcontract not found",

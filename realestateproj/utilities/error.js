@@ -48,4 +48,5 @@ module.exports = Object.freeze({
 
     SOMETHING_WENT_WRONG: 500,
     FAILED_TO_UPLOAD_IMAGE: 700,
+    FAILED_TO_UPLOAD_DOCUMENT: 701,
 });

@@ -3,10 +3,10 @@ const mongoose = require("mongoose");
 const { createBaseSchema } = require("./base.model");
 const tenantPlugin = require("../plugins/tenant.plugin");
 const hideSecureFieldsPlugin = require("../plugins/hidesecurefields.plugin");
-const { status } = require("../utilities/roles");
+const { status, fileTypes } = require("../utilities/roles");
 const CONSTANTS = require("../utilities/constants");
 
-const ImageSchema = createBaseSchema(
+const DocumentSchema = createBaseSchema(
     {
         p_id: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
         s_id: { type: mongoose.Schema.Types.ObjectId, ref: "Stage", default: null },
@@ -14,6 +14,11 @@ const ImageSchema = createBaseSchema(
         status: {
             type: String,
             enum: [status.ACTIVE, status.INACTIVE],
+            default: status.ACTIVE,
+        },
+        type: {
+            type: String,
+            enum: [fileTypes.CONSTRUCTION_FILE, fileTypes.CONTRACT_FILE, fileTypes.IMAGE],
             default: status.ACTIVE,
         },
     },
@@ -24,12 +29,12 @@ const ImageSchema = createBaseSchema(
 );
 
 // Hide secure fields
-ImageSchema.plugin(hideSecureFieldsPlugin, {
+DocumentSchema.plugin(hideSecureFieldsPlugin, {
     fields: ["tenantId", "__v", "createdAt", "updatedAt", "status"],
 });
 
 // Add tenant enforcement plugin
-ImageSchema.plugin(tenantPlugin);
+DocumentSchema.plugin(tenantPlugin);
 
-const ImageModel = mongoose.model("Image", ImageSchema);
-module.exports = ImageModel;
+const DocumentModel = mongoose.model("Documents", DocumentSchema);
+module.exports = DocumentModel;
