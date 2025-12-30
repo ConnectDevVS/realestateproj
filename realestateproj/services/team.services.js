@@ -1,8 +1,16 @@
 const TeamModel = require("../models/team.model");
 const helper = require("../utilities/helper");
 const { status: teamStatus } = require("../utilities/roles");
+const ERROR = require("../utilities/error");
+const CONSTANTS = require("../utilities/constants");
 
 async function createTeamForTenant(tenantId, teamData) {
+    const team = await TeamModel.findOne({ pid: teamData.pid, status: teamStatus.ACTIVE }, null, {
+        tenantId,
+    });
+    if (team && team._id) {
+        throw new Error(CONSTANTS.TEAM_ALREADY_EXISIT);
+    }
     return await TeamModel.create({ ...teamData, tenantId });
 }
 
@@ -73,7 +81,7 @@ async function findTeamForTenantByProjectId(tenantId, projectId) {
         return false;
     }
 
-    const teams = await TeamModel.find({ p_id: projectId, status: teamStatus.ACTIVE }, null, {
+    const teams = await TeamModel.findOne({ pid: projectId, status: teamStatus.ACTIVE }, null, {
         tenantId,
     }).populate("members", "name username email role "); //-_id
 

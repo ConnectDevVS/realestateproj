@@ -8,7 +8,7 @@ const CONSTANTS = require("../utilities/constants");
 
 const TeamSchema = createBaseSchema(
     {
-        p_id: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
+        pid: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
         members: {
             type: [mongoose.Schema.Types.ObjectId],
             ref: "User",

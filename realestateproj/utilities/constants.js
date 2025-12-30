@@ -52,4 +52,7 @@ module.exports = Object.freeze({
     FAILED_TO_UPDATE_COMPLAINT: "Failed to update complaint",
     COMPLAINT_COMMENT_CANNOT_BE_EMPTY: "complaint comment cannot be empty",
     COMPLAINT_NOT_FOUND: "Complaint not found",
+    PROJECTCHAT_NOT_FOUND: "chat not found",
+    FAILED_TO_CREATE_PROJECTCHAT: "Failed to create project chat",
+    TEAM_ALREADY_EXISIT: "Team already exist for project. Try editing existing team",
 });

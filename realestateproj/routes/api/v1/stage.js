@@ -14,7 +14,7 @@ const {
 
 router.post("/", async (req, res, next) => {
     let reqBody = {
-        p_id: req.body.p_id,
+        pid: req.body.pid,
         title: req.body.title,
         start_date: req.body.start_date,
         end_date: req.body.end_date,
@@ -23,10 +23,11 @@ router.post("/", async (req, res, next) => {
         invoice_gen: req.body.invoice_gen,
         expense: req.body.expense,
         s_status: req.body.s_status,
+        members: req.body.members,
     };
 
     if (
-        helper.isEmpty(reqBody.p_id) ||
+        helper.isEmpty(reqBody.pid) ||
         helper.isEmpty(reqBody.title) ||
         helper.isEmpty(reqBody.start_date) ||
         helper.isEmpty(reqBody.end_date) ||
@@ -86,7 +87,7 @@ router.get("/:id", async (req, res, next) => {
 router.put("/:id", async (req, res, next) => {
     const { id } = req.params;
     let reqBody = {
-        p_id: req.body.p_id,
+        pid: req.body.pid,
         title: req.body.title,
         start_date: req.body.start_date,
         end_date: req.body.end_date,
@@ -95,6 +96,7 @@ router.put("/:id", async (req, res, next) => {
         invoice_gen: req.body.invoice_gen,
         expense: req.body.expense,
         s_status: req.body.s_status,
+        members: req.body.members,
     };
     if (helper.isEmpty(id)) {
         return responseBuilder.sendErrorResponse(

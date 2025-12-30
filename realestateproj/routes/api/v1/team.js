@@ -14,10 +14,10 @@ const {
 
 router.post("/", async (req, res, next) => {
     let reqBody = {
-        p_id: req.body.p_id,
+        pid: req.body.pid,
         members: req.body.members,
     };
-    let { p_id, members } = reqBody;
+    let { pid, members } = reqBody;
 
     if (!helper.validateObjectIdArray(members)) {
         return responseBuilder.sendErrorResponse(
@@ -27,7 +27,7 @@ router.post("/", async (req, res, next) => {
         );
     }
 
-    if (helper.isEmpty(p_id)) {
+    if (helper.isEmpty(pid)) {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
@@ -41,6 +41,7 @@ router.post("/", async (req, res, next) => {
             return responseBuilder.sendSuccessResponse(res, team);
         }
     } catch (err) {
+        console.log("hererhehehe", err.message);
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.FAILED_TO_CREATE_TEAM,
@@ -90,7 +91,7 @@ router.put("/:id", async (req, res, next) => {
 
     let reqBody = {
         members: req.body.members,
-        p_id: req.body.p_id,
+        pid: req.body.pid,
     };
 
     if (helper.isEmpty(members) || !helper.validateObjectIdArray(members)) {
@@ -101,7 +102,7 @@ router.put("/:id", async (req, res, next) => {
         );
     }
 
-    if (helper.isEmpty(p_id)) {
+    if (helper.isEmpty(pid)) {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,

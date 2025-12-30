@@ -18,7 +18,7 @@ async function findStageForTenantByProjectId(tenantId, projectId) {
         return false;
     }
 
-    const stages = await StageModel.find({ p_id: projectId, status: stageStatus.ACTIVE }, null, {
+    const stages = await StageModel.find({ pid: projectId, status: stageStatus.ACTIVE }, null, {
         tenantId,
     });
 
