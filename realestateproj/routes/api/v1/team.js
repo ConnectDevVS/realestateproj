@@ -41,7 +41,6 @@ router.post("/", async (req, res, next) => {
             return responseBuilder.sendSuccessResponse(res, team);
         }
     } catch (err) {
-        console.log("hererhehehe", err.message);
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.FAILED_TO_CREATE_TEAM,
@@ -94,7 +93,7 @@ router.put("/:id", async (req, res, next) => {
         pid: req.body.pid,
     };
 
-    if (helper.isEmpty(members) || !helper.validateObjectIdArray(members)) {
+    if (helper.isEmpty(reqBody.members) || !helper.validateObjectIdArray(reqBody.members)) {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
@@ -102,7 +101,7 @@ router.put("/:id", async (req, res, next) => {
         );
     }
 
-    if (helper.isEmpty(pid)) {
+    if (helper.isEmpty(reqBody.pid)) {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
@@ -111,11 +110,12 @@ router.put("/:id", async (req, res, next) => {
     }
 
     try {
-        const updatedTeam = await findTeamAndUpdateById(req.tenantId, reqBody.id, reqBody);
+        const updatedTeam = await findTeamAndUpdateById(req.tenantId, id, reqBody);
 
         if (updatedTeam && updatedTeam.members.length > 0) {
             return responseBuilder.sendSuccessResponse(res, updatedTeam);
         } else {
+            console.log(updatedTeam);
             return responseBuilder.sendErrorResponse(
                 res,
                 ERROR.FAILED_TO_UPDATE_TEAM,
