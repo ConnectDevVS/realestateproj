@@ -8,6 +8,8 @@ module.exports = Object.freeze({
     /****************REGISTRATION MODULE : STARTS FROM 100 ********************/
 
     NO_ERROR: 0,
+    UNKNOWN_TENANT: 1,
+
     SERVER_ERROR: 100,
     MISSING_PARAMETERS: 101,
     USERNAME_EXISTS: 102,
@@ -48,6 +50,7 @@ module.exports = Object.freeze({
     PROJECTCHAT_NOT_FOUND: 302,
     FAILED_TO_CREATE_PROJECTCHAT: 303,
     TEAM_ALREADY_EXISIT: 304,
+    ERROR_WHILE_FETCHING_IMAGES: 305,
 
     SOMETHING_WENT_WRONG: 500,
     FAILED_TO_UPLOAD_IMAGE: 700,

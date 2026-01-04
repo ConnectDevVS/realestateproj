@@ -15,6 +15,7 @@ module.exports = Object.freeze({
     FAILED: "failed",
     SOMETHING_WENT_WRONG: "Something went wrong",
     SERVER_ERROR: "Server error occured",
+    UNKNOWN_TENANT: "Request from unknown tenant",
     MISSING_PARAMETERS: "Missing parameters",
     USERNAME_EXISTS: "Username ealready exist",
     USERNAME_DOESNT_EXISTS: "User does not exist",
@@ -55,4 +56,5 @@ module.exports = Object.freeze({
     PROJECTCHAT_NOT_FOUND: "chat not found",
     FAILED_TO_CREATE_PROJECTCHAT: "Failed to create project chat",
     TEAM_ALREADY_EXISIT: "Team already exist for project. Try editing existing team",
+    ERROR_WHILE_FETCHING_IMAGES: "Error occured while fetching images",
 });

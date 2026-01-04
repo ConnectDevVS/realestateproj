@@ -8,8 +8,8 @@ const CONSTANTS = require("../utilities/constants");
 
 const InvoiceSchema = createBaseSchema(
     {
-        p_id: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
-        s_id: { type: mongoose.Schema.Types.ObjectId, ref: "Stage", default: null },
+        pid: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
+        sid: { type: mongoose.Schema.Types.ObjectId, ref: "Stage", default: null },
         transaction_id: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "Transaction",

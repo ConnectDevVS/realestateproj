@@ -15,7 +15,7 @@ async function createTransactionForTenant(tenantId, transactionData) {
 async function findAllTransactionForProject(projectId, tenantId) {
     const query = {};
     query.tenantId = tenantId;
-    query.p_id = projectId;
+    query.pid = projectId;
     query.status = transactionStatus.ACTIVE;
     return await TransactionModel.find(query, null, { tenantId })
         .populate("from", "name username")
@@ -41,8 +41,6 @@ async function findTransactionById(tenantId, transacionId) {
             tenantId,
         }
     )
-        .populate("p_id", "title")
-        .populate("stage_id", "title")
         .populate("from", "name email")
         .populate("to", "name email");
     return transacion;

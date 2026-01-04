@@ -14,8 +14,8 @@ const {
 
 router.post("/", async (req, res, next) => {
     let reqBody = {
-        p_id: req.body.p_id,
-        stage_id: req.body.stage_id,
+        pid: req.body.pid,
+        sid: req.body.sid,
         amount: req.body.amount,
         from: req.body.from,
         to: req.body.to,
@@ -26,7 +26,7 @@ router.post("/", async (req, res, next) => {
     };
 
     if (
-        helper.isEmpty(reqBody.p_id) ||
+        helper.isEmpty(reqBody.pid) ||
         helper.isEmpty(reqBody.amount) ||
         helper.isEmpty(reqBody.from) ||
         helper.isEmpty(reqBody.to) ||
@@ -87,8 +87,8 @@ router.get("/:id", async (req, res, next) => {
 router.put("/:id", async (req, res, next) => {
     const { id } = req.params;
     let reqBody = {
-        p_id: req.body.p_id,
-        stage_id: req.body.stage_id,
+        pid: req.body.pid,
+        sid: req.body.sid,
         amount: req.body.amount,
         from: req.body.from,
         to: req.body.to,
@@ -100,7 +100,7 @@ router.put("/:id", async (req, res, next) => {
 
     if (
         !helper.isValidMongoId(id) ||
-        helper.isEmpty(reqBody.p_id) ||
+        helper.isEmpty(reqBody.pid) ||
         helper.isEmpty(reqBody.amount) ||
         helper.isEmpty(reqBody.from) ||
         helper.isEmpty(reqBody.to) ||

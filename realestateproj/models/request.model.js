@@ -8,8 +8,8 @@ const CONSTANTS = require("../utilities/constants");
 
 const RequestSchema = createBaseSchema(
     {
-        p_id: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
-        stage_id: { type: mongoose.Schema.Types.ObjectId, ref: "Stage", default: null },
+        pid: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
+        sid: { type: mongoose.Schema.Types.ObjectId, ref: "Stage", default: null },
         requested_by: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
         updated_by: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 

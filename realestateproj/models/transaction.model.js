@@ -14,8 +14,8 @@ const CONSTANTS = require("../utilities/constants");
 
 const TransactionSchema = createBaseSchema(
     {
-        p_id: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
-        stage_id: { type: mongoose.Schema.Types.ObjectId, ref: "Stage", default: null },
+        pid: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
+        sid: { type: mongoose.Schema.Types.ObjectId, ref: "Stage", default: null },
         amount: { type: Number, required: true, default: 0 },
         from: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
         to: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },

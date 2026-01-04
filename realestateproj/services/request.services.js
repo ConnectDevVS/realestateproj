@@ -15,7 +15,7 @@ async function createRequestForTenant(tenantId, requestData) {
 async function findAllRequestForProject(projectId, tenantId) {
     const query = {};
     query.tenantId = tenantId;
-    query.p_id = projectId;
+    query.pid = projectId;
     query.status = requestStatus.ACTIVE;
     return await RequestModel.find(query, null, { tenantId })
         .populate("requested_by", "name username")

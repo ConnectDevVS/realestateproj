@@ -8,17 +8,19 @@ const CONSTANTS = require("../../../utilities/constants.js");
 const {
     addProjectImageForTenant,
     addProjectDocumentForTenant,
+    findDocumentsForProjectId,
+    findDocumentsForStageId,
 } = require("../../../services/projectimage.services.js");
 const roles = require("../../../utilities/roles.js");
 
 router.post("/upload-image", upload.single("image"), async (req, res, next) => {
     var reqBody = {
-        p_id: req.body.p_id,
-        s_id: req.body.s_id,
+        pid: req.body.pid,
+        sid: req.body.sid,
         type: roles.fileTypes.IMAGE,
     };
 
-    if (helper.isEmpty(reqBody.p_id)) {
+    if (helper.isEmpty(reqBody.pid)) {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
@@ -26,12 +28,15 @@ router.post("/upload-image", upload.single("image"), async (req, res, next) => {
         );
     }
 
-    if (helper.isEmpty(reqBody.s_id)) {
-        reqBody.s_id = null;
+    if (helper.isEmpty(reqBody.sid)) {
+        reqBody.sid = null;
     }
 
     try {
+        console.log("Heehheheheheeer 1");
         if (!req.file) {
+            console.log("Heehheheheheeer 2");
+
             return responseBuilder.sendErrorResponse(
                 res,
                 ERROR.FAILED_TO_UPLOAD_IMAGE,
@@ -42,8 +47,12 @@ router.post("/upload-image", upload.single("image"), async (req, res, next) => {
         const imageUrl = `/documents/${req.tenantId}/${req.file.filename}`;
         reqBody.url = imageUrl;
         const imageData = await addProjectImageForTenant(req.tenantId, reqBody);
+        console.log("Heehheheheheeer 3");
+
         return responseBuilder.sendSuccessResponse(res, imageData);
     } catch (err) {
+        console.log("Heehheheheheeer 4");
+
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.FAILED_TO_UPLOAD_IMAGE,
@@ -55,12 +64,12 @@ router.post("/upload-image", upload.single("image"), async (req, res, next) => {
 
 router.post("/upload-document", upload.single("document"), async (req, res, next) => {
     var reqBody = {
-        p_id: req.body.p_id,
-        s_id: req.body.s_id,
+        pid: req.body.pid,
+        sid: req.body.sid,
         type: req.body.type,
     };
 
-    if (helper.isEmpty(reqBody.p_id)) {
+    if (helper.isEmpty(reqBody.pid)) {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
@@ -75,8 +84,8 @@ router.post("/upload-document", upload.single("document"), async (req, res, next
         );
     }
 
-    if (helper.isEmpty(reqBody.s_id)) {
-        reqBody.s_id = null;
+    if (helper.isEmpty(reqBody.sid)) {
+        reqBody.sid = null;
     }
 
     try {
@@ -102,4 +111,31 @@ router.post("/upload-document", upload.single("document"), async (req, res, next
     }
 });
 
+router.get("/project/:id", async (req, res, next) => {
+    const { id } = req.params;
+    const documents = await findDocumentsForProjectId(req.tenantId, id);
+    if (documents) {
+        return responseBuilder.sendSuccessResponse(res, documents);
+    } else {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.ERROR_WHILE_FETCHING_IMAGES,
+            CONSTANTS.ERROR_WHILE_FETCHING_IMAGES
+        );
+    }
+});
+
+router.get("/stage/:id", async (req, res, next) => {
+    const { id } = req.params;
+    const documents = await findDocumentsForStageId(req.tenantId, id);
+    if (documents) {
+        return responseBuilder.sendSuccessResponse(res, documents);
+    } else {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.ERROR_WHILE_FETCHING_IMAGES,
+            CONSTANTS.ERROR_WHILE_FETCHING_IMAGES
+        );
+    }
+});
 module.exports = router;

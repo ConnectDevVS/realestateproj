@@ -25,14 +25,15 @@ router.get("/transaction/:transactionId", async (req, res, next) => {
                 CONSTANTS.TRANSACTIONS_NOT_FOUND
             );
         }
+        console.log("--------------->>>", transaction);
 
         // Build invoice object
         let invoice_no = `INV-${new Date().getFullYear()}-${generateInvoiceUniqueCode()}`;
         const invoice = {
             invoice_no: invoice_no,
             invoice_date: new Date(),
-            project: transaction.p_id,
-            stage: transaction.stage_id,
+            project: transaction.pid,
+            stage: transaction.sid,
             billed_from: transaction.from,
             billed_to: transaction.to,
             description: transaction.note,
@@ -52,8 +53,8 @@ router.get("/transaction/:transactionId", async (req, res, next) => {
 
         const invoiceUrl = `/invoices/${tenantId}/${fileName}`;
         let newInvoice = {
-            p_id: transaction.p_id,
-            s_id: transaction.stage_id,
+            pid: transaction.pid,
+            sid: transaction.sid,
             transaction_id: transaction._id,
             url: invoiceUrl,
             invoice_no: invoice_no,
