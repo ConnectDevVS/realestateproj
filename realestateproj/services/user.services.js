@@ -5,7 +5,26 @@ const { roles } = require("../utilities/roles");
 
 async function findUserWithUserName(username, tenantId) {
     return await UserModel.findOne(
-        { username: username, role: { $ne: roles.SUPER_ADMIN }, status: userStatus.ACTIVE },
+        {
+            username: username,
+            role: { $ne: roles.SUPER_ADMIN },
+            status: {
+                $in: [userStatus.ACTIVE, userStatus.UNVERIFIED],
+            },
+        },
+        null,
+        {
+            tenantId,
+        }
+    );
+}
+async function findActiveUserWithUserName(username, tenantId) {
+    return await UserModel.findOne(
+        {
+            username: username,
+            role: { $ne: roles.SUPER_ADMIN },
+            status: userStatus.ACTIVE,
+        },
         null,
         {
             tenantId,
@@ -86,6 +105,7 @@ module.exports = {
     findUsersForTenant,
     createUserForTenant,
     findUserWithUserName,
+    findActiveUserWithUserName,
     findUsersForTenantByFilters,
     findUserById,
     findUserAndUpdateById,

@@ -2,6 +2,7 @@ var express = require("express");
 var router = express.Router();
 let helper = require("../../../utilities/helper");
 let responseBuilder = require("../../../utilities/response-builder");
+const { status: userStatus } = require("../../../utilities/roles");
 const ERROR = require("../../../utilities/error");
 const CONSTANTS = require("../../../utilities/constants");
 const { sendOTP } = require("../../../services/email.services");
@@ -51,6 +52,7 @@ router.post("/", async (req, res, next) => {
         role: req.body.role,
         phone_no: req.body.phone_no,
         email: req.body.email,
+        status: userStatus.UNVERIFIED,
     };
     let { name, role, phone_no, email, username } = reqBody;
 

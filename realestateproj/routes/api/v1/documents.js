@@ -44,8 +44,10 @@ router.post("/upload-image", upload.single("image"), async (req, res, next) => {
             );
         }
 
-        const imageUrl = `/documents/${req.tenantId}/${req.file.filename}`;
+        const imageUrl = `/uploads/documents/${req.tenantId}/${req.file.filename}`;
         reqBody.url = imageUrl;
+        console.log("Heehheheheheeer 2-1");
+
         const imageData = await addProjectImageForTenant(req.tenantId, reqBody);
         console.log("Heehheheheheeer 3");
 

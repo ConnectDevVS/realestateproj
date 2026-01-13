@@ -11,6 +11,7 @@ const roles = {
 const status = {
     ACTIVE: "ACTIVE",
     INACTIVE: "INACTIVE",
+    UNVERIFIED: "UNVERIFIED",
 };
 const currency = {
     INR: "INR",

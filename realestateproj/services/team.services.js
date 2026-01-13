@@ -57,6 +57,9 @@ async function findTeamById(tenantId, teamId) {
  * @returns {Promise<Object|null>} The team document or null if not found
  */
 async function findTeamAndUpdateById(tenantId, teamId, updateOptions) {
+    console.log("teamId:", teamId);
+    console.log("updateOptions:", updateOptions);
+
     if (!helper.isValidMongoId(teamId)) {
         return false;
     }
@@ -65,6 +68,7 @@ async function findTeamAndUpdateById(tenantId, teamId, updateOptions) {
         runValidators: true,
         tenantId,
     });
+    console.log("team:", team);
 
     return team;
 }

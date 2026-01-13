@@ -5,7 +5,7 @@ const { v4: uuidv4 } = require("uuid");
 
 // Base directory outside project
 const BASE_UPLOAD_DIR_LOCAL = path.join(__dirname, "../../uploads/documents");
-const BASE_UPLOAD_DIR_SERVER = path.join(__dirname, "../uploads/documents");
+const BASE_UPLOAD_DIR_SERVER = path.join(__dirname, "../public/uploads/documents");
 
 function returnBaseDirectory(req) {
     if (req.app.get("env") === "development") {
