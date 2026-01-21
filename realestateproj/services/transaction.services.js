@@ -18,8 +18,8 @@ async function findAllTransactionForProject(projectId, tenantId) {
     query.pid = projectId;
     query.status = transactionStatus.ACTIVE;
     return await TransactionModel.find(query, null, { tenantId })
-        .populate("from", "name username")
-        .populate("to", "name username");
+        .populate("from", "name username email role")
+        .populate("to", "name username email role");
 }
 
 /**
@@ -41,8 +41,8 @@ async function findTransactionById(tenantId, transacionId) {
             tenantId,
         }
     )
-        .populate("from", "name email")
-        .populate("to", "name email");
+        .populate("from", "name username email role")
+        .populate("to", "name username email role");
     return transacion;
 }
 

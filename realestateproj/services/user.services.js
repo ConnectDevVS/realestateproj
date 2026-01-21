@@ -7,7 +7,7 @@ async function findUserWithUserName(username, tenantId) {
     return await UserModel.findOne(
         {
             username: username,
-            role: { $ne: roles.SUPER_ADMIN },
+            //role: { $ne: roles.SUPER_ADMIN },
             status: {
                 $in: [userStatus.ACTIVE, userStatus.UNVERIFIED],
             },
@@ -22,7 +22,7 @@ async function findActiveUserWithUserName(username, tenantId) {
     return await UserModel.findOne(
         {
             username: username,
-            role: { $ne: roles.SUPER_ADMIN },
+            //role: { $ne: roles.SUPER_ADMIN },
             status: userStatus.ACTIVE,
         },
         null,
