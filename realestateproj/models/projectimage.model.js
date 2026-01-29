@@ -18,14 +18,20 @@ const DocumentSchema = createBaseSchema(
         },
         type: {
             type: String,
-            enum: [fileTypes.CONSTRUCTION_FILE, fileTypes.CONTRACT_FILE, fileTypes.IMAGE],
+            enum: [
+                fileTypes.CONSTRUCTION_FILE,
+                fileTypes.CONTRACT_FILE,
+                fileTypes.IMAGE,
+                fileTypes.PROFILE_ICON,
+                fileTypes.PROJECT_ICON,
+            ],
             default: status.ACTIVE,
         },
     },
     {
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
-    }
+    },
 );
 
 // Hide secure fields

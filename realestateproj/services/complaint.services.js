@@ -18,7 +18,7 @@ async function findComplaintById(tenantId, complaintId) {
         null,
         {
             tenantId,
-        }
+        },
     ).populate("uid", "name username");
 
     return complaint;
@@ -34,7 +34,7 @@ async function findComplaintByProjectId(projectId, tenantId) {
         null,
         {
             tenantId,
-        }
+        },
     );
     return complaints;
 }
@@ -49,7 +49,7 @@ async function findComplaintByStageId(stageId, tenantId) {
         null,
         {
             tenantId,
-        }
+        },
     );
 
     return complaints;
@@ -62,6 +62,7 @@ async function findComplaintAndUpdateById(tenantId, complaintId, updateOptions) 
     const complaint = await ComplaintModel.findOneAndUpdate({ _id: complaintId }, updateOptions, {
         runValidators: true,
         tenantId,
+        new: true,
     });
 
     return complaint;
@@ -91,7 +92,7 @@ async function findComplaintAndUpdateCommentsById(tenantId, complaintId, comment
             new: true,
             runValidators: true,
             tenantId,
-        }
+        },
     );
 
     return complaint;
@@ -105,7 +106,7 @@ async function deleteComplaintById(complaintId, tenantId) {
     const complaint = await ComplaintModel.findOneAndUpdate(
         { _id: complaintId },
         { status: complaintStatus.INACTIVE },
-        { new: true, runValidators: true, tenantId }
+        { new: true, runValidators: true, tenantId },
     );
     console.log("---------->", complaint);
 

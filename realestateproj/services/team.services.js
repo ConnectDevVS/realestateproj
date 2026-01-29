@@ -26,7 +26,7 @@ async function findAllTeamsForTenant(tenantId) {
     query.status = teamStatus.ACTIVE;
     return await TeamModel.find(query, null, { tenantId }).populate(
         "members",
-        "name username email role "
+        "name username email role ",
     ); //-_id;
 }
 
@@ -67,6 +67,7 @@ async function findTeamAndUpdateById(tenantId, teamId, updateOptions) {
     const team = await TeamModel.findOneAndUpdate({ _id: teamId }, updateOptions, {
         runValidators: true,
         tenantId,
+        new: true,
     });
     console.log("team:", team);
 

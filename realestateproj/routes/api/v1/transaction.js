@@ -16,6 +16,7 @@ router.post("/", async (req, res, next) => {
     let reqBody = {
         pid: req.body.pid,
         sid: req.body.sid,
+        subcontract_id: req.body.subcontract_id,
         amount: req.body.amount,
         from: req.body.from,
         to: req.body.to,
@@ -36,7 +37,7 @@ router.post("/", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
-            CONSTANTS.MISSING_PARAMETERS
+            CONSTANTS.MISSING_PARAMETERS,
         );
     }
 
@@ -50,7 +51,7 @@ router.post("/", async (req, res, next) => {
             res,
             ERROR.FAILED_TO_CREATE_TRANSACTION,
             CONSTANTS.FAILED_TO_CREATE_TRANSACTION,
-            err
+            err,
         );
     }
 });
@@ -64,7 +65,7 @@ router.get("/project/:id", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.TRANSACTIONS_NOT_FOUND,
-            CONSTANTS.TRANSACTIONS_NOT_FOUND
+            CONSTANTS.TRANSACTIONS_NOT_FOUND,
         );
     }
 });
@@ -79,7 +80,7 @@ router.get("/:id", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.TRANSACTIONS_NOT_FOUND,
-            CONSTANTS.TRANSACTIONS_NOT_FOUND
+            CONSTANTS.TRANSACTIONS_NOT_FOUND,
         );
     }
 });
@@ -89,6 +90,7 @@ router.put("/:id", async (req, res, next) => {
     let reqBody = {
         pid: req.body.pid,
         sid: req.body.sid,
+        subcontract_id: req.body.subcontract_id,
         amount: req.body.amount,
         from: req.body.from,
         to: req.body.to,
@@ -110,7 +112,7 @@ router.put("/:id", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
-            CONSTANTS.MISSING_PARAMETERS
+            CONSTANTS.MISSING_PARAMETERS,
         );
     }
 
@@ -123,7 +125,7 @@ router.put("/:id", async (req, res, next) => {
             return responseBuilder.sendErrorResponse(
                 res,
                 ERROR.FAILED_TO_UPDATE_TRANSACTION,
-                CONSTANTS.FAILED_TO_UPDATE_TRANSACTION
+                CONSTANTS.FAILED_TO_UPDATE_TRANSACTION,
             );
         }
     } catch (err) {
@@ -131,7 +133,7 @@ router.put("/:id", async (req, res, next) => {
             res,
             ERROR.FAILED_TO_UPDATE_TRANSACTION,
             CONSTANTS.FAILED_TO_UPDATE_TRANSACTION,
-            err
+            err,
         );
     }
 });
@@ -146,7 +148,7 @@ router.delete("/:id", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.TRANSACTIONS_NOT_FOUND,
-            CONSTANTS.TRANSACTIONS_NOT_FOUND
+            CONSTANTS.TRANSACTIONS_NOT_FOUND,
         );
     }
 });

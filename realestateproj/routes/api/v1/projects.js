@@ -11,6 +11,7 @@ const {
     findProjectForTenantById,
     findProjectForTenantByCustomerId,
     updateProjectById,
+    findProjectsByMember,
 } = require("../../../services/project.services");
 
 router.post("/", async (req, res, next) => {
@@ -30,7 +31,7 @@ router.post("/", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
-            CONSTANTS.MISSING_PARAMETERS
+            CONSTANTS.MISSING_PARAMETERS,
         );
     }
 
@@ -38,7 +39,7 @@ router.post("/", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.INVALID_CUSTOMER,
-            CONSTANTS.INVALID_CUSTOMER
+            CONSTANTS.INVALID_CUSTOMER,
         );
     }
 
@@ -55,7 +56,7 @@ router.post("/", async (req, res, next) => {
             return responseBuilder.sendErrorResponse(
                 res,
                 ERROR.PROJECT_NAME_EXISTS,
-                CONSTANTS.PROJECT_NAME_EXISTS
+                CONSTANTS.PROJECT_NAME_EXISTS,
             );
         }
 
@@ -68,7 +69,7 @@ router.post("/", async (req, res, next) => {
             res,
             ERROR.FAILED_TO_CREATE_PROJECT,
             CONSTANTS.FAILED_TO_CREATE_PROJECT,
-            err
+            err,
         );
     }
 });
@@ -91,7 +92,7 @@ router.get("/:id", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.PROJECT_NOT_FOUND,
-            CONSTANTS.PROJECT_NOT_FOUND
+            CONSTANTS.PROJECT_NOT_FOUND,
         );
     }
 });
@@ -106,7 +107,22 @@ router.get("/customer/:id", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.PROJECT_NOT_FOUND,
-            CONSTANTS.PROJECT_NOT_FOUND
+            CONSTANTS.PROJECT_NOT_FOUND,
+        );
+    }
+});
+
+router.get("/user/:id", async (req, res, next) => {
+    const { id } = req.params;
+
+    const projects = await findProjectsByMember(id, req.tenantId);
+    if (projects) {
+        return responseBuilder.sendSuccessResponse(res, projects);
+    } else {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.PROJECT_NOT_FOUND,
+            CONSTANTS.PROJECT_NOT_FOUND,
         );
     }
 });
@@ -134,7 +150,7 @@ router.put("/", async (req, res, next) => {
             return responseBuilder.sendErrorResponse(
                 res,
                 ERROR.FAILED_TO_UPDATE_PROJECT,
-                CONSTANTS.FAILED_TO_UPDATE_PROJECT
+                CONSTANTS.FAILED_TO_UPDATE_PROJECT,
             );
         }
     } catch (err) {
@@ -142,7 +158,7 @@ router.put("/", async (req, res, next) => {
             res,
             ERROR.FAILED_TO_UPDATE_PROJECT,
             CONSTANTS.FAILED_TO_UPDATE_PROJECT,
-            err
+            err,
         );
     }
 });

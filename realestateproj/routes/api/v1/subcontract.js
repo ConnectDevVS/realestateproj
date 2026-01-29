@@ -21,6 +21,8 @@ router.post("/", async (req, res, next) => {
         uid: req.body.uid,
         title: req.body.title,
         description: req.body.description,
+        estimate: req.body.estimate,
+        total_cost: req.body.total_cost,
     };
 
     if (
@@ -33,7 +35,7 @@ router.post("/", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
-            CONSTANTS.MISSING_PARAMETERS
+            CONSTANTS.MISSING_PARAMETERS,
         );
     }
 
@@ -47,7 +49,7 @@ router.post("/", async (req, res, next) => {
             res,
             ERROR.FAILED_TO_CREATE_SUBCONTRACT,
             CONSTANTS.FAILED_TO_CREATE_SUBCONTRACT,
-            err
+            err,
         );
     }
 });
@@ -61,7 +63,7 @@ router.get("/project/:id", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.SUBCONTRACT_NOT_FOUND,
-            CONSTANTS.SUBCONTRACT_NOT_FOUND
+            CONSTANTS.SUBCONTRACT_NOT_FOUND,
         );
     }
 });
@@ -74,7 +76,7 @@ router.get("/stage/:id", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.SUBCONTRACT_NOT_FOUND,
-            CONSTANTS.SUBCONTRACT_NOT_FOUND
+            CONSTANTS.SUBCONTRACT_NOT_FOUND,
         );
     }
 });
@@ -89,7 +91,7 @@ router.get("/:id", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.SUBCONTRACT_NOT_FOUND,
-            CONSTANTS.SUBCONTRACT_NOT_FOUND
+            CONSTANTS.SUBCONTRACT_NOT_FOUND,
         );
     }
 });
@@ -101,6 +103,8 @@ router.put("/:id", async (req, res, next) => {
         title: req.body.title,
         description: req.body.description,
         progress: req.body.progress,
+        estimate: req.body.estimate,
+        total_cost: req.body.total_cost,
     };
 
     if (
@@ -112,7 +116,7 @@ router.put("/:id", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
-            CONSTANTS.MISSING_PARAMETERS
+            CONSTANTS.MISSING_PARAMETERS,
         );
     }
 
@@ -125,7 +129,7 @@ router.put("/:id", async (req, res, next) => {
             return responseBuilder.sendErrorResponse(
                 res,
                 ERROR.FAILED_TO_UPDATE_SUBCONTRACT,
-                CONSTANTS.FAILED_TO_UPDATE_SUBCONTRACT
+                CONSTANTS.FAILED_TO_UPDATE_SUBCONTRACT,
             );
         }
     } catch (err) {
@@ -133,7 +137,7 @@ router.put("/:id", async (req, res, next) => {
             res,
             ERROR.FAILED_TO_UPDATE_SUBCONTRACT,
             CONSTANTS.FAILED_TO_UPDATE_SUBCONTRACT,
-            err
+            err,
         );
     }
 });
@@ -149,7 +153,7 @@ router.put("/comment/:id", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
-            CONSTANTS.MISSING_PARAMETERS
+            CONSTANTS.MISSING_PARAMETERS,
         );
     }
 
@@ -157,7 +161,7 @@ router.put("/comment/:id", async (req, res, next) => {
         const updatedSubContract = await findSubContractAndUpdateCommentsById(
             req.tenantId,
             id,
-            reqBody
+            reqBody,
         );
 
         if (updatedSubContract) {
@@ -166,7 +170,7 @@ router.put("/comment/:id", async (req, res, next) => {
             return responseBuilder.sendErrorResponse(
                 res,
                 ERROR.FAILED_TO_UPDATE_SUBCONTRACT,
-                CONSTANTS.FAILED_TO_UPDATE_SUBCONTRACT
+                CONSTANTS.FAILED_TO_UPDATE_SUBCONTRACT,
             );
         }
     } catch (err) {
@@ -174,7 +178,7 @@ router.put("/comment/:id", async (req, res, next) => {
             res,
             ERROR.FAILED_TO_UPDATE_SUBCONTRACT,
             CONSTANTS.FAILED_TO_UPDATE_SUBCONTRACT,
-            err
+            err,
         );
     }
 });
@@ -189,7 +193,7 @@ router.delete("/:id", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.SUBCONTRACT_NOT_FOUND,
-            CONSTANTS.SUBCONTRACT_NOT_FOUND
+            CONSTANTS.SUBCONTRACT_NOT_FOUND,
         );
     }
 });

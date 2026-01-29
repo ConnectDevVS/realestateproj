@@ -16,6 +16,7 @@ const TransactionSchema = createBaseSchema(
     {
         pid: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
         sid: { type: mongoose.Schema.Types.ObjectId, ref: "Stage", default: null },
+        subcontract_id: { type: mongoose.Schema.Types.ObjectId, ref: "SubContract", default: null },
         amount: { type: Number, required: true, default: 0 },
         from: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
         to: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
@@ -56,7 +57,7 @@ const TransactionSchema = createBaseSchema(
     {
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
-    }
+    },
 );
 
 // Hide secure fields

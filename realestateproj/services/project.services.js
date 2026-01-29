@@ -1,6 +1,9 @@
 const ProjectModel = require("../models/project.model");
+const TeamModel = require("../models/team.model");
 const helper = require("../utilities/helper");
 const { status: projectActiveStatus } = require("../utilities/roles");
+const { status: teamStatus } = require("../utilities/roles");
+
 const { projectStatus } = require("../utilities/roles");
 
 async function findProjectWithTitle(title, tenantId) {
@@ -10,7 +13,7 @@ async function updateProjectById(reqBody, tenantId) {
     const { id, ...fields } = reqBody;
     // Remove null or undefined fields
     const updateData = Object.fromEntries(
-        Object.entries(fields).filter(([_, value]) => value != null)
+        Object.entries(fields).filter(([_, value]) => value != null),
     );
 
     if (!helper.isValidMongoId(id)) {
@@ -24,6 +27,9 @@ async function updateProjectById(reqBody, tenantId) {
         new: true,
         runValidators: true,
         tenantId,
+    }).populate({
+        path: "customer",
+        select: "_id name username email",
     });
 }
 async function createProjectForTenant(tenantId, userData) {
@@ -45,7 +51,7 @@ async function findProjetcsForTenantByFilters(tenantId, filters) {
     console.log(query);
     let projects = await ProjectModel.find(query, null, { tenantId }).populate(
         "customer",
-        "name username email" //-_id
+        "name username email", //-_id
     );
     console.log("projectActiveStatus.ACTIVE:", projectActiveStatus.ACTIVE);
     const counts = await ProjectModel.aggregate([
@@ -75,7 +81,7 @@ async function findProjectForTenantById(tenantId, projectId) {
     const project = await ProjectModel.findOne(
         { _id: projectId, status: projectActiveStatus.ACTIVE },
         null,
-        { tenantId }
+        { tenantId },
     ).populate("customer", "name username email "); //-_id
 
     return project;
@@ -96,10 +102,29 @@ async function findProjectForTenantByCustomerId(tenantId, customerId) {
     const projects = await ProjectModel.find(
         { customer: customerId, status: projectActiveStatus.ACTIVE },
         null,
-        { tenantId }
+        { tenantId },
     ).populate("customer", "name username email "); //-_id
 
     return projects;
+}
+
+/**
+ * Finds a project of member by their ObjectId
+ *
+ */
+async function findProjectsByMember(memberId, tenantId) {
+    const projectIds = await TeamModel.distinct(
+        "pid",
+        {
+            members: { $in: [memberId] },
+            status: teamStatus.ACTIVE,
+        },
+        { tenantId },
+    );
+    return await ProjectModel.find({ _id: { $in: projectIds } }, null, { tenantId }).populate({
+        path: "customer",
+        select: "_id name username email",
+    });
 }
 
 module.exports = {
@@ -109,4 +134,5 @@ module.exports = {
     findProjectForTenantById,
     findProjectForTenantByCustomerId,
     updateProjectById,
+    findProjectsByMember,
 };

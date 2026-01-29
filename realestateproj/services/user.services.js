@@ -15,7 +15,7 @@ async function findUserWithUserName(username, tenantId) {
         null,
         {
             tenantId,
-        }
+        },
     );
 }
 async function findActiveUserWithUserName(username, tenantId) {
@@ -28,7 +28,7 @@ async function findActiveUserWithUserName(username, tenantId) {
         null,
         {
             tenantId,
-        }
+        },
     );
 }
 
@@ -39,7 +39,7 @@ async function findUsersForTenant(tenantId) {
             status: userStatus.ACTIVE,
         },
         null,
-        { tenantId }
+        { tenantId },
     );
 }
 
@@ -55,10 +55,17 @@ async function createUserForTenant(tenantId, userData) {
  * @param {Object} filters - Example: { username, name, email, role, status }
  * @returns {Promise<Array>} List of users matching filters
  */
-async function findUsersForTenantByFilters(tenantId, filters) {
+async function findUsersForTenantByFilters(tenantId, filters, includeunverified) {
     const query = Object.fromEntries(Object.entries(filters).filter(([_, value]) => value != null));
     query.tenantId = tenantId;
-    query.status = userStatus.ACTIVE;
+    if (includeunverified) {
+        query.status = {
+            $in: [userStatus.ACTIVE, userStatus.UNVERIFIED],
+        };
+    } else {
+        query.status = userStatus.ACTIVE;
+    }
+    console.log(query);
     return await UserModel.find(query, null, { tenantId });
 }
 
@@ -96,6 +103,7 @@ async function findUserAndUpdateById(tenantId, userId, updateOptions) {
     const user = await UserModel.findOneAndUpdate({ _id: userId }, updateOptions, {
         runValidators: true,
         tenantId,
+        new: true,
     });
 
     return user;

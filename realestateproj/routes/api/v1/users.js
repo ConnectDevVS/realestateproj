@@ -17,14 +17,18 @@ const {
 } = require("../../../services/user.services");
 
 router.get("/", async (req, res, next) => {
-    const { username, name, email, role } = req.query;
+    const { username, name, email, role, includeunverified } = req.query;
 
-    const users = await findUsersForTenantByFilters(req.tenantId, {
-        username,
-        name,
-        email,
-        role,
-    });
+    const users = await findUsersForTenantByFilters(
+        req.tenantId,
+        {
+            username,
+            name,
+            email,
+            role,
+        },
+        includeunverified,
+    );
     if (users) {
         return responseBuilder.sendSuccessResponse(res, users);
     }
@@ -40,7 +44,7 @@ router.get("/:id", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.USER_NOT_FOUND,
-            CONSTANTS.USER_NOT_FOUND
+            CONSTANTS.USER_NOT_FOUND,
         );
     }
 });
@@ -65,7 +69,7 @@ router.post("/", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
-            CONSTANTS.MISSING_PARAMETERS
+            CONSTANTS.MISSING_PARAMETERS,
         );
     }
 
@@ -74,7 +78,7 @@ router.post("/", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.USERNAME_EXISTS,
-            CONSTANTS.USERNAME_EXISTS
+            CONSTANTS.USERNAME_EXISTS,
         );
     }
     const user = await createUserForTenant(req.tenantId, reqBody);
@@ -93,7 +97,7 @@ router.post("/check-user", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
-            CONSTANTS.MISSING_PARAMETERS
+            CONSTANTS.MISSING_PARAMETERS,
         );
     }
 
@@ -109,7 +113,7 @@ router.post("/check-user", async (req, res, next) => {
             return responseBuilder.sendSuccessResponse(
                 res,
                 existingUser,
-                "Otp will be removed from API response "
+                "Otp will be removed from API response ",
             );
         } catch (err) {
             console.log(err);
@@ -117,14 +121,14 @@ router.post("/check-user", async (req, res, next) => {
                 res,
                 ERROR.FAILED_TO_SET_PASSWORD,
                 CONSTANTS.FAILED_TO_SET_PASSWORD,
-                err
+                err,
             );
         }
     } else {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.USERNAME_DOESNT_EXISTS,
-            CONSTANTS.USERNAME_DOESNT_EXISTS
+            CONSTANTS.USERNAME_DOESNT_EXISTS,
         );
     }
 });
@@ -135,7 +139,7 @@ router.post("/set-user-status", async (req, res, next) => {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
-            CONSTANTS.MISSING_PARAMETERS
+            CONSTANTS.MISSING_PARAMETERS,
         );
     }
 
@@ -150,7 +154,7 @@ router.post("/set-user-status", async (req, res, next) => {
             res,
             ERROR.FAILED_TO_UPDATE_USER,
             CONSTANTS.FAILED_TO_UPDATE_USER,
-            err
+            err,
         );
     }
 });

@@ -67,6 +67,8 @@ const ProjectSubContractSchema = createBaseSchema(
             type: [SubContractCommentSchema],
             default: [],
         },
+        estimate: { type: Number, default: 0, required: false },
+        total_cost: { type: Number, default: 0, required: false },
         status: {
             type: String,
             enum: [status.ACTIVE, status.INACTIVE],
@@ -77,7 +79,7 @@ const ProjectSubContractSchema = createBaseSchema(
         timestamps: true,
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
-    }
+    },
 );
 
 // Hide secure fields

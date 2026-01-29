@@ -74,6 +74,8 @@ const fileTypes = {
     IMAGE: "IMAGE",
     CONSTRUCTION_FILES: "CONSTRUCTION_FILE",
     CONTRACT_FILES: "CONTRACT_FILE",
+    PROFILE_ICON: "PROFILE_ICON",
+    PROJECT_ICON: "PROJECT_ICON",
 };
 
 module.exports = {

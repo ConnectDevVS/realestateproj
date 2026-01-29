@@ -18,7 +18,7 @@ async function findSubcontractById(tenantId, subcontractId) {
         null,
         {
             tenantId,
-        }
+        },
     );
 
     return subcontract;
@@ -34,7 +34,7 @@ async function findSubContractByProjectId(projectId, tenantId) {
         null,
         {
             tenantId,
-        }
+        },
     );
     return subcontracts;
 }
@@ -49,7 +49,7 @@ async function findSubContractByStageId(stageId, tenantId) {
         null,
         {
             tenantId,
-        }
+        },
     );
 
     return subcontracts;
@@ -65,7 +65,8 @@ async function findSubContractAndUpdateById(tenantId, subcontractId, updateOptio
         {
             runValidators: true,
             tenantId,
-        }
+            new: true,
+        },
     );
 
     return subcontract;
@@ -95,7 +96,7 @@ async function findSubContractAndUpdateCommentsById(tenantId, subcontractId, com
             new: true,
             runValidators: true,
             tenantId,
-        }
+        },
     );
 
     return subcontract;
@@ -109,7 +110,7 @@ async function deleteSubContractById(subcontractId, tenantId) {
     const subcontract = await ProjectSubContractModel.findOneAndUpdate(
         { _id: subcontractId },
         { status: subcontractorStatus.INACTIVE },
-        { new: true, runValidators: true, tenantId }
+        { new: true, runValidators: true, tenantId },
     );
     console.log("---------->", subcontract);
 

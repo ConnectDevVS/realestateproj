@@ -2,17 +2,21 @@ const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
+const { fileTypes } = require("../utilities/roles");
 
 // Base directory outside project
-const BASE_UPLOAD_DIR_LOCAL = path.join(__dirname, "../../uploads/documents");
-const BASE_UPLOAD_DIR_SERVER = path.join(__dirname, "../public/uploads/documents");
+const BASE_UPLOAD_DIR_LOCAL = path.join(__dirname, "../../uploads");
+const BASE_UPLOAD_DIR_SERVER = path.join(__dirname, "../public/uploads");
 
 function returnBaseDirectory(req) {
+    let baseUrl = "";
     if (req.app.get("env") === "development") {
-        return BASE_UPLOAD_DIR_LOCAL;
+        baseUrl = BASE_UPLOAD_DIR_LOCAL;
     } else {
-        return BASE_UPLOAD_DIR_SERVER;
+        baseUrl = BASE_UPLOAD_DIR_SERVER;
     }
+
+    return baseUrl;
 }
 
 const storage = multer.diskStorage({
@@ -22,7 +26,20 @@ const storage = multer.diskStorage({
             return cb(new Error("Tenant ID missing"), null);
         }
         try {
-            const tenantDir = path.join(returnBaseDirectory(req), tenantId);
+            let tenantDir = returnBaseDirectory(req);
+            if (req.body.type === fileTypes.PROFILE_ICON) {
+                tenantDir = `${tenantDir}/profileicon`;
+            }
+            if (req.body.type === fileTypes.PROJECT_ICON) {
+                tenantDir = `${tenantDir}/projecticon`;
+            }
+            if (req.body.type === fileTypes.IMAGE) {
+                tenantDir = `${tenantDir}/images`;
+            }
+            tenantDir = path.join(tenantDir, tenantId);
+
+            console.log("tenantDir:", tenantDir);
+
             if (!fs.existsSync(tenantDir)) {
                 fs.mkdirSync(tenantDir, { recursive: true });
             }
@@ -60,7 +77,7 @@ const upload = multer({
     fileFilter: (req, file, cb) => {
         allowedMimeTypes.includes(file.mimetype)
             ? cb(null, true)
-            : cb(new Error("Only image files allowed"), false);
+            : cb(new Error("unsupported file type"), false);
     },
     limits: {
         fileSize: 20 * 1024 * 1024, // 20MB
