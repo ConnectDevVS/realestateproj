@@ -15,6 +15,7 @@ function returnBaseDirectory(req) {
     } else {
         baseUrl = BASE_UPLOAD_DIR_SERVER;
     }
+    console.log("---------baseUrl---------->");
 
     return baseUrl;
 }
@@ -22,6 +23,7 @@ function returnBaseDirectory(req) {
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const tenantId = req.tenantId;
+        console.log("---------destination---------->");
         if (!tenantId) {
             return cb(new Error("Tenant ID missing"), null);
         }
@@ -41,6 +43,8 @@ const storage = multer.diskStorage({
             console.log("tenantDir:", tenantDir);
 
             if (!fs.existsSync(tenantDir)) {
+                console.log("---------fs---------->");
+
                 fs.mkdirSync(tenantDir, { recursive: true });
             }
             cb(null, tenantDir);

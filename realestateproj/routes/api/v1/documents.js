@@ -15,24 +15,20 @@ const roles = require("../../../utilities/roles.js");
 const { fileTypes } = require("../../../utilities/roles");
 
 router.post("/upload-image", upload.single("image"), async (req, res, next) => {
-    console.log("req.body", req.body);
-
     var reqBody = {
         pid: req.body.pid,
         sid: req.body.sid,
         type: req.body.type,
     };
 
-    if (helper.isEmpty(reqBody.pid)) {
+    console.log("req.body", reqBody);
+
+    if (!(reqBody.type === fileTypes.PROFILE_ICON) && helper.isEmpty(reqBody.pid)) {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
             CONSTANTS.MISSING_PARAMETERS,
         );
-    }
-
-    if (helper.isEmpty(reqBody.sid)) {
-        reqBody.sid = null;
     }
 
     try {
@@ -60,9 +56,12 @@ router.post("/upload-image", upload.single("image"), async (req, res, next) => {
         reqBody.url = imageUrl;
 
         const imageData = await addProjectImageForTenant(req.tenantId, reqBody);
+        console.log("image data::::", imageData);
 
         return responseBuilder.sendSuccessResponse(res, imageData);
     } catch (err) {
+        console.log("err::::", err);
+
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.FAILED_TO_UPLOAD_IMAGE,

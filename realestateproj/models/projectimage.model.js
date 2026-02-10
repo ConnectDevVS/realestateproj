@@ -8,8 +8,8 @@ const CONSTANTS = require("../utilities/constants");
 
 const DocumentSchema = createBaseSchema(
     {
-        pid: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
-        sid: { type: mongoose.Schema.Types.ObjectId, ref: "Stage", default: null },
+        pid: { type: mongoose.Schema.Types.ObjectId, ref: "Project" },
+        sid: { type: mongoose.Schema.Types.ObjectId, ref: "Stage" },
         url: { type: String, required: true },
         status: {
             type: String,
