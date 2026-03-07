@@ -3,7 +3,10 @@ const helper = require("../utilities/helper");
 const { status: requestStatus } = require("../utilities/roles");
 
 async function createRequestForTenant(tenantId, requestData) {
-    return await RequestModel.create({ ...requestData, tenantId });
+    let newRequest = await RequestModel.create({ ...requestData, tenantId });
+    await newRequest.populate("requested_by", "name username");
+    return newRequest;
+   // return await RequestModel.create({ ...requestData, tenantId }).populate("requested_by", "name username");
 }
 
 /**

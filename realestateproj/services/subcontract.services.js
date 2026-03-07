@@ -19,6 +19,9 @@ async function findSubcontractById(tenantId, subcontractId) {
         {
             tenantId,
         },
+    ).populate(
+        "uid",
+        "name username email role",
     );
 
     return subcontract;
@@ -35,6 +38,9 @@ async function findSubContractByProjectId(projectId, tenantId) {
         {
             tenantId,
         },
+    ).populate(
+        "uid",
+        "name username email role",
     );
     return subcontracts;
 }
@@ -50,6 +56,9 @@ async function findSubContractByStageId(stageId, tenantId) {
         {
             tenantId,
         },
+    ).populate(
+        "uid",
+        "name username email role",
     );
 
     return subcontracts;

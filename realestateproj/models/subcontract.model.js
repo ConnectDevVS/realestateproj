@@ -22,6 +22,11 @@ const SubContractCommentSchema = new mongoose.Schema({
         ref: "User",
         required: true,
     },
+    uid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
 });
 
 const ProjectSubContractSchema = createBaseSchema(
@@ -49,7 +54,7 @@ const ProjectSubContractSchema = createBaseSchema(
         },
         uid: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "User",
+            ref: "User",  //subcontractor who is assigned for the subcontract job
             required: true,
         },
         date: {
