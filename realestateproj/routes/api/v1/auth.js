@@ -2,9 +2,14 @@ var express = require("express");
 var router = express.Router();
 let helper = require("../../../utilities/helper");
 let responseBuilder = require("../../../utilities/response-builder");
+const { status: userStatus } = require("../../../utilities/roles");
+
 const ERROR = require("../../../utilities/error");
 const CONSTANTS = require("../../../utilities/constants");
-const { findUserWithUserName } = require("../../../services/user.services");
+const {
+    findUserWithUserName,
+    findActiveUserWithUserName,
+} = require("../../../services/user.services");
 const { generateToken } = require("../../../services/auth.services");
 
 router.post("/set-password", async (req, res, next) => {
@@ -29,6 +34,8 @@ router.post("/set-password", async (req, res, next) => {
         existingUser.password = password;
         existingUser.access_token = generateToken(existingUser);
         existingUser.otp = null;
+        existingUser.status = userStatus.ACTIVE;
+
         try {
             await existingUser.save();
             return responseBuilder.sendSuccessResponse(res, existingUser);
@@ -65,7 +72,7 @@ router.post("/login", async (req, res, next) => {
         );
     }
 
-    let existingUser = await findUserWithUserName(username);
+    let existingUser = await findActiveUserWithUserName(username);
 
     if (
         !existingUser ||

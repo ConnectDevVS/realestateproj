@@ -7,4 +7,16 @@ function generateOtp() {
     return String(num);
 }
 
-module.exports = { generateOtp };
+function generateInvoiceUniqueCode(length = 6) {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const bytes = crypto.randomBytes(length);
+    let result = "";
+
+    for (let i = 0; i < length; i++) {
+        result += chars[bytes[i] % chars.length];
+    }
+
+    return result;
+}
+
+module.exports = { generateOtp, generateInvoiceUniqueCode };

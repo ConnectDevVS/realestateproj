@@ -23,7 +23,7 @@ const ProjectSchema = createBaseSchema(
         location: { type: String, required: true },
         start_date: { type: Date, default: null },
         end_date: { type: Date, default: null },
-        estimate: { type: String, default: "" },
+        estimate: { type: Number, default: 0 },
         currency: { type: String, default: currency.INR },
         image: { type: String },
         status: {
@@ -31,11 +31,17 @@ const ProjectSchema = createBaseSchema(
             enum: [status.ACTIVE, status.INACTIVE],
             default: status.ACTIVE,
         },
+        progress: {
+            type: Number,
+            required: false,
+            min: 0,
+            max: 100,
+        },
     },
     {
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
-    }
+    },
 );
 
 // Unique projectname per tenant

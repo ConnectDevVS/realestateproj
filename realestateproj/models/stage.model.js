@@ -8,14 +8,19 @@ const CONSTANTS = require("../utilities/constants");
 
 const StageSchema = createBaseSchema(
     {
-        p_id: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
-        title: { type: String, required: true, unique: true },
+        pid: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
+        title: { type: String, required: true },
         start_date: { type: Date, default: null },
         end_date: { type: Date, default: null },
         estimate: { type: Number, default: 0 },
         total_cost: { type: Number, default: 0 },
         invoice_gen: { type: Number, default: 0 },
         expense: { type: Number, default: 0 },
+        members: {
+            type: [mongoose.Schema.Types.ObjectId],
+            ref: "User",
+            required: false,
+        },
 
         s_status: {
             type: String,

@@ -14,8 +14,8 @@ const {
 
 router.post("/", async (req, res, next) => {
     let reqBody = {
-        p_id: req.body.p_id,
-        stage_id: req.body.stage_id,
+        pid: req.body.pid,
+        sid: req.body.sid,
         title: req.body.title,
         description: req.body.description,
         requested_by: req.body.requested_by,
@@ -25,8 +25,8 @@ router.post("/", async (req, res, next) => {
     };
 
     if (
-        helper.isEmpty(reqBody.p_id) ||
-        helper.isEmpty(reqBody.stage_id) ||
+        helper.isEmpty(reqBody.pid) ||
+        helper.isEmpty(reqBody.sid) ||
         helper.isEmpty(reqBody.title) ||
         helper.isEmpty(reqBody.description) ||
         helper.isEmpty(reqBody.requested_by) ||

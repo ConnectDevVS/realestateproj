@@ -1,13 +1,46 @@
 const UserModel = require("../models/user.model");
 const helper = require("../utilities/helper");
 const { status: userStatus } = require("../utilities/roles");
+const { roles } = require("../utilities/roles");
 
 async function findUserWithUserName(username, tenantId) {
-    return await UserModel.findOne({ username: username }, null, { tenantId });
+    return await UserModel.findOne(
+        {
+            username: username,
+            //role: { $ne: roles.SUPER_ADMIN },
+            status: {
+                $in: [userStatus.ACTIVE, userStatus.UNVERIFIED],
+            },
+        },
+        null,
+        {
+            tenantId,
+        },
+    );
+}
+async function findActiveUserWithUserName(username, tenantId) {
+    return await UserModel.findOne(
+        {
+            username: username,
+            //role: { $ne: roles.SUPER_ADMIN },
+            status: userStatus.ACTIVE,
+        },
+        null,
+        {
+            tenantId,
+        },
+    );
 }
 
 async function findUsersForTenant(tenantId) {
-    return await UserModel.find({}, null, { tenantId });
+    return await UserModel.find(
+        {
+            role: { $ne: roles.SUPER_ADMIN },
+            status: userStatus.ACTIVE,
+        },
+        null,
+        { tenantId },
+    );
 }
 
 async function createUserForTenant(tenantId, userData) {
@@ -22,10 +55,17 @@ async function createUserForTenant(tenantId, userData) {
  * @param {Object} filters - Example: { username, name, email, role, status }
  * @returns {Promise<Array>} List of users matching filters
  */
-async function findUsersForTenantByFilters(tenantId, filters) {
+async function findUsersForTenantByFilters(tenantId, filters, includeunverified) {
     const query = Object.fromEntries(Object.entries(filters).filter(([_, value]) => value != null));
     query.tenantId = tenantId;
-    query.status = userStatus.ACTIVE;
+    if (includeunverified) {
+        query.status = {
+            $in: [userStatus.ACTIVE, userStatus.UNVERIFIED],
+        };
+    } else {
+        query.status = userStatus.ACTIVE;
+    }
+    console.log(query);
     return await UserModel.find(query, null, { tenantId });
 }
 
@@ -63,6 +103,7 @@ async function findUserAndUpdateById(tenantId, userId, updateOptions) {
     const user = await UserModel.findOneAndUpdate({ _id: userId }, updateOptions, {
         runValidators: true,
         tenantId,
+        new: true,
     });
 
     return user;
@@ -72,6 +113,7 @@ module.exports = {
     findUsersForTenant,
     createUserForTenant,
     findUserWithUserName,
+    findActiveUserWithUserName,
     findUsersForTenantByFilters,
     findUserById,
     findUserAndUpdateById,

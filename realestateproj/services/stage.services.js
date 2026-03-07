@@ -18,9 +18,9 @@ async function findStageForTenantByProjectId(tenantId, projectId) {
         return false;
     }
 
-    const stages = await StageModel.find({ p_id: projectId, status: stageStatus.ACTIVE }, null, {
+    const stages = await StageModel.find({ pid: projectId, status: stageStatus.ACTIVE }, null, {
         tenantId,
-    });
+    }).populate("members", "name username email role "); //-_id;;
 
     return stages;
 }
@@ -39,7 +39,7 @@ async function findStageById(tenantId, stageId) {
 
     const stage = await StageModel.findOne({ _id: stageId, status: stageStatus.ACTIVE }, null, {
         tenantId,
-    });
+    }).populate("members", "name username email role "); //-_id;;
 
     return stage;
 }

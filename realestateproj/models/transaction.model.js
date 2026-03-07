@@ -3,13 +3,20 @@ const mongoose = require("mongoose");
 const { createBaseSchema } = require("./base.model");
 const tenantPlugin = require("../plugins/tenant.plugin");
 const hideSecureFieldsPlugin = require("../plugins/hidesecurefields.plugin");
-const { paymentStatus, paymentMode, transactionType, status } = require("../utilities/roles");
+const {
+    paymentStatus,
+    paymentMode,
+    transactionType,
+    status,
+    currency,
+} = require("../utilities/roles");
 const CONSTANTS = require("../utilities/constants");
 
 const TransactionSchema = createBaseSchema(
     {
-        p_id: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
-        stage_id: { type: mongoose.Schema.Types.ObjectId, ref: "Stage", default: null },
+        pid: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
+        sid: { type: mongoose.Schema.Types.ObjectId, ref: "Stage", default: null },
+        subcontract_id: { type: mongoose.Schema.Types.ObjectId, ref: "SubContract", default: null },
         amount: { type: Number, required: true, default: 0 },
         from: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
         to: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
@@ -41,11 +48,16 @@ const TransactionSchema = createBaseSchema(
             enum: [status.ACTIVE, status.INACTIVE],
             default: status.ACTIVE,
         },
+        currency: {
+            type: String,
+
+            default: currency.INR,
+        },
     },
     {
         toJSON: { virtuals: true },
         toObject: { virtuals: true },
-    }
+    },
 );
 
 // Hide secure fields

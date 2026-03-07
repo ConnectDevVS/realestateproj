@@ -37,7 +37,7 @@ const UserSchema = createBaseSchema(
         },
         status: {
             type: String,
-            enum: [status.ACTIVE, status.INACTIVE],
+            enum: [status.ACTIVE, status.INACTIVE, status.UNVERIFIED],
             default: status.ACTIVE,
         },
     },

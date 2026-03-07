@@ -19,6 +19,11 @@ var v1TeamRouter = require("./routes/api/v1/team");
 var v1StageRouter = require("./routes/api/v1/stage");
 var v1TransactionRouter = require("./routes/api/v1/transaction");
 var v1RequestRouter = require("./routes/api/v1/requests");
+var v1DocumentsRouter = require("./routes/api/v1/documents");
+var v1InvoicesRouter = require("./routes/api/v1/invoices");
+var v1SubContractRouter = require("./routes/api/v1/subcontract");
+var v1ComplaintRouter = require("./routes/api/v1/complaints");
+
 /*************ROUTES FOR VERSION 1 ************/
 
 var app = express();
@@ -49,6 +54,10 @@ app.use("/api/v1/team", v1TeamRouter);
 app.use("/api/v1/stage", v1StageRouter);
 app.use("/api/v1/transaction", v1TransactionRouter);
 app.use("/api/v1/requests", v1RequestRouter);
+app.use("/api/v1/documents", v1DocumentsRouter);
+app.use("/api/v1/invoices", v1InvoicesRouter);
+app.use("/api/v1/subcontract", v1SubContractRouter);
+app.use("/api/v1/complaints", v1ComplaintRouter);
 
 /*********************************************/
 
@@ -61,7 +70,7 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
     // set locals, only providing error in development
     res.locals.message = err.message;
-    res.locals.error = req.app.get("env") === "development" ? err : {};
+    res.locals.error = req.app.get("env") === "development" ? err : err;
 
     // render the error page
     res.status(err.status || 500);

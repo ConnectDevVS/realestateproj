@@ -11,6 +11,7 @@ const roles = {
 const status = {
     ACTIVE: "ACTIVE",
     INACTIVE: "INACTIVE",
+    UNVERIFIED: "UNVERIFIED",
 };
 const currency = {
     INR: "INR",
@@ -64,6 +65,19 @@ const quantityMetric = {
     GRAM: "GRAM",
 };
 
+const complaintStatus = {
+    OPEN: "OPEN",
+    CLOSED: "CLOSED",
+};
+
+const fileTypes = {
+    IMAGE: "IMAGE",
+    CONSTRUCTION_FILES: "CONSTRUCTION_FILE",
+    CONTRACT_FILES: "CONTRACT_FILE",
+    PROFILE_ICON: "PROFILE_ICON",
+    PROJECT_ICON: "PROJECT_ICON",
+};
+
 module.exports = {
     roles: roles,
     status: status,
@@ -74,4 +88,6 @@ module.exports = {
     paymentMode: paymentMode,
     transactionType: transactionType,
     quantityMetric: quantityMetric,
+    complaintStatus: complaintStatus,
+    fileTypes: fileTypes,
 };

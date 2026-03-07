@@ -6,20 +6,18 @@ const hideSecureFieldsPlugin = require("../plugins/hidesecurefields.plugin");
 const { status } = require("../utilities/roles");
 const CONSTANTS = require("../utilities/constants");
 
-const TeamSchema = createBaseSchema(
+const InvoiceSchema = createBaseSchema(
     {
         pid: { type: mongoose.Schema.Types.ObjectId, ref: "Project", required: true },
-        members: {
-            type: [mongoose.Schema.Types.ObjectId],
-            ref: "User",
+        sid: { type: mongoose.Schema.Types.ObjectId, ref: "Stage", default: null },
+        transaction_id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Transaction",
             required: true,
-            validate: {
-                validator: function (arr) {
-                    return Array.isArray(arr) && arr.length > 0;
-                },
-                message: CONSTANTS.MEMBERS_CANNOT_BE_EMPTY,
-            },
         },
+        url: { type: String, required: true },
+        invoice_no: { type: String, required: true },
+        tax: { type: Number, default: 15 },
         status: {
             type: String,
             enum: [status.ACTIVE, status.INACTIVE],
@@ -33,12 +31,12 @@ const TeamSchema = createBaseSchema(
 );
 
 // Hide secure fields
-TeamSchema.plugin(hideSecureFieldsPlugin, {
-    fields: ["tenantId", "__v", "createdAt", "updatedAt"],
+InvoiceSchema.plugin(hideSecureFieldsPlugin, {
+    fields: ["tenantId", "__v", "updatedAt", "status"],
 });
 
 // Add tenant enforcement plugin
-TeamSchema.plugin(tenantPlugin);
+InvoiceSchema.plugin(tenantPlugin);
 
-const TeamModel = mongoose.model("Team", TeamSchema);
-module.exports = TeamModel;
+const InvoiceModel = mongoose.model("Invoice", InvoiceSchema);
+module.exports = InvoiceModel;
