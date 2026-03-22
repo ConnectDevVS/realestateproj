@@ -18,38 +18,16 @@ const TransactionSchema = createBaseSchema(
         sid: { type: mongoose.Schema.Types.ObjectId, ref: "Stage", default: null },
         subcontract_id: { type: mongoose.Schema.Types.ObjectId, ref: "SubContract", default: null },
         amount: { type: Number, required: true, default: 0 },
-        from: { type: mongoose.Schema.Types.Mixed, 
-                required: true,
-                validate: {
-                 validator: async function (v) {
-                // allow special string
-                if (v === "HOMESY_BUSINESS") return true;
-
-                // check if valid ObjectId
-                if (!mongoose.Types.ObjectId.isValid(v)) return false;
-
-                // check if User exists
-                const user = await mongoose.model("User").exists({ _id: v });
-                return !!user;
-            },
-            message: "from must be 'HOMESY_BUSINESS' or a valid User ObjectId"
-        }},
-        to: { type: mongoose.Schema.Types.Mixed, 
-                required: true,
-                validate: {
-                 validator: async function (v) {
-                // allow special string
-                if (v === "HOMESY_BUSINESS") return true;
-
-                // check if valid ObjectId
-                if (!mongoose.Types.ObjectId.isValid(v)) return false;
-
-                // check if User exists
-                const user = await mongoose.model("User").exists({ _id: v });
-                return !!user;
-            },
-            message: "to must be 'HOMESY_BUSINESS' or a valid User ObjectId"
-        }},
+        from: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        to: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
         transaction_type: {
             type: String,
             enum: [transactionType.ADVANCE, transactionType.REGULAR, paymentStatus.ADDITIONAL],

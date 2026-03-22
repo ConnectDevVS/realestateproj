@@ -14,7 +14,7 @@ const UserSchema = createBaseSchema(
         role: {
             type: String,
             enum: [
-                roles.SUPER_ADMIN,
+                roles.BUSINESS_ACCOUNT, 
                 roles.ADMIN,
                 roles.SUPERVISOR,
                 roles.ACCOUNTS,
