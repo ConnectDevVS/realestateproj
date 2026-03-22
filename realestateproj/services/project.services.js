@@ -104,8 +104,16 @@ async function findProjectForTenantByCustomerId(tenantId, customerId) {
         null,
         { tenantId },
     ).populate("customer", "name username email "); //-_id
+    const counts = await ProjectModel.aggregate([
+        { $match: { customer: helper.stringToObjectId(customerId),  status: projectActiveStatus.ACTIVE } },
+        { $group: { _id: "$p_status", count: { $sum: 1 } } },
+        { $group: { _id: null, totalCount: { $sum: "$count" }, breakdown: { $push: "$$ROOT" } } },
+    ]);
+    return {
+        projects: projects,
+        counts: { total: counts?.[0]?.totalCount, breakdown: counts?.[0]?.breakdown },
+    };
 
-    return projects;
 }
 
 /**
@@ -121,10 +129,19 @@ async function findProjectsByMember(memberId, tenantId) {
         },
         { tenantId },
     );
-    return await ProjectModel.find({ _id: { $in: projectIds } }, null, { tenantId }).populate({
+    const projects = await ProjectModel.find({ _id: { $in: projectIds } }, null, { tenantId }).populate({
         path: "customer",
         select: "_id name username email",
     });
+     const counts = await ProjectModel.aggregate([
+        { $match: {  _id: { $in: projectIds } , status: projectActiveStatus.ACTIVE  } },
+        { $group: { _id: "$p_status", count: { $sum: 1 } } },
+        { $group: { _id: null, totalCount: { $sum: "$count" }, breakdown: { $push: "$$ROOT" } } },
+    ]);
+    return {
+        projects: projects,
+        counts: { total: counts?.[0]?.totalCount, breakdown: counts?.[0]?.breakdown },
+    };
 }
 
 module.exports = {

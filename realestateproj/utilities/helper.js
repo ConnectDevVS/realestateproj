@@ -116,6 +116,14 @@ function errorToObject(err) {
     return plain;
 }
 
+function stringToObjectId(str) {
+    if (isValidMongoId(str)) {
+        return ObjectId.createFromHexString(str);
+    } else {
+        throw new Error('Invalid ObjectId string: ' + str);
+    }
+}
+
 module.exports = {
     logg: logg,
     isEmpty: isEmpty,
@@ -127,4 +135,5 @@ module.exports = {
     isValidMongoId: isValidMongoId,
     errorToObject: errorToObject,
     validateObjectIdArray: validateObjectIdArray,
+    stringToObjectId: stringToObjectId,
 };
