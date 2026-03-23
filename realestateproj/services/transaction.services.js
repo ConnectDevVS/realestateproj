@@ -2,7 +2,7 @@ const TransactionModel = require("../models/transaction.model");
 const { BUSINESS_ACCOUNT, BUSINESS_NAME, BUSINESS_EMAIL } = require("../utilities/constants");
 const helper = require("../utilities/helper");
 const { status: transactionStatus } = require("../utilities/roles");
-const {roles: roles} = require("../utilities/roles");
+const { roles: roles } = require("../utilities/roles");
 const { status: userStatus } = require("../utilities/roles");
 
 const { findUserWithUserName, createUserForTenant } = require("./user.services");
@@ -10,23 +10,23 @@ const { findUserWithUserName, createUserForTenant } = require("./user.services")
 async function createTransactionForTenant(tenantId, transactionData) {
 
 
-    if(transactionData.from.toString() === BUSINESS_ACCOUNT || transactionData.to.toString() === BUSINESS_ACCOUNT){
-      let homesyBusinessUser = await findUserWithUserName(BUSINESS_ACCOUNT, tenantId);
+    if (transactionData.from.toString() === BUSINESS_ACCOUNT || transactionData.to.toString() === BUSINESS_ACCOUNT) {
+        let homesyBusinessUser = await findUserWithUserName(BUSINESS_ACCOUNT, tenantId);
 
         if (!homesyBusinessUser) {
             homesyBusinessUser = await createUserForTenant(tenantId, {
-            username: BUSINESS_ACCOUNT,
-            name: BUSINESS_NAME,
-            email: BUSINESS_EMAIL,  
-            role : roles.BUSINESS_ACCOUNT,
-            status: userStatus.UNVERIFIED,
+                username: BUSINESS_ACCOUNT,
+                name: BUSINESS_NAME,
+                email: BUSINESS_EMAIL,
+                role: roles.BUSINESS_ACCOUNT,
+                status: userStatus.UNVERIFIED,
             });
 
         }
-        if(transactionData.from.toString() === BUSINESS_ACCOUNT){
+        if (transactionData.from.toString() === BUSINESS_ACCOUNT) {
             transactionData.from = homesyBusinessUser._id.toString();
         }
-        if(transactionData.to.toString() === BUSINESS_ACCOUNT){
+        if (transactionData.to.toString() === BUSINESS_ACCOUNT) {
             transactionData.to = homesyBusinessUser._id.toString();
         }
 
@@ -40,12 +40,34 @@ async function createTransactionForTenant(tenantId, transactionData) {
  * Finds transacion by project
  * @param {String} projectId - The project ID
  * @param {String} teanantId - The tenant ID
- * @returns {Promise<Array>} List of users matching filters
+ * @returns {Promise<Array>} Finds transacion by project
  */
 async function findAllTransactionForProject(projectId, tenantId) {
+    if (!helper.isValidMongoId(projectId)) {
+        return false;
+    }
     const query = {};
     query.tenantId = tenantId;
     query.pid = projectId;
+    query.status = transactionStatus.ACTIVE;
+    return await TransactionModel.find(query, null, { tenantId })
+        .populate("from", "name username email role")
+        .populate("to", "name username email role");
+}
+
+/**
+ * Finds transacion by stage
+ * @param {String} stageId - The stage ID
+ * @param {String} teanantId - The tenant ID
+ * @returns {Promise<Array>} Finds transacion by stage
+ */
+async function findAllTransactionForStage(stageId, tenantId) {
+    if (!helper.isValidMongoId(stageId)) {
+        return false;
+    }
+    const query = {};
+    query.tenantId = tenantId;
+    query.sid = stageId;
     query.status = transactionStatus.ACTIVE;
     return await TransactionModel.find(query, null, { tenantId })
         .populate("from", "name username email role")
@@ -87,24 +109,24 @@ async function findTransactionAndUpdateById(tenantId, transactionId, updateOptio
     if (!helper.isValidMongoId(transactionId)) {
         return false;
     }
-   
-    if(updateOptions.from.toString() === BUSINESS_ACCOUNT || updateOptions.to.toString() === BUSINESS_ACCOUNT){
-      let homesyBusinessUser = await findUserWithUserName(BUSINESS_ACCOUNT, tenantId);
+
+    if (updateOptions.from.toString() === BUSINESS_ACCOUNT || updateOptions.to.toString() === BUSINESS_ACCOUNT) {
+        let homesyBusinessUser = await findUserWithUserName(BUSINESS_ACCOUNT, tenantId);
 
         if (!homesyBusinessUser) {
             homesyBusinessUser = await createUserForTenant(tenantId, {
-            username: BUSINESS_ACCOUNT,
-            name: BUSINESS_NAME,
-            email: BUSINESS_EMAIL,  
-            role : roles.BUSINESS_ACCOUNT,
-            status: userStatus.UNVERIFIED,
+                username: BUSINESS_ACCOUNT,
+                name: BUSINESS_NAME,
+                email: BUSINESS_EMAIL,
+                role: roles.BUSINESS_ACCOUNT,
+                status: userStatus.UNVERIFIED,
             });
 
         }
-        if(updateOptions.from.toString() === BUSINESS_ACCOUNT){
+        if (updateOptions.from.toString() === BUSINESS_ACCOUNT) {
             updateOptions.from = homesyBusinessUser._id.toString();
         }
-        if(updateOptions.to.toString() === BUSINESS_ACCOUNT){
+        if (updateOptions.to.toString() === BUSINESS_ACCOUNT) {
             updateOptions.to = homesyBusinessUser._id.toString();
         }
 
@@ -146,6 +168,7 @@ async function deleteTransactionById(tenantId, transactionId) {
 module.exports = {
     createTransactionForTenant,
     findAllTransactionForProject,
+    findAllTransactionForStage,
     findTransactionById,
     findTransactionAndUpdateById,
     deleteTransactionById,

@@ -10,6 +10,7 @@ const {
     findTransactionById,
     findTransactionAndUpdateById,
     deleteTransactionById,
+    findAllTransactionForStage,
 } = require("../../../services/transaction.services.js");
 
 router.post("/", async (req, res, next) => {
@@ -69,6 +70,21 @@ router.get("/project/:id", async (req, res, next) => {
         );
     }
 });
+
+router.get("/stage/:id", async (req, res, next) => {
+    const { id } = req.params;
+    const transacions = await findAllTransactionForStage(id, req.tenantId);
+    if (transacions) {
+        return responseBuilder.sendSuccessResponse(res, transacions);
+    } else {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.TRANSACTIONS_NOT_FOUND,
+            CONSTANTS.TRANSACTIONS_NOT_FOUND,
+        );
+    }
+});
+
 
 router.get("/:id", async (req, res, next) => {
     const { id } = req.params;
