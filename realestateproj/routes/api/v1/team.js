@@ -58,16 +58,19 @@ router.get("/", async (req, res, next) => {
 
 router.get("/project/:id", async (req, res, next) => {
     const { id } = req.params;
-    const teams = await findTeamForTenantByProjectId(req.tenantId, id);
-    if (teams) {
+    try {
+        const teams = await findTeamForTenantByProjectId(req.tenantId, id);
         return responseBuilder.sendSuccessResponse(res, teams);
-    } else {
+
+
+    } catch (error) {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.TEAM_NOT_FOUND,
             CONSTANTS.TEAM_NOT_FOUND
         );
     }
+
 });
 
 router.get("/:id", async (req, res, next) => {
