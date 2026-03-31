@@ -22,6 +22,7 @@ const DocumentSchema = createBaseSchema(
                 fileTypes.CONSTRUCTION_FILE,
                 fileTypes.CONTRACT_FILE,
                 fileTypes.IMAGE,
+                fileTypes.COMPLAINT_IMAGE,
                 fileTypes.PROFILE_ICON,
                 fileTypes.PROJECT_ICON,
             ],

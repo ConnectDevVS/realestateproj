@@ -47,7 +47,7 @@ router.post("/upload-image", upload.single("image"), async (req, res, next) => {
         if (req.body.type === fileTypes.PROJECT_ICON) {
             imageUrl = `${imageUrl}/projecticon`;
         }
-        if (req.body.type === fileTypes.IMAGE) {
+        if (req.body.type === fileTypes.IMAGE || req.body.type === fileTypes.COMPLAINT_IMAGE) {
             imageUrl = `${imageUrl}/images`;
         }
 

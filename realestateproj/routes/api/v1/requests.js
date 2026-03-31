@@ -28,7 +28,6 @@ router.post("/", async (req, res, next) => {
         helper.isEmpty(reqBody.pid) ||
         helper.isEmpty(reqBody.sid) ||
         helper.isEmpty(reqBody.title) ||
-        helper.isEmpty(reqBody.description) ||
         helper.isEmpty(reqBody.requested_by) ||
         helper.isEmpty(reqBody.quantity) ||
         helper.isEmpty(reqBody.quantity_metric)
@@ -97,7 +96,6 @@ router.put("/:id", async (req, res, next) => {
 
     if (
         helper.isEmpty(reqBody.title) ||
-        helper.isEmpty(reqBody.description) ||
         helper.isEmpty(reqBody.updated_by) ||
         helper.isEmpty(reqBody.quantity) ||
         helper.isEmpty(reqBody.quantity_metric)

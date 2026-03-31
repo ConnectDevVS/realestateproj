@@ -143,3 +143,5 @@ vite.config.ts.timestamp-*
 /uploads/*
 */uploads
 /uploads
+.vscode/settings.json
+Postman-API-Documentation.json

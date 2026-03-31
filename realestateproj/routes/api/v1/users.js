@@ -49,6 +49,59 @@ router.get("/:id", async (req, res, next) => {
     }
 });
 
+router.put("/:id", async (req, res, next) => {
+    const { id } = req.params;
+    let updatePayload = {};
+
+    const updatableFields = ["name", "phone_no", "email", "image"];
+    updatableFields.forEach((field) => {
+        if (req.body[field] !== undefined) {
+            updatePayload[field] = req.body[field];
+        }
+    });
+
+    try {
+        const existingUser = await findUserById(req.tenantId, id);
+        if (!existingUser) {
+            return responseBuilder.sendErrorResponse(
+                res,
+                ERROR.USER_NOT_FOUND,
+                CONSTANTS.USER_NOT_FOUND,
+            );
+        }
+
+        if (Object.keys(updatePayload).length === 0) {
+            // No updatable fields provided, return current user without changes
+            return responseBuilder.sendSuccessResponse(res, existingUser);
+        }
+
+        if (updatePayload.username && updatePayload.username !== existingUser.username) {
+            const duplicateUser = await findUserWithUserName(updatePayload.username, req.tenantId);
+            if (duplicateUser && duplicateUser._id.toString() !== id) {
+                return responseBuilder.sendErrorResponse(
+                    res,
+                    ERROR.USERNAME_EXISTS,
+                    CONSTANTS.USERNAME_EXISTS,
+                );
+            }
+        }
+
+        const updatedUser = await findUserAndUpdateById(req.tenantId, id, updatePayload);
+        if (!updatedUser) {
+            throw new Error(CONSTANTS.USER_NOT_FOUND);
+        }
+
+        return responseBuilder.sendSuccessResponse(res, updatedUser);
+    } catch (err) {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.FAILED_TO_UPDATE_USER,
+            CONSTANTS.FAILED_TO_UPDATE_USER,
+            err,
+        );
+    }
+});
+
 router.post("/", async (req, res, next) => {
     let reqBody = {
         name: req.body.name,

@@ -26,6 +26,7 @@ const UserSchema = createBaseSchema(
         },
         phone_no: { type: String, default: null },
         email: { type: String, default: null, trim: true },
+        image: { type: String, default: null },
         access_token: { type: String, default: null },
         password: {
             type: String,
