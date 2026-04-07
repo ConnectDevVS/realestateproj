@@ -134,9 +134,20 @@ router.post("/", async (req, res, next) => {
             CONSTANTS.USERNAME_EXISTS,
         );
     }
-    const user = await createUserForTenant(req.tenantId, reqBody);
-    if (user) {
-        return responseBuilder.sendSuccessResponse(res, user);
+    try {
+        const user = await createUserForTenant(req.tenantId, reqBody);
+
+        if (user) {
+            return responseBuilder.sendSuccessResponse(res, user);
+        }
+    }
+    catch (err) {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.FAILED_TO_CREATE_USER,
+            CONSTANTS.FAILED_TO_CREATE_USER,
+            err,
+        );
     }
 });
 

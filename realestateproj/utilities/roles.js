@@ -80,6 +80,15 @@ const fileTypes = {
     PROJECT_ICON: "PROJECT_ICON",
 };
 
+const billingStatus = {
+    ACTIVE: "ACTIVE",
+    TRIAL: "TRIAL",
+    OVERDUE: "OVERDUE",
+    CANCELLED: "CANCELLED",
+    UNBILLED: "UNBILLED",
+
+};
+
 module.exports = {
     roles: roles,
     status: status,
@@ -92,4 +101,5 @@ module.exports = {
     quantityMetric: quantityMetric,
     complaintStatus: complaintStatus,
     fileTypes: fileTypes,
+    billingStatus: billingStatus,
 };

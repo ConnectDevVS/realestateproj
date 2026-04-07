@@ -14,7 +14,8 @@ const UserSchema = createBaseSchema(
         role: {
             type: String,
             enum: [
-                roles.BUSINESS_ACCOUNT, 
+                roles.SUPER_ADMIN,
+                roles.BUSINESS_ACCOUNT,
                 roles.ADMIN,
                 roles.SUPERVISOR,
                 roles.ACCOUNTS,
@@ -53,7 +54,7 @@ UserSchema.index({ tenantId: 1, username: 1 }, { unique: true });
 
 // Hide secure fields
 UserSchema.plugin(hideSecureFieldsPlugin, {
-    fields: ["tenantId", "password", "__v", "createdAt", "updatedAt"],
+    fields: ["password", "__v", "createdAt", "updatedAt"],
 });
 
 // Add tenant enforcement plugin

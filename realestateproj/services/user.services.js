@@ -7,6 +7,7 @@ async function findUserWithUserName(username, tenantId) {
     return await UserModel.findOne(
         {
             username: username,
+            role: { $nin: [roles.SUPER_ADMIN, roles.BUSINESS_ACCOUNT] },
             status: {
                 $in: [userStatus.ACTIVE, userStatus.UNVERIFIED],
             },
@@ -34,7 +35,7 @@ async function findActiveUserWithUserName(username, tenantId) {
 async function findUsersForTenant(tenantId) {
     return await UserModel.find(
         {
-        role: { $nin: [roles.SUPER_ADMIN, roles.BUSINESS_ACCOUNT] },
+            role: { $nin: [roles.SUPER_ADMIN, roles.BUSINESS_ACCOUNT] },
             status: userStatus.ACTIVE,
         },
         null,
@@ -56,6 +57,7 @@ async function createUserForTenant(tenantId, userData) {
  */
 async function findUsersForTenantByFilters(tenantId, filters, includeunverified) {
     const query = Object.fromEntries(Object.entries(filters).filter(([_, value]) => value != null));
+    query.role = { $nin: [roles.SUPER_ADMIN, roles.BUSINESS_ACCOUNT] };
     query.tenantId = tenantId;
     if (includeunverified) {
         query.status = {
@@ -80,9 +82,15 @@ async function findUserById(tenantId, userId) {
         return false;
     }
 
-    const user = await UserModel.findOne({ _id: userId, status: userStatus.ACTIVE }, null, {
-        tenantId,
-    });
+    const user = await UserModel.findOne(
+        {
+            _id: userId,
+            role: { $nin: [roles.SUPER_ADMIN, roles.BUSINESS_ACCOUNT] },
+            status: userStatus.ACTIVE,
+        },
+        null,
+        { tenantId },
+    );
 
     return user;
 }

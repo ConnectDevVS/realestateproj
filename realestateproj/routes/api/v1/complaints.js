@@ -102,6 +102,8 @@ router.put("/:id", async (req, res, next) => {
         description: req.body.description,
         images: req.body.image,
         c_status: req.body.c_status,
+        sid: req.body.sid,
+
     };
 
     if (
