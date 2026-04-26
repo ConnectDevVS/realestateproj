@@ -5,15 +5,17 @@ const { status: transactionStatus } = require("../utilities/roles");
 const { roles: roles } = require("../utilities/roles");
 const { status: userStatus } = require("../utilities/roles");
 
-const { findUserWithUserName, createUserForTenant } = require("./user.services");
+const { findBusinessAccountUser, createUserForTenant } = require("./user.services");
 
 async function createTransactionForTenant(tenantId, transactionData) {
 
 
     if (transactionData.from.toString() === BUSINESS_ACCOUNT || transactionData.to.toString() === BUSINESS_ACCOUNT) {
-        let homesyBusinessUser = await findUserWithUserName(BUSINESS_ACCOUNT, tenantId);
+        let homesyBusinessUser = await findBusinessAccountUser(tenantId);
 
-        if (!homesyBusinessUser) {
+        if (homesyBusinessUser === null) {
+            console.log("-----homesyBusinessUser----->", (homesyBusinessUser === null));
+
             homesyBusinessUser = await createUserForTenant(tenantId, {
                 username: BUSINESS_ACCOUNT,
                 name: BUSINESS_NAME,
@@ -111,7 +113,7 @@ async function findTransactionAndUpdateById(tenantId, transactionId, updateOptio
     }
 
     if (updateOptions.from.toString() === BUSINESS_ACCOUNT || updateOptions.to.toString() === BUSINESS_ACCOUNT) {
-        let homesyBusinessUser = await findUserWithUserName(BUSINESS_ACCOUNT, tenantId);
+        let homesyBusinessUser = await findBusinessAccountUser(tenantId);
 
         if (!homesyBusinessUser) {
             homesyBusinessUser = await createUserForTenant(tenantId, {

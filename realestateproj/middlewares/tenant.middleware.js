@@ -8,6 +8,9 @@ async function tenantMiddleware(req, res, next) {
     if (req.path.includes("/tenants")) {
         return next();
     }
+    if (req.path.startsWith("/invoices/") && !req.path.startsWith("/api/")) {
+        return next();
+    }
 
     const tenantId = req.header("x-tenant-id");
     if (!tenantId) {
@@ -19,6 +22,7 @@ async function tenantMiddleware(req, res, next) {
     }
 
     const tenant = await TenantModel.findOne({ tenant_id: tenantId, status: status.ACTIVE });
+    console.log("tenantMiddleware -> tenantId:", tenantId, "found:", !!tenant);
     if (!tenant) {
         return responseBuilder.sendErrorResponse(
             res,

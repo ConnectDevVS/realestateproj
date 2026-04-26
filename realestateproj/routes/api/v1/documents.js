@@ -21,7 +21,7 @@ router.post("/upload-image", upload.single("image"), async (req, res, next) => {
         type: req.body.type,
     };
 
-    console.log("req.body", reqBody);
+    console.log("req.body", JSON.stringify(req.headers));
 
     if (!(reqBody.type === fileTypes.PROFILE_ICON) && helper.isEmpty(reqBody.pid)) {
         return responseBuilder.sendErrorResponse(
@@ -32,7 +32,10 @@ router.post("/upload-image", upload.single("image"), async (req, res, next) => {
     }
 
     try {
+
         if (!req.file) {
+            console.log("file error::::");
+
             return responseBuilder.sendErrorResponse(
                 res,
                 ERROR.FAILED_TO_UPLOAD_IMAGE,

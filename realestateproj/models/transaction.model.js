@@ -30,7 +30,7 @@ const TransactionSchema = createBaseSchema(
         },
         transaction_type: {
             type: String,
-            enum: [transactionType.ADVANCE, transactionType.REGULAR, paymentStatus.ADDITIONAL],
+            enum: [transactionType.ADVANCE, transactionType.REGULAR, transactionType.ADDITIONAL],
             default: null,
         },
 

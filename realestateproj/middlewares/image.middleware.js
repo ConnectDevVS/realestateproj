@@ -21,7 +21,10 @@ function returnBaseDirectory(req) {
 }
 
 const storage = multer.diskStorage({
+
     destination: function (req, file, cb) {
+        console.log("---------destination-------1--->")
+
         const tenantId = req.tenantId;
         console.log("---------destination---------->");
         if (!tenantId) {
@@ -54,6 +57,7 @@ const storage = multer.diskStorage({
     },
 
     filename: function (req, file, cb) {
+        console.log("---------filename---------->");
         const timestamp = new Date().toISOString().replace(/[-:.TZ]/g, "");
         const uuid = uuidv4();
         const ext = path.extname(file.originalname).toLowerCase();

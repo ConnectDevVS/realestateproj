@@ -4,7 +4,7 @@ const path = require("path");
 const { v4: uuidv4 } = require("uuid");
 const InvoiceModel = require("../models/invoice.model");
 
-const INVOICE_ROOT = path.join(__dirname, "../uploads/invoices");
+const INVOICE_ROOT = path.join(__dirname, "../public/uploads/invoices");
 
 const COL_DESC_X = 50;
 const COL_DESC_WIDTH = 250;

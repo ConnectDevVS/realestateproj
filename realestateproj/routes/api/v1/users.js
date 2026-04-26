@@ -2,7 +2,7 @@ var express = require("express");
 var router = express.Router();
 let helper = require("../../../utilities/helper");
 let responseBuilder = require("../../../utilities/response-builder");
-const { status: userStatus } = require("../../../utilities/roles");
+const { status: userStatus, status } = require("../../../utilities/roles");
 const ERROR = require("../../../utilities/error");
 const CONSTANTS = require("../../../utilities/constants");
 const { sendOTP } = require("../../../services/email.services");
@@ -14,6 +14,7 @@ const {
     findUsersForTenantByFilters,
     findUserById,
     findUserAndUpdateById,
+    findUnverifiedUserById
 } = require("../../../services/user.services");
 
 router.get("/", async (req, res, next) => {
@@ -212,6 +213,41 @@ router.post("/set-user-status", async (req, res, next) => {
         if (!isSuccess) {
             throw new Error(CONSTANTS.USER_NOT_FOUND);
         }
+        return responseBuilder.sendSuccessResponse(res);
+    } catch (err) {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.FAILED_TO_UPDATE_USER,
+            CONSTANTS.FAILED_TO_UPDATE_USER,
+            err,
+        );
+    }
+});
+
+router.post("/activate-user", async (req, res, next) => {
+    let { id, password } = req.body;
+    if (helper.isEmpty(id) || helper.isEmpty(password)) {
+        return responseBuilder.sendErrorResponse(
+            res,
+            ERROR.MISSING_PARAMETERS,
+            CONSTANTS.MISSING_PARAMETERS,
+        );
+    }
+
+    try {
+        const user = await findUnverifiedUserById(req.tenantId, id);
+        if (!user) {
+            return responseBuilder.sendErrorResponse(
+                res,
+                ERROR.USER_NOT_FOUND,
+                CONSTANTS.USER_NOT_FOUND
+            );
+        }
+
+        user.password = await user.hashPassword(password);
+        user.status = userStatus.ACTIVE;
+        user.otp = null;
+        await user.save();
         return responseBuilder.sendSuccessResponse(res);
     } catch (err) {
         return responseBuilder.sendErrorResponse(

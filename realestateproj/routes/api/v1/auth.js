@@ -31,7 +31,7 @@ router.post("/set-password", async (req, res, next) => {
     let existingUser = await findUserWithUserName(username);
 
     if (existingUser && existingUser.username === username && existingUser.otp === otp) {
-        existingUser.password = password;
+        existingUser.password = await existingUser.hashPassword(password);
         existingUser.access_token = generateToken(existingUser);
         existingUser.otp = null;
         existingUser.status = userStatus.ACTIVE;

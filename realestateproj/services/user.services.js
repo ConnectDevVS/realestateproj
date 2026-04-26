@@ -1,4 +1,5 @@
 const UserModel = require("../models/user.model");
+const { BUSINESS_ACCOUNT } = require("../utilities/constants");
 const helper = require("../utilities/helper");
 const { status: userStatus } = require("../utilities/roles");
 const { roles } = require("../utilities/roles");
@@ -11,6 +12,18 @@ async function findUserWithUserName(username, tenantId) {
             status: {
                 $in: [userStatus.ACTIVE, userStatus.UNVERIFIED],
             },
+        },
+        null,
+        {
+            tenantId,
+        },
+    );
+}
+async function findBusinessAccountUser(tenantId) {
+    return await UserModel.findOne(
+        {
+            username: BUSINESS_ACCOUNT,
+            role: roles.BUSINESS_ACCOUNT,
         },
         null,
         {
@@ -94,6 +107,30 @@ async function findUserById(tenantId, userId) {
 
     return user;
 }
+/**
+ * Finds a single unverified user by their ObjectId
+ *
+ * @param {String} tenantId - The tenant ID
+ * @param {String} userId - The MongoDB ObjectId of the user
+ * @returns {Promise<Object|null>} The user document or null if not found
+ */
+async function findUnverifiedUserById(tenantId, userId) {
+    if (!helper.isValidMongoId(userId)) {
+        return false;
+    }
+
+    const user = await UserModel.findOne(
+        {
+            _id: userId,
+            role: { $nin: [roles.SUPER_ADMIN, roles.BUSINESS_ACCOUNT] },
+            status: userStatus.UNVERIFIED,
+        },
+        null,
+        { tenantId },
+    );
+
+    return user;
+}
 
 /**
  * Finds a single user by their ObjectId and update fields
@@ -124,4 +161,6 @@ module.exports = {
     findUsersForTenantByFilters,
     findUserById,
     findUserAndUpdateById,
+    findUnverifiedUserById,
+    findBusinessAccountUser
 };

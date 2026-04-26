@@ -25,6 +25,8 @@ var v1InvoicesRouter = require("./routes/api/v1/invoices");
 var v1SubContractRouter = require("./routes/api/v1/subcontract");
 var v1ComplaintRouter = require("./routes/api/v1/complaints");
 var v1TenantRouter = require("./routes/api/v1/tenant");
+var v1ShowcaseCatalogRouter = require("./routes/api/v1/showcase-catalog");
+var v1ContactUsRouter = require("./routes/api/v1/contactus");
 
 /*************ROUTES FOR VERSION 1 ************/
 
@@ -63,6 +65,8 @@ app.use("/api/v1/invoices", v1InvoicesRouter);
 app.use("/api/v1/subcontract", v1SubContractRouter);
 app.use("/api/v1/complaints", v1ComplaintRouter);
 app.use("/api/v1/tenants", v1TenantRouter);
+app.use("/api/v1/showcase-catalog", v1ShowcaseCatalogRouter);
+app.use("/api/v1/contactus", v1ContactUsRouter);
 
 /*********************************************/
 

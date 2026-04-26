@@ -26,7 +26,6 @@ const DocumentSchema = createBaseSchema(
                 fileTypes.PROFILE_ICON,
                 fileTypes.PROJECT_ICON,
             ],
-            default: status.ACTIVE,
         },
     },
     {
