@@ -41,6 +41,12 @@ const storage = multer.diskStorage({
             if (req.body.type === fileTypes.IMAGE) {
                 tenantDir = `${tenantDir}/images`;
             }
+            if (
+                req.body.type === fileTypes.CONSTRUCTION_FILES ||
+                req.body.type === fileTypes.CONTRACT_FILES
+            ) {
+                tenantDir = `${tenantDir}/documents`;
+            }
             tenantDir = path.join(tenantDir, tenantId);
 
             console.log("tenantDir:", tenantDir);

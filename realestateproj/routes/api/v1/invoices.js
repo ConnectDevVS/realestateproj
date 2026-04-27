@@ -1,11 +1,10 @@
 const express = require("express");
 const router = express.Router();
-const mongoose = require("mongoose");
-let helper = require("../../../utilities/helper");
 let responseBuilder = require("../../../utilities/response-builder");
 const ERROR = require("../../../utilities/error");
 const CONSTANTS = require("../../../utilities/constants");
 const { findTransactionById } = require("../../../services/transaction.services.js");
+const { findTenantByTenantId } = require("../../../services/tenant.services.js");
 const { generateInvoiceUniqueCode } = require("../../../utilities/otp.js");
 const {
     generateInvoicePdf,
@@ -13,11 +12,16 @@ const {
 } = require("../../../services/invoice.services.js");
 const { currency } = require("../../../utilities/roles.js");
 
-router.get("/transaction/:transactionId", async (req, res, next) => {
+router.get("/transaction/:transactionId", async (req, res) => {
     try {
         const { transactionId } = req.params;
+        const { tenantId } = req;
 
-        const transaction = await findTransactionById(req.tenantId, transactionId);
+        const [transaction, tenant] = await Promise.all([
+            findTransactionById(tenantId, transactionId),
+            findTenantByTenantId(tenantId),
+        ]);
+
         if (!transaction) {
             return responseBuilder.sendErrorResponse(
                 res,
@@ -25,12 +29,10 @@ router.get("/transaction/:transactionId", async (req, res, next) => {
                 CONSTANTS.TRANSACTIONS_NOT_FOUND
             );
         }
-        console.log("--------------->>>", transaction);
 
-        // Build invoice object
         let invoice_no = `INV-${new Date().getFullYear()}-${generateInvoiceUniqueCode()}`;
         const invoice = {
-            invoice_no: invoice_no,
+            invoice_no,
             invoice_date: new Date(),
             project: transaction.pid,
             stage: transaction.sid,
@@ -43,23 +45,22 @@ router.get("/transaction/:transactionId", async (req, res, next) => {
             currency: transaction.currency ? transaction.currency : currency.INR,
         };
 
-        const { tenantId } = req;
-        // Generate PDF
         const { invoice_no: fileName } = await generateInvoicePdf({
             invoice,
             tenantId,
             invoice_no,
+            tenant,
         });
 
         const invoiceUrl = `/invoices/${tenantId}/${fileName}`;
-        let newInvoice = {
+        const newInvoice = {
             pid: transaction.pid,
             sid: transaction.sid,
             transaction_id: transaction._id,
             url: invoiceUrl,
-            invoice_no: invoice_no,
+            invoice_no,
         };
-        const invoiceData = await addInvoiceForTenant(req.tenantId, newInvoice);
+        const invoiceData = await addInvoiceForTenant(tenantId, newInvoice);
         return responseBuilder.sendSuccessResponse(res, invoiceData);
     } catch (err) {
         return responseBuilder.sendErrorResponse(

@@ -1,4 +1,5 @@
 const TransactionModel = require("../models/transaction.model");
+const ProjectModel = require("../models/project.model");
 const { BUSINESS_ACCOUNT, BUSINESS_NAME, BUSINESS_EMAIL } = require("../utilities/constants");
 const helper = require("../utilities/helper");
 const { status: transactionStatus } = require("../utilities/roles");
@@ -8,9 +9,9 @@ const { status: userStatus } = require("../utilities/roles");
 const { findBusinessAccountUser, createUserForTenant } = require("./user.services");
 
 async function createTransactionForTenant(tenantId, transactionData) {
+    const toIsBusinessAccount = transactionData.to.toString() === BUSINESS_ACCOUNT;
 
-
-    if (transactionData.from.toString() === BUSINESS_ACCOUNT || transactionData.to.toString() === BUSINESS_ACCOUNT) {
+    if (transactionData.from.toString() === BUSINESS_ACCOUNT || toIsBusinessAccount) {
         let homesyBusinessUser = await findBusinessAccountUser(tenantId);
 
         if (homesyBusinessUser === null) {
@@ -28,14 +29,23 @@ async function createTransactionForTenant(tenantId, transactionData) {
         if (transactionData.from.toString() === BUSINESS_ACCOUNT) {
             transactionData.from = homesyBusinessUser._id.toString();
         }
-        if (transactionData.to.toString() === BUSINESS_ACCOUNT) {
+        if (toIsBusinessAccount) {
             transactionData.to = homesyBusinessUser._id.toString();
         }
 
     }
-    return await TransactionModel.create({ ...transactionData, tenantId });
 
+    const transaction = await TransactionModel.create({ ...transactionData, tenantId });
 
+    if (toIsBusinessAccount) {
+        await ProjectModel.findByIdAndUpdate(
+            transactionData.pid,
+            { $inc: { total_cost: transactionData.amount } },
+            { tenantId }
+        );
+    }
+
+    return transaction;
 }
 
 /**

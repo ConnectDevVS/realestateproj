@@ -72,10 +72,15 @@ async function deleteTenantById(tenantId, id) {
    );
 }
 
+async function findTenantByTenantId(tenantId) {
+   return await TenantModel.findOne({ tenant_id: tenantId, status: status.ACTIVE });
+}
+
 module.exports = {
    createTenant,
    findAllTenants,
    findTenantById,
+   findTenantByTenantId,
    findTenantAndUpdateById,
    deleteTenantById,
 };

@@ -69,8 +69,14 @@ async function createUserForTenant(tenantId, userData) {
  * @returns {Promise<Array>} List of users matching filters
  */
 async function findUsersForTenantByFilters(tenantId, filters, includeunverified) {
-    const query = Object.fromEntries(Object.entries(filters).filter(([_, value]) => value != null));
-    query.role = { $nin: [roles.SUPER_ADMIN, roles.BUSINESS_ACCOUNT] };
+    const query = Object.fromEntries(Object.entries(filters).filter(([key, value]) => value != null && key !== 'role'));
+    const excludedRoles = [roles.SUPER_ADMIN, roles.BUSINESS_ACCOUNT];
+    if (filters.role != null) {
+        const allowedRoles = [].concat(filters.role).filter(r => !excludedRoles.includes(r));
+        query.role = { $in: allowedRoles };
+    } else {
+        query.role = { $nin: excludedRoles };
+    }
     query.tenantId = tenantId;
     if (includeunverified) {
         query.status = {
