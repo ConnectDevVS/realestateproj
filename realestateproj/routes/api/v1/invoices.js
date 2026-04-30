@@ -39,7 +39,7 @@ router.get("/transaction/:transactionId", async (req, res) => {
             billed_from: transaction.from,
             billed_to: transaction.to,
             description: transaction.note,
-            tax: 15,
+            tax: 0,
             transaction,
             amount: transaction.amount,
             currency: transaction.currency ? transaction.currency : currency.INR,

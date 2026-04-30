@@ -24,7 +24,8 @@ const ProjectSchema = createBaseSchema(
         start_date: { type: Date, default: null },
         end_date: { type: Date, default: null },
         estimate: { type: Number, default: 0 },
-        total_cost: { type: Number, default: 0 },
+        amount_recieved: { type: Number, default: 0 },
+        expense: { type: Number, default: 0 },
         currency: { type: String, default: currency.INR },
         image: { type: String },
         status: {

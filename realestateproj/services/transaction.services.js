@@ -6,9 +6,35 @@ const { status: transactionStatus } = require("../utilities/roles");
 const { roles: roles } = require("../utilities/roles");
 const { status: userStatus } = require("../utilities/roles");
 
-const { findBusinessAccountUser, createUserForTenant } = require("./user.services");
+const { findBusinessAccountUser, createUserForTenant, findUserById } = require("./user.services");
+
+async function _updateProjectFinancials(tenantId, transactionData, fromIsBusinessAccount, toIsBusinessAccount) {
+    if (!fromIsBusinessAccount && toIsBusinessAccount) {
+        const fromUser = await findUserById(tenantId, transactionData.from.toString());
+        if (fromUser?.role === roles.CUSTOMER) {
+            await ProjectModel.findByIdAndUpdate(
+                transactionData.pid,
+                { $inc: { amount_recieved: transactionData.amount } },
+                { tenantId }
+            );
+        }
+        return;
+    }
+
+    if (fromIsBusinessAccount) {
+        const toUser = await findUserById(tenantId, transactionData.to.toString());
+        if (toUser?.role !== roles.CUSTOMER) {
+            await ProjectModel.findByIdAndUpdate(
+                transactionData.pid,
+                { $inc: { expense: transactionData.amount } },
+                { tenantId }
+            );
+        }
+    }
+}
 
 async function createTransactionForTenant(tenantId, transactionData) {
+    const fromIsBusinessAccount = transactionData.from.toString() === BUSINESS_ACCOUNT;
     const toIsBusinessAccount = transactionData.to.toString() === BUSINESS_ACCOUNT;
 
     if (transactionData.from.toString() === BUSINESS_ACCOUNT || toIsBusinessAccount) {
@@ -37,13 +63,7 @@ async function createTransactionForTenant(tenantId, transactionData) {
 
     const transaction = await TransactionModel.create({ ...transactionData, tenantId });
 
-    if (toIsBusinessAccount) {
-        await ProjectModel.findByIdAndUpdate(
-            transactionData.pid,
-            { $inc: { total_cost: transactionData.amount } },
-            { tenantId }
-        );
-    }
+    await _updateProjectFinancials(tenantId, transactionData, fromIsBusinessAccount, toIsBusinessAccount);
 
     return transaction;
 }
