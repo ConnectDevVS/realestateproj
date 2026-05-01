@@ -19,9 +19,9 @@ router.post("/", async (req, res, next) => {
         start_date: req.body.start_date,
         end_date: req.body.end_date,
         estimate: req.body.estimate,
-        total_cost: req.body.total_cost,
+        total_cost: 0,
         invoice_gen: req.body.invoice_gen,
-        expense: req.body.expense,
+        expense: 0,
         s_status: req.body.s_status,
         members: req.body.members,
     };
@@ -72,8 +72,11 @@ router.get("/project/:id", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
     const { id } = req.params;
 
-    const stage = await findStageById(req.tenantId, id);
-    if (stage) {
+    const stageDoc = await findStageById(req.tenantId, id);
+    if (stageDoc) {
+        const stage = stageDoc.toObject();
+        stage.total_cost = 0;
+        stage.expense = 0;
         return responseBuilder.sendSuccessResponse(res, stage);
     } else {
         return responseBuilder.sendErrorResponse(
@@ -92,11 +95,12 @@ router.put("/:id", async (req, res, next) => {
         start_date: req.body.start_date,
         end_date: req.body.end_date,
         estimate: req.body.estimate,
-        total_cost: req.body.total_cost,
+        total_cost: 0,
         invoice_gen: req.body.invoice_gen,
-        expense: req.body.expense,
+        expense: 0,
         s_status: req.body.s_status,
         members: req.body.members,
+        progress: req.body.progress,
     };
     if (helper.isEmpty(id)) {
         return responseBuilder.sendErrorResponse(

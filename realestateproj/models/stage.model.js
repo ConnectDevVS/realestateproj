@@ -22,6 +22,7 @@ const StageSchema = createBaseSchema(
             required: false,
         },
 
+        progress: { type: Number, default: 0, min: 0, max: 100 },
         s_status: {
             type: String,
             enum: [
