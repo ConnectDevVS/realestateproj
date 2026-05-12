@@ -21,7 +21,6 @@ router.post("/upload-image", upload.single("image"), async (req, res, next) => {
         type: req.body.type,
     };
 
-    console.log("req.body", JSON.stringify(req.headers));
 
     if (!(reqBody.type === fileTypes.PROFILE_ICON) && helper.isEmpty(reqBody.pid)) {
         return responseBuilder.sendErrorResponse(
@@ -32,6 +31,7 @@ router.post("/upload-image", upload.single("image"), async (req, res, next) => {
     }
 
     try {
+        const fileType = req.headers['x-file-type'];
 
         if (!req.file) {
             console.log("file error::::");
@@ -44,19 +44,20 @@ router.post("/upload-image", upload.single("image"), async (req, res, next) => {
         }
         let imageUrl = `/uploads`;
 
-        if (req.body.type === fileTypes.PROFILE_ICON) {
+        if (fileType === fileTypes.PROFILE_ICON) {
             imageUrl = `${imageUrl}/profileicon`;
         }
-        if (req.body.type === fileTypes.PROJECT_ICON) {
+        if (fileType === fileTypes.PROJECT_ICON) {
             imageUrl = `${imageUrl}/projecticon`;
         }
-        if (req.body.type === fileTypes.IMAGE || req.body.type === fileTypes.COMPLAINT_IMAGE) {
+        if (fileType === fileTypes.IMAGE || fileType === fileTypes.COMPLAINT_IMAGE) {
             imageUrl = `${imageUrl}/images`;
         }
 
         imageUrl = `${imageUrl}/${req.tenantId}/${req.file.filename}`;
         console.log("imageUrl:", imageUrl);
         reqBody.url = imageUrl;
+        reqBody.type = fileType
 
         const imageData = await addProjectImageForTenant(req.tenantId, reqBody);
         console.log("image data::::", imageData);
@@ -108,9 +109,10 @@ router.post("/upload-document", upload.single("document"), async (req, res, next
                 CONSTANTS.FAILED_TO_UPLOAD_DOCUMENT,
             );
         }
-
+        const fileType = req.headers['x-file-type'];
         const imageUrl = `/uploads/documents/${req.tenantId}/${req.file.filename}`;
         reqBody.url = imageUrl;
+        reqBody.type = fileType;
         const imageData = await addProjectDocumentForTenant(req.tenantId, reqBody);
         return responseBuilder.sendSuccessResponse(res, imageData);
     } catch (err) {

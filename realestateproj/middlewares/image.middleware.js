@@ -23,27 +23,25 @@ function returnBaseDirectory(req) {
 const storage = multer.diskStorage({
 
     destination: function (req, file, cb) {
-        console.log("---------destination-------1--->")
 
         const tenantId = req.tenantId;
-        console.log("---------destination---------->");
         if (!tenantId) {
             return cb(new Error("Tenant ID missing"), null);
         }
         try {
             let tenantDir = returnBaseDirectory(req);
-            if (req.body.type === fileTypes.PROFILE_ICON) {
+            const fileType = req.headers['x-file-type'];
+            console.log("---------Type---------->", fileType);
+
+            if (fileType === fileTypes.PROFILE_ICON) {
                 tenantDir = `${tenantDir}/profileicon`;
-            }
-            if (req.body.type === fileTypes.PROJECT_ICON) {
+            } else if (fileType === fileTypes.PROJECT_ICON) {
                 tenantDir = `${tenantDir}/projecticon`;
-            }
-            if (req.body.type === fileTypes.IMAGE) {
+            } else if (fileType === fileTypes.IMAGE || fileType === fileTypes.COMPLAINT_IMAGE) {
                 tenantDir = `${tenantDir}/images`;
-            }
-            if (
-                req.body.type === fileTypes.CONSTRUCTION_FILES ||
-                req.body.type === fileTypes.CONTRACT_FILES
+            } else if (
+                fileType === fileTypes.CONSTRUCTION_FILES ||
+                fileType === fileTypes.CONTRACT_FILES
             ) {
                 tenantDir = `${tenantDir}/documents`;
             }
@@ -52,7 +50,6 @@ const storage = multer.diskStorage({
             console.log("tenantDir:", tenantDir);
 
             if (!fs.existsSync(tenantDir)) {
-                console.log("---------fs---------->");
 
                 fs.mkdirSync(tenantDir, { recursive: true });
             }

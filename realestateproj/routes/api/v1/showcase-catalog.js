@@ -117,11 +117,6 @@ const showcaseAndCatalog = {
     ],
     catalog: [
         {
-            "brand": "Kajaria Glazed Vitrified Tile (per sq.ft)",
-            "image": "https://images.unsplash.com/photo-1558618047-f4e50c431b26?w=800",
-            "price": "₹85"
-        },
-        {
             "brand": "Somany Ceramic Floor Tile (per sq.ft)",
             "image": "https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?w=800",
             "price": "₹62"
@@ -162,11 +157,6 @@ const showcaseAndCatalog = {
             "price": "₹12,500"
         },
         {
-            "brand": "CERA Rain Shower Panel",
-            "image": "https://images.unsplash.com/photo-1620626011761-996317702782?w=800",
-            "price": "₹9,800"
-        },
-        {
             "brand": "Finolex FR PVC Wire 1.5 sq.mm (90m coil)",
             "image": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800",
             "price": "₹1,150"
@@ -180,16 +170,6 @@ const showcaseAndCatalog = {
             "brand": "Legrand MCB 32A Single Pole",
             "image": "https://images.unsplash.com/photo-1558002038-1055907df827?w=800",
             "price": "₹480"
-        },
-        {
-            "brand": "Polycab Distribution Board 8-Way",
-            "image": "https://images.unsplash.com/photo-1605732049255-f0a27d4e19be?w=800",
-            "price": "₹2,200"
-        },
-        {
-            "brand": "Anchor Roma Switch Socket Combo",
-            "image": "https://images.unsplash.com/photo-1610056494249-5d7a3b153571?w=800",
-            "price": "₹195"
         },
         {
             "brand": "Syska LED Panel Light 18W",
@@ -212,19 +192,9 @@ const showcaseAndCatalog = {
             "price": "₹68"
         },
         {
-            "brand": "Asian Granito Outdoor Anti-Skid Tile (per sq.ft)",
-            "image": "https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?w=800",
-            "price": "₹58"
-        },
-        {
             "brand": "Schneider Electric Acti9 RCCB 40A",
             "image": "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800",
             "price": "₹1,850"
-        },
-        {
-            "brand": "Jaquar ALD Series Shower Head",
-            "image": "https://images.unsplash.com/photo-1603825491103-bd638b1873b4?w=800",
-            "price": "₹3,400"
         }
     ]
 }

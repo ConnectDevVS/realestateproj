@@ -19,8 +19,8 @@ const DocumentSchema = createBaseSchema(
         type: {
             type: String,
             enum: [
-                fileTypes.CONSTRUCTION_FILE,
-                fileTypes.CONTRACT_FILE,
+                fileTypes.CONSTRUCTION_FILES,
+                fileTypes.CONTRACT_FILES,
                 fileTypes.IMAGE,
                 fileTypes.COMPLAINT_IMAGE,
                 fileTypes.PROFILE_ICON,
