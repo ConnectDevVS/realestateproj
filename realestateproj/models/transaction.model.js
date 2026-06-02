@@ -7,6 +7,7 @@ const {
     paymentStatus,
     paymentMode,
     transactionType,
+    refundStatus,
     status,
     currency,
 } = require("../utilities/roles");
@@ -51,6 +52,19 @@ const TransactionSchema = createBaseSchema(
             ],
             default: null,
         },
+        razorpay_order_id: { type: String, default: null },
+        razorpay_payment_id: { type: String, default: null },
+        razorpay_signature: { type: String, default: null },
+        paid_at: { type: Date, default: null },
+        failure_reason: { type: String, default: null },
+        refund_id: { type: String, default: null },
+        refund_status: {
+            type: String,
+            enum: [refundStatus.PENDING, refundStatus.PROCESSED, refundStatus.FAILED, null],
+            default: null,
+        },
+        refund_amount: { type: Number, default: 0 },
+        refunded_at: { type: Date, default: null },
         status: {
             type: String,
             enum: [status.ACTIVE, status.INACTIVE],
@@ -70,7 +84,7 @@ const TransactionSchema = createBaseSchema(
 
 // Hide secure fields
 TransactionSchema.plugin(hideSecureFieldsPlugin, {
-    fields: ["tenantId", "__v"],
+    fields: ["tenantId", "__v", "razorpay_signature"],
 });
 
 // Add tenant enforcement plugin

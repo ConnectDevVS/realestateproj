@@ -13,6 +13,7 @@ const status = {
     ACTIVE: "ACTIVE",
     INACTIVE: "INACTIVE",
     UNVERIFIED: "UNVERIFIED",
+    RESETPASSWORD: "RESETPASSWORD"
 };
 const currency = {
     INR: "INR",
@@ -80,6 +81,12 @@ const fileTypes = {
     PROJECT_ICON: "PROJECT_ICON",
 };
 
+const refundStatus = {
+    PENDING: "PENDING",
+    PROCESSED: "PROCESSED",
+    FAILED: "FAILED",
+};
+
 const billingStatus = {
     ACTIVE: "ACTIVE",
     TRIAL: "TRIAL",
@@ -102,4 +109,5 @@ module.exports = {
     complaintStatus: complaintStatus,
     fileTypes: fileTypes,
     billingStatus: billingStatus,
+    refundStatus: refundStatus,
 };

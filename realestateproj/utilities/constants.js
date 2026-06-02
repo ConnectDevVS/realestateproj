@@ -65,4 +65,10 @@ module.exports = Object.freeze({
     FAILED_TO_CREATE_PROJECTCHAT: "Failed to create project chat",
     TEAM_ALREADY_EXISIT: "Team already exist for project. Try editing existing team",
     ERROR_WHILE_FETCHING_IMAGES: "Error occured while fetching images",
+    FAILED_TO_CREATE_PAYMENT_ORDER: "Failed to create payment order",
+    PAYMENT_ALREADY_COMPLETED: "Payment already completed for this transaction",
+    INVALID_PAYMENT_SIGNATURE: "Invalid payment signature",
+    PAYMENT_VERIFICATION_FAILED: "Payment verification failed",
+    FAILED_TO_REFUND_PAYMENT: "Failed to process refund",
+    FAILED_TO_FETCH_PAYMENT: "Failed to fetch payment details",
 });

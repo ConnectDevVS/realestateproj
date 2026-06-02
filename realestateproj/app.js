@@ -27,6 +27,7 @@ var v1ComplaintRouter = require("./routes/api/v1/complaints");
 var v1TenantRouter = require("./routes/api/v1/tenant");
 var v1ShowcaseCatalogRouter = require("./routes/api/v1/showcase-catalog");
 var v1ContactUsRouter = require("./routes/api/v1/contactus");
+var v1PaymentRouter = require("./routes/api/v1/payment");
 
 /*************ROUTES FOR VERSION 1 ************/
 
@@ -40,6 +41,8 @@ app.set("view engine", "pug");
 app.use(logger("dev"));
 // Enable CORS for all routes
 app.use(cors());
+// Raw body needed for Razorpay webhook signature verification (must be before express.json)
+app.use("/api/v1/payment/webhook", require("body-parser").raw({ type: "application/json" }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -67,6 +70,7 @@ app.use("/api/v1/complaints", v1ComplaintRouter);
 app.use("/api/v1/tenants", v1TenantRouter);
 app.use("/api/v1/showcase-catalog", v1ShowcaseCatalogRouter);
 app.use("/api/v1/contactus", v1ContactUsRouter);
+app.use("/api/v1/payment", v1PaymentRouter);
 
 /*********************************************/
 

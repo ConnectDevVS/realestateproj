@@ -10,7 +10,7 @@ async function findUserWithUserName(username, tenantId) {
             username: username,
             role: { $nin: [roles.SUPER_ADMIN, roles.BUSINESS_ACCOUNT] },
             status: {
-                $in: [userStatus.ACTIVE, userStatus.UNVERIFIED],
+                $in: [userStatus.ACTIVE, userStatus.UNVERIFIED, userStatus.RESETPASSWORD],
             },
         },
         null,
@@ -36,7 +36,9 @@ async function findActiveUserWithUserName(username, tenantId) {
         {
             username: username,
             role: { $nin: [roles.BUSINESS_ACCOUNT] },
-            status: userStatus.ACTIVE,
+            status: {
+                $in: [userStatus.ACTIVE, userStatus.RESETPASSWORD],
+            },
         },
         null,
         {

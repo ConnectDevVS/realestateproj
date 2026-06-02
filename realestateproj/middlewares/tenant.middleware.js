@@ -5,7 +5,7 @@ const CONSTANTS = require("../utilities/constants");
 const { status } = require("../utilities/roles");
 
 async function tenantMiddleware(req, res, next) {
-    if (req.path.includes("/tenants")) {
+    if (req.path.includes("/tenants") || req.path.includes("/payment/webhook")) {
         return next();
     }
     if (req.path.startsWith("/invoices/") && !req.path.startsWith("/api/")) {

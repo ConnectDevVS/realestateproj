@@ -167,14 +167,16 @@ router.post("/check-user", async (req, res, next) => {
     }
 
     const existingUser = await findUserWithUserName(username);
-    var data = {};
     if (existingUser && existingUser.username === username && existingUser.email) {
         try {
-            let otp = generateOtp();
-            existingUser.otp = otp;
+            if (existingUser.status === userStatus.UNVERIFIED) {
+                let otp = generateOtp();
+                existingUser.otp = otp;
 
-            sendOTP(otp, existingUser.email);
-            await existingUser.save();
+                sendOTP(otp, existingUser.email);
+                await existingUser.save();
+            }
+
             return responseBuilder.sendSuccessResponse(
                 res,
                 existingUser,

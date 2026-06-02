@@ -9,8 +9,8 @@ const { status } = require("../utilities/roles");
 
 const UserSchema = createBaseSchema(
     {
-        name: { type: String, required: true },
-        username: { type: String, required: true },
+        name: { type: String, required: true, trim: true },
+        username: { type: String, required: true, trim: true },
         role: {
             type: String,
             enum: [
@@ -39,7 +39,7 @@ const UserSchema = createBaseSchema(
         },
         status: {
             type: String,
-            enum: [status.ACTIVE, status.INACTIVE, status.UNVERIFIED],
+            enum: [status.ACTIVE, status.INACTIVE, status.UNVERIFIED, status.RESETPASSWORD],
             default: status.ACTIVE,
         },
     },

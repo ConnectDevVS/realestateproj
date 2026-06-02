@@ -9,9 +9,9 @@ const { sendEmail } = require("../../../services/email.services");
 const CONTACT_US_EMAIL = "info@homesyonefourbuilders.com";
 
 router.post("/", async (req, res) => {
-    const { name, contact } = req.body;
+    const { name, contact, email } = req.body;
 
-    if (helper.isEmpty(name) || helper.isEmpty(contact)) {
+    if (helper.isEmpty(name)) {
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.MISSING_PARAMETERS,
@@ -31,7 +31,7 @@ router.post("/", async (req, res) => {
         await sendEmail({
             to: CONTACT_US_EMAIL,
             subject: "New contact info",
-            text: `A user named: ${name} tried to contact you. Contact info is ${contact}.`,
+            text: `A user named: ${name} and email ${email} tried to contact you. Contact info is ${contact}.`,
             html: `<p>A user named: <strong>${name}</strong> tried to contact you. Contact info is <strong>${contact}</strong>.</p>`,
         });
         return responseBuilder.sendSuccessResponse(res);
