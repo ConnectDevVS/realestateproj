@@ -49,6 +49,7 @@ const paymentMode = {
     CHEQUE: "CHEQUE",
     DD: "DD",
     OTHERS: "OTHERS",
+    CANCELLED: "CANCELLED"
 };
 
 const transactionType = {

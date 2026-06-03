@@ -49,6 +49,7 @@ const TransactionSchema = createBaseSchema(
                 paymentMode.CHEQUE,
                 paymentMode.DD,
                 paymentMode.OTHERS,
+                paymentMode.CANCELLED
             ],
             default: null,
         },

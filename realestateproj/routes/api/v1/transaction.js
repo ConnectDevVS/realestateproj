@@ -145,6 +145,13 @@ router.put("/:id", async (req, res, next) => {
             );
         }
     } catch (err) {
+        if (err.message === "RAZORPAY_TRANSACTION_CANNOT_EDIT") {
+            return responseBuilder.sendErrorResponse(
+                res,
+                ERROR.RAZORPAY_TRANSACTION_CANNOT_EDIT,
+                CONSTANTS.RAZORPAY_TRANSACTION_CANNOT_EDIT,
+            );
+        }
         return responseBuilder.sendErrorResponse(
             res,
             ERROR.FAILED_TO_UPDATE_TRANSACTION,

@@ -2,8 +2,7 @@ const TransactionModel = require("../models/transaction.model");
 const ProjectModel = require("../models/project.model");
 const { BUSINESS_ACCOUNT, BUSINESS_NAME, BUSINESS_EMAIL } = require("../utilities/constants");
 const helper = require("../utilities/helper");
-const { status: transactionStatus } = require("../utilities/roles");
-const { roles: roles } = require("../utilities/roles");
+const { status: transactionStatus, roles: roles, paymentStatus } = require("../utilities/roles");
 const { status: userStatus } = require("../utilities/roles");
 
 const { findBusinessAccountUser, createUserForTenant, findUserById } = require("./user.services");
@@ -87,6 +86,24 @@ async function findAllTransactionForProject(projectId, tenantId) {
         .populate("to", "name username email role");
 }
 
+async function sumCustomerPaymentsForProject(tenantId, projectId) {
+    if (!helper.isValidMongoId(projectId)) {
+        return false;
+    }
+
+    const transactions = await TransactionModel.find(
+        { pid: projectId, status: transactionStatus.ACTIVE, payment_status: paymentStatus.SUCCESS },
+        null,
+        { tenantId }
+    )
+        .populate("from", "role")
+        .populate("to", "role");
+
+    return transactions
+        .filter(t => t.from?.role === roles.CUSTOMER && t.to?.role === roles.BUSINESS_ACCOUNT)
+        .reduce((sum, t) => sum + t.amount, 0);
+}
+
 /**
  * Finds transacion by stage
  * @param {String} stageId - The stage ID
@@ -164,6 +181,16 @@ async function findTransactionAndUpdateById(tenantId, transactionId, updateOptio
 
     }
 
+    const oldTransaction = await TransactionModel.findOne(
+        { _id: transactionId },
+        null,
+        { tenantId }
+    );
+
+    if (oldTransaction?.razorpay_payment_id) {
+        throw new Error("RAZORPAY_TRANSACTION_CANNOT_EDIT");
+    }
+
     const transaction = await TransactionModel.findOneAndUpdate(
         { _id: transactionId },
         updateOptions,
@@ -200,6 +227,7 @@ async function deleteTransactionById(tenantId, transactionId) {
 module.exports = {
     createTransactionForTenant,
     findAllTransactionForProject,
+    sumCustomerPaymentsForProject,
     findAllTransactionForStage,
     findTransactionById,
     findTransactionAndUpdateById,

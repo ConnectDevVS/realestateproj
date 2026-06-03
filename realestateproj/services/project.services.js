@@ -5,6 +5,7 @@ const { status: projectActiveStatus } = require("../utilities/roles");
 const { status: teamStatus } = require("../utilities/roles");
 
 const { projectStatus } = require("../utilities/roles");
+const { sumCustomerPaymentsForProject } = require("./transaction.services");
 
 async function findProjectWithTitle(title, tenantId) {
     return await ProjectModel.findOne({ title: title }, null, { tenantId });
@@ -78,11 +79,17 @@ async function findProjectForTenantById(tenantId, projectId) {
         return false;
     }
 
-    const project = await ProjectModel.findOne(
+    var project = await ProjectModel.findOne(
         { _id: projectId, status: projectActiveStatus.ACTIVE },
         null,
         { tenantId },
     ).populate("customer", "name username email "); //-_id
+    console.log("---old->", project.amount_recieved)
+    let totalAmountFromCustomer = await sumCustomerPaymentsForProject(tenantId, projectId);
+    project.amount_recieved = totalAmountFromCustomer;
+    console.log("---new->", totalAmountFromCustomer)
+    console.log("---new-1>", project.amount_recieved)
+
 
     return project;
 }
@@ -105,7 +112,7 @@ async function findProjectForTenantByCustomerId(tenantId, customerId) {
         { tenantId },
     ).populate("customer", "name username email "); //-_id
     const counts = await ProjectModel.aggregate([
-        { $match: { customer: helper.stringToObjectId(customerId),  status: projectActiveStatus.ACTIVE } },
+        { $match: { customer: helper.stringToObjectId(customerId), status: projectActiveStatus.ACTIVE } },
         { $group: { _id: "$p_status", count: { $sum: 1 } } },
         { $group: { _id: null, totalCount: { $sum: "$count" }, breakdown: { $push: "$$ROOT" } } },
     ]);
@@ -133,8 +140,8 @@ async function findProjectsByMember(memberId, tenantId) {
         path: "customer",
         select: "_id name username email",
     });
-     const counts = await ProjectModel.aggregate([
-        { $match: {  _id: { $in: projectIds } , status: projectActiveStatus.ACTIVE  } },
+    const counts = await ProjectModel.aggregate([
+        { $match: { _id: { $in: projectIds }, status: projectActiveStatus.ACTIVE } },
         { $group: { _id: "$p_status", count: { $sum: 1 } } },
         { $group: { _id: null, totalCount: { $sum: "$count" }, breakdown: { $push: "$$ROOT" } } },
     ]);
