@@ -34,6 +34,8 @@ const paymentStatus = {
     SUCCESS: "SUCCESS",
     FAILED: "FAILED",
     INPROGRESS: "INPROGRESS",
+    CANCELLED: "CANCELLED"
+
 };
 
 const requestStatus = {
@@ -48,8 +50,7 @@ const paymentMode = {
     CASH: "CASH",
     CHEQUE: "CHEQUE",
     DD: "DD",
-    OTHERS: "OTHERS",
-    CANCELLED: "CANCELLED"
+    OTHERS: "OTHERS"
 };
 
 const transactionType = {

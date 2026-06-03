@@ -38,7 +38,7 @@ const TransactionSchema = createBaseSchema(
         note: { type: String, default: "" },
         payment_status: {
             type: String,
-            enum: [paymentStatus.SUCCESS, paymentStatus.FAILED, paymentStatus.INPROGRESS],
+            enum: [paymentStatus.SUCCESS, paymentStatus.FAILED, paymentStatus.INPROGRESS, paymentStatus.CANCELLED],
             default: null,
         },
         payment_mode: {
@@ -48,8 +48,7 @@ const TransactionSchema = createBaseSchema(
                 paymentMode.CASH,
                 paymentMode.CHEQUE,
                 paymentMode.DD,
-                paymentMode.OTHERS,
-                paymentMode.CANCELLED
+                paymentMode.OTHERS
             ],
             default: null,
         },
