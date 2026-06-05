@@ -107,7 +107,7 @@ async function findProjectForTenantByCustomerId(tenantId, customerId) {
     }
 
     const projects = await ProjectModel.find(
-        { customer: customerId, status: projectActiveStatus.ACTIVE },
+        { customer: helper.stringToObjectId(customerId), status: projectActiveStatus.ACTIVE },
         null,
         { tenantId },
     ).populate("customer", "name username email "); //-_id

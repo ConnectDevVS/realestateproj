@@ -47,11 +47,17 @@ router.post("/upload-image", upload.single("image"), async (req, res, next) => {
         if (fileType === fileTypes.PROFILE_ICON) {
             imageUrl = `${imageUrl}/profileicon`;
         }
-        if (fileType === fileTypes.PROJECT_ICON) {
+        else if (fileType === fileTypes.PROJECT_ICON) {
             imageUrl = `${imageUrl}/projecticon`;
         }
-        if (fileType === fileTypes.IMAGE || fileType === fileTypes.COMPLAINT_IMAGE) {
+        else if (fileType === fileTypes.IMAGE || fileType === fileTypes.COMPLAINT_IMAGE) {
             imageUrl = `${imageUrl}/images`;
+        }
+        else if (fileType === fileTypes.CONSTRUCTION_FILES || fileType === fileTypes.CONTRACT_FILES) {
+            imageUrl = `${imageUrl}/documents`;
+        }
+        else {
+            imageUrl = `${imageUrl}/documents`;
         }
 
         imageUrl = `${imageUrl}/${req.tenantId}/${req.file.filename}`;

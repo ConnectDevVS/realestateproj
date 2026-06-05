@@ -44,6 +44,8 @@ const storage = multer.diskStorage({
                 fileType === fileTypes.CONTRACT_FILES
             ) {
                 tenantDir = `${tenantDir}/documents`;
+            } else {
+                return cb(new Error(`Unknown x-file-type header: ${fileType}`), null);
             }
             tenantDir = path.join(tenantDir, tenantId);
 
