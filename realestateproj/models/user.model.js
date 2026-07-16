@@ -9,12 +9,13 @@ const { status } = require("../utilities/roles");
 
 const UserSchema = createBaseSchema(
     {
-        name: { type: String, required: true },
-        username: { type: String, required: true, unique: true },
+        name: { type: String, required: true, trim: true },
+        username: { type: String, required: true, trim: true },
         role: {
             type: String,
             enum: [
                 roles.SUPER_ADMIN,
+                roles.BUSINESS_ACCOUNT,
                 roles.ADMIN,
                 roles.SUPERVISOR,
                 roles.ACCOUNTS,
@@ -26,6 +27,7 @@ const UserSchema = createBaseSchema(
         },
         phone_no: { type: String, default: null },
         email: { type: String, default: null, trim: true },
+        image: { type: String, default: null },
         access_token: { type: String, default: null },
         password: {
             type: String,
@@ -37,7 +39,7 @@ const UserSchema = createBaseSchema(
         },
         status: {
             type: String,
-            enum: [status.ACTIVE, status.INACTIVE, status.UNVERIFIED],
+            enum: [status.ACTIVE, status.INACTIVE, status.UNVERIFIED, status.RESETPASSWORD],
             default: status.ACTIVE,
         },
     },
@@ -52,19 +54,19 @@ UserSchema.index({ tenantId: 1, username: 1 }, { unique: true });
 
 // Hide secure fields
 UserSchema.plugin(hideSecureFieldsPlugin, {
-    fields: ["tenantId", "password", "__v", "createdAt", "updatedAt"],
+    fields: ["password", "__v", "createdAt", "updatedAt"],
 });
 
 // Add tenant enforcement plugin
 UserSchema.plugin(tenantPlugin);
 
-// hash password before saving
-UserSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) return next();
-    this.password = await bcrypt.hash(this.password, 12);
 
-    next();
-});
+//compare password
+UserSchema.methods.hashPassword = async function (candidatePassword) {
+    return await bcrypt.hash(candidatePassword, 12);
+};
+
+
 
 //compare password
 UserSchema.methods.correctPassword = async function (candidatePassword) {

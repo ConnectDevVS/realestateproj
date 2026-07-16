@@ -7,6 +7,7 @@ const {
     paymentStatus,
     paymentMode,
     transactionType,
+    refundStatus,
     status,
     currency,
 } = require("../utilities/roles");
@@ -18,18 +19,26 @@ const TransactionSchema = createBaseSchema(
         sid: { type: mongoose.Schema.Types.ObjectId, ref: "Stage", default: null },
         subcontract_id: { type: mongoose.Schema.Types.ObjectId, ref: "SubContract", default: null },
         amount: { type: Number, required: true, default: 0 },
-        from: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
-        to: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+        from: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
+        to: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            required: true,
+        },
         transaction_type: {
             type: String,
-            enum: [transactionType.ADVANCE, transactionType.REGULAR, paymentStatus.ADDITIONAL],
+            enum: [transactionType.ADVANCE, transactionType.REGULAR, transactionType.ADDITIONAL],
             default: null,
         },
 
         note: { type: String, default: "" },
         payment_status: {
             type: String,
-            enum: [paymentStatus.SUCCESS, paymentStatus.FAILED, paymentStatus.INPROGRESS],
+            enum: [paymentStatus.SUCCESS, paymentStatus.FAILED, paymentStatus.INPROGRESS, paymentStatus.CANCELLED],
             default: null,
         },
         payment_mode: {
@@ -39,10 +48,23 @@ const TransactionSchema = createBaseSchema(
                 paymentMode.CASH,
                 paymentMode.CHEQUE,
                 paymentMode.DD,
-                paymentMode.OTHERS,
+                paymentMode.OTHERS
             ],
             default: null,
         },
+        razorpay_order_id: { type: String, default: null },
+        razorpay_payment_id: { type: String, default: null },
+        razorpay_signature: { type: String, default: null },
+        paid_at: { type: Date, default: null },
+        failure_reason: { type: String, default: null },
+        refund_id: { type: String, default: null },
+        refund_status: {
+            type: String,
+            enum: [refundStatus.PENDING, refundStatus.PROCESSED, refundStatus.FAILED, null],
+            default: null,
+        },
+        refund_amount: { type: Number, default: 0 },
+        refunded_at: { type: Date, default: null },
         status: {
             type: String,
             enum: [status.ACTIVE, status.INACTIVE],
@@ -62,7 +84,7 @@ const TransactionSchema = createBaseSchema(
 
 // Hide secure fields
 TransactionSchema.plugin(hideSecureFieldsPlugin, {
-    fields: ["tenantId", "__v"],
+    fields: ["tenantId", "__v", "razorpay_signature"],
 });
 
 // Add tenant enforcement plugin

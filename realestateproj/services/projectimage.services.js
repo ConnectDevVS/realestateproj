@@ -27,6 +27,7 @@ async function findDocumentsForProjectId(tenantId, projectId) {
                             fileTypes.CONSTRUCTION_FILES,
                             fileTypes.CONTRACT_FILES,
                             fileTypes.IMAGE,
+                            fileTypes.COMPLAINT_IMAGE,
                         ],
                     },
                 },

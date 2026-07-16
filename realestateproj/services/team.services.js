@@ -89,8 +89,12 @@ async function findTeamForTenantByProjectId(tenantId, projectId) {
     const teams = await TeamModel.findOne({ pid: projectId, status: teamStatus.ACTIVE }, null, {
         tenantId,
     }).populate("members", "name username email role "); //-_id
-
-    return teams;
+    if (!teams) {
+        return {};
+    }
+    else {
+        return teams;
+    }
 }
 
 module.exports = {

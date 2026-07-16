@@ -1,4 +1,5 @@
 const roles = {
+    BUSINESS_ACCOUNT: "BUSINESS_ACCOUNT",
     SUPER_ADMIN: "SUPER_ADMIN",
     ADMIN: "ADMIN",
     SUPERVISOR: "SUPERVISOR",
@@ -12,6 +13,7 @@ const status = {
     ACTIVE: "ACTIVE",
     INACTIVE: "INACTIVE",
     UNVERIFIED: "UNVERIFIED",
+    RESETPASSWORD: "RESETPASSWORD"
 };
 const currency = {
     INR: "INR",
@@ -32,6 +34,8 @@ const paymentStatus = {
     SUCCESS: "SUCCESS",
     FAILED: "FAILED",
     INPROGRESS: "INPROGRESS",
+    CANCELLED: "CANCELLED"
+
 };
 
 const requestStatus = {
@@ -46,7 +50,7 @@ const paymentMode = {
     CASH: "CASH",
     CHEQUE: "CHEQUE",
     DD: "DD",
-    OTHERS: "OTHERS",
+    OTHERS: "OTHERS"
 };
 
 const transactionType = {
@@ -72,10 +76,26 @@ const complaintStatus = {
 
 const fileTypes = {
     IMAGE: "IMAGE",
+    COMPLAINT_IMAGE: "COMPLAINT_IMAGE",
     CONSTRUCTION_FILES: "CONSTRUCTION_FILE",
     CONTRACT_FILES: "CONTRACT_FILE",
     PROFILE_ICON: "PROFILE_ICON",
     PROJECT_ICON: "PROJECT_ICON",
+};
+
+const refundStatus = {
+    PENDING: "PENDING",
+    PROCESSED: "PROCESSED",
+    FAILED: "FAILED",
+};
+
+const billingStatus = {
+    ACTIVE: "ACTIVE",
+    TRIAL: "TRIAL",
+    OVERDUE: "OVERDUE",
+    CANCELLED: "CANCELLED",
+    UNBILLED: "UNBILLED",
+
 };
 
 module.exports = {
@@ -90,4 +110,6 @@ module.exports = {
     quantityMetric: quantityMetric,
     complaintStatus: complaintStatus,
     fileTypes: fileTypes,
+    billingStatus: billingStatus,
+    refundStatus: refundStatus,
 };

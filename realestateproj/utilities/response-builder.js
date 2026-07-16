@@ -33,6 +33,28 @@ function sendErrorResponse(res, code, msg, obj) {
     return;
 }
 
+function sendErrorResponseWithStatusCode(res, code, msg, statusCode, obj) {
+    let errObj = {
+        error_code: code || 500,
+        error_msg: msg || constants.SOMETHING_WENT_WRONG,
+    };
+
+    if (obj instanceof Error) {
+        obj = { message: obj.message };
+    }
+
+    if (obj) {
+        errObj.error_obj = obj;
+    }
+
+    let response = {
+        success: false,
+        error: errObj,
+    };
+    res.status(statusCode).json(response);
+    return;
+}
+
 function sendServerError(res, err) {
     let response = {
         success: false,
@@ -49,4 +71,5 @@ module.exports = {
     sendSuccessResponse: sendSuccessResponse,
     sendErrorResponse: sendErrorResponse,
     sendServerError: sendServerError,
+    sendErrorResponseWithStatusCode: sendErrorResponseWithStatusCode
 };

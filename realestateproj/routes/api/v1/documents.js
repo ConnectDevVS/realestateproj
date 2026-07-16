@@ -21,7 +21,6 @@ router.post("/upload-image", upload.single("image"), async (req, res, next) => {
         type: req.body.type,
     };
 
-    console.log("req.body", reqBody);
 
     if (!(reqBody.type === fileTypes.PROFILE_ICON) && helper.isEmpty(reqBody.pid)) {
         return responseBuilder.sendErrorResponse(
@@ -32,7 +31,11 @@ router.post("/upload-image", upload.single("image"), async (req, res, next) => {
     }
 
     try {
+        const fileType = req.headers['x-file-type'];
+
         if (!req.file) {
+            console.log("file error::::");
+
             return responseBuilder.sendErrorResponse(
                 res,
                 ERROR.FAILED_TO_UPLOAD_IMAGE,
@@ -41,19 +44,26 @@ router.post("/upload-image", upload.single("image"), async (req, res, next) => {
         }
         let imageUrl = `/uploads`;
 
-        if (req.body.type === fileTypes.PROFILE_ICON) {
+        if (fileType === fileTypes.PROFILE_ICON) {
             imageUrl = `${imageUrl}/profileicon`;
         }
-        if (req.body.type === fileTypes.PROJECT_ICON) {
+        else if (fileType === fileTypes.PROJECT_ICON) {
             imageUrl = `${imageUrl}/projecticon`;
         }
-        if (req.body.type === fileTypes.IMAGE) {
+        else if (fileType === fileTypes.IMAGE || fileType === fileTypes.COMPLAINT_IMAGE) {
             imageUrl = `${imageUrl}/images`;
+        }
+        else if (fileType === fileTypes.CONSTRUCTION_FILES || fileType === fileTypes.CONTRACT_FILES) {
+            imageUrl = `${imageUrl}/documents`;
+        }
+        else {
+            imageUrl = `${imageUrl}/documents`;
         }
 
         imageUrl = `${imageUrl}/${req.tenantId}/${req.file.filename}`;
         console.log("imageUrl:", imageUrl);
         reqBody.url = imageUrl;
+        reqBody.type = fileType
 
         const imageData = await addProjectImageForTenant(req.tenantId, reqBody);
         console.log("image data::::", imageData);
@@ -105,9 +115,10 @@ router.post("/upload-document", upload.single("document"), async (req, res, next
                 CONSTANTS.FAILED_TO_UPLOAD_DOCUMENT,
             );
         }
-
+        const fileType = req.headers['x-file-type'];
         const imageUrl = `/uploads/documents/${req.tenantId}/${req.file.filename}`;
         reqBody.url = imageUrl;
+        reqBody.type = fileType;
         const imageData = await addProjectDocumentForTenant(req.tenantId, reqBody);
         return responseBuilder.sendSuccessResponse(res, imageData);
     } catch (err) {

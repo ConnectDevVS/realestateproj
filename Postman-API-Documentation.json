@@ -1,0 +1,1806 @@
+{
+  "info": {
+    "name": "Real Estate Project Management API",
+    "description": "Comprehensive API documentation for the Real Estate Project Management application. This API provides endpoints for managing projects, teams, stages, users, transactions, and more.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000/api/v1",
+      "type": "string"
+    },
+    {
+      "key": "x-tenant-id",
+      "value": "tenant-1",
+      "type": "string"
+    },
+    {
+      "key": "tenant_id",
+      "value": "your_tenant_id",
+      "type": "string"
+    },
+    {
+      "key": "user_id",
+      "value": "user_id_example",
+      "type": "string"
+    },
+    {
+      "key": "project_id",
+      "value": "project_id_example",
+      "type": "string"
+    },
+    {
+      "key": "team_id",
+      "value": "team_id_example",
+      "type": "string"
+    },
+    {
+      "key": "stage_id",
+      "value": "stage_id_example",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "your_access_token",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"user@example.com\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Authenticate user and receive access token"
+          },
+          "response": []
+        },
+        {
+          "name": "Set Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"user@example.com\",\n  \"password\": \"newpassword123\",\n  \"otp\": \"123456\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/set-password",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "set-password"
+              ]
+            },
+            "description": "Set or reset user password using OTP"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Get All Users",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users?username=&name=&email=&role=&includeunverified=false",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "username",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "name",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "email",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "role",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "includeunverified",
+                  "value": "false",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Retrieve all users with optional filters"
+          },
+          "response": []
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/users/{{user_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "{{user_id}}"
+              ]
+            },
+            "description": "Retrieve a specific user by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"John Doe\",\n  \"username\": \"johndoe\",\n  \"role\": \"ADMIN\",\n  \"phone_no\": \"+1234567890\",\n  \"email\": \"john@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users"
+              ]
+            },
+            "description": "Create a new user account"
+          },
+          "response": []
+        },
+        {
+          "name": "Update User",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Doe\",\n  \"username\": \"janedoe\",\n  \"phone_no\": \"+9876543210\",\n  \"email\": \"jane@example.com\",\n  \"image\": \"https://example.com/image.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/{{user_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "{{user_id}}"
+              ]
+            },
+            "description": "Update user details (name, username, phone_no, email, image). Note: role and status cannot be updated via this endpoint"
+          },
+          "response": []
+        },
+        {
+          "name": "Check User Exists",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"johndoe\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/check-user",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "check-user"
+              ]
+            },
+            "description": "Check if user exists and send OTP for password reset"
+          },
+          "response": []
+        },
+        {
+          "name": "Set User Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"id\": \"{{user_id}}\",\n  \"status\": \"ACTIVE\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/users/set-user-status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "users",
+                "set-user-status"
+              ]
+            },
+            "description": "Update user status (ACTIVE, INACTIVE, UNVERIFIED)"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Projects",
+      "item": [
+        {
+          "name": "Create Project",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Residential Complex A\",\n  \"p_status\": \"ONGOING\",\n  \"customer\": \"{{user_id}}\",\n  \"location\": \"Downtown Area\",\n  \"start_date\": \"2026-01-01\",\n  \"end_date\": \"2026-12-31\",\n  \"estimate\": 500000,\n  \"image\": \"https://example.com/project.jpg\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/projects",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects"
+              ]
+            },
+            "description": "Create a new project"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Projects",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/projects?p_status=ONGOING&title=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects"
+              ],
+              "query": [
+                {
+                  "key": "p_status",
+                  "value": "ONGOING",
+                  "disabled": true
+                },
+                {
+                  "key": "title",
+                  "value": "",
+                  "disabled": true
+                }
+              ]
+            },
+            "description": "Retrieve all projects with optional filters"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Project by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/projects/{{project_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects",
+                "{{project_id}}"
+              ]
+            },
+            "description": "Retrieve a specific project by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Projects by Customer",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/projects/customer/{{user_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects",
+                "customer",
+                "{{user_id}}"
+              ]
+            },
+            "description": "Retrieve all projects for a specific customer"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Projects by Member",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/projects/member/{{user_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects",
+                "member",
+                "{{user_id}}"
+              ]
+            },
+            "description": "Retrieve all projects where user is a team member"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Project",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Residential Complex A - Updated\",\n  \"p_status\": \"ONGOING\",\n  \"location\": \"Downtown Area\",\n  \"start_date\": \"2026-01-01\",\n  \"end_date\": \"2026-12-31\",\n  \"estimate\": 550000\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/projects/{{project_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projects",
+                "{{project_id}}"
+              ]
+            },
+            "description": "Update project details"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Teams",
+      "item": [
+        {
+          "name": "Create Team",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pid\": \"{{project_id}}\",\n  \"members\": [\"{{user_id}}\", \"user_id_2\", \"user_id_3\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/team",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "team"
+              ]
+            },
+            "description": "Create a new team for a project"
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Teams",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/team",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "team"
+              ]
+            },
+            "description": "Retrieve all teams"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Team by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/team/{{team_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "team",
+                "{{team_id}}"
+              ]
+            },
+            "description": "Retrieve a specific team by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Team by Project",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/team/project/{{project_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "team",
+                "project",
+                "{{project_id}}"
+              ]
+            },
+            "description": "Retrieve team for a specific project"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Team",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"members\": [\"{{user_id}}\", \"user_id_2\", \"user_id_3\", \"user_id_4\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/team/{{team_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "team",
+                "{{team_id}}"
+              ]
+            },
+            "description": "Update team members"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Stages",
+      "item": [
+        {
+          "name": "Create Stage",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pid\": \"{{project_id}}\",\n  \"title\": \"Foundation Work\",\n  \"start_date\": \"2026-01-15\",\n  \"end_date\": \"2026-03-15\",\n  \"estimate\": 100000,\n  \"total_cost\": 0,\n  \"invoice_gen\": 0,\n  \"expense\": 0,\n  \"s_status\": \"ONGOING\",\n  \"members\": [\"{{user_id}}\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/stage",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "stage"
+              ]
+            },
+            "description": "Create a new stage within a project. When members are added, they are automatically added to the project team if not already present."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Stages by Project",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/stage/project/{{project_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "stage",
+                "project",
+                "{{project_id}}"
+              ]
+            },
+            "description": "Retrieve all stages for a project"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Stage by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/stage/{{stage_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "stage",
+                "{{stage_id}}"
+              ]
+            },
+            "description": "Retrieve a specific stage by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Stage",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Foundation Work - Phase 1\",\n  \"start_date\": \"2026-01-15\",\n  \"end_date\": \"2026-03-20\",\n  \"estimate\": 120000,\n  \"total_cost\": 95000,\n  \"s_status\": \"ONGOING\",\n  \"members\": [\"{{user_id}}\", \"user_id_2\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/stage/{{stage_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "stage",
+                "{{stage_id}}"
+              ]
+            },
+            "description": "Update stage details. New members are automatically added to the project team if not already present."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Stage",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/stage/{{stage_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "stage",
+                "{{stage_id}}"
+              ]
+            },
+            "description": "Delete (soft delete) a stage"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Transactions",
+      "item": [
+        {
+          "name": "Create Transaction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pid\": \"{{project_id}}\",\n  \"sid\": \"{{stage_id}}\",\n  \"subcontract_id\": \"subcontract_id\",\n  \"amount\": 50000,\n  \"from\": \"Company Name\",\n  \"to\": \"Vendor Name\",\n  \"transaction_type\": \"PAYMENT\",\n  \"note\": \"Payment for materials\",\n  \"payment_status\": \"PENDING\",\n  \"payment_mode\": \"BANK_TRANSFER\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/transaction",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transaction"
+              ]
+            },
+            "description": "Create a new transaction record"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Transactions by Project",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/transaction/project/{{project_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transaction",
+                "project",
+                "{{project_id}}"
+              ]
+            },
+            "description": "Retrieve all transactions for a project"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Transactions by Stage",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/transaction/stage/{{stage_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transaction",
+                "stage",
+                "{{stage_id}}"
+              ]
+            },
+            "description": "Retrieve all transactions for a stage"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Transaction by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/transaction/{{transaction_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transaction",
+                "{{transaction_id}}"
+              ]
+            },
+            "description": "Retrieve a specific transaction by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Transaction",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pid\": \"{{project_id}}\",\n  \"sid\": \"{{stage_id}}\",\n  \"amount\": 55000,\n  \"from\": \"Company Name\",\n  \"to\": \"Vendor Name\",\n  \"transaction_type\": \"PAYMENT\",\n  \"note\": \"Payment for materials - Updated\",\n  \"payment_status\": \"COMPLETED\",\n  \"payment_mode\": \"BANK_TRANSFER\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/transaction/{{transaction_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transaction",
+                "{{transaction_id}}"
+              ]
+            },
+            "description": "Update transaction details"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Transaction",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/transaction/{{transaction_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "transaction",
+                "{{transaction_id}}"
+              ]
+            },
+            "description": "Delete a transaction"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Requests",
+      "item": [
+        {
+          "name": "Create Request",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pid\": \"{{project_id}}\",\n  \"sid\": \"{{stage_id}}\",\n  \"title\": \"Cement Procurement\",\n  \"description\": \"Need 100 bags of cement\",\n  \"requested_by\": \"{{user_id}}\",\n  \"request_status\": \"PENDING\",\n  \"quantity\": 100,\n  \"quantity_metric\": \"bags\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/requests",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "requests"
+              ]
+            },
+            "description": "Create a new request for materials/services"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Requests by Project",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/requests/project/{{project_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "requests",
+                "project",
+                "{{project_id}}"
+              ]
+            },
+            "description": "Retrieve all requests for a project"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Request by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/requests/{{request_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "requests",
+                "{{request_id}}"
+              ]
+            },
+            "description": "Retrieve a specific request by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Request",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Cement Procurement - Updated\",\n  \"description\": \"Need 120 bags of cement\",\n  \"updated_by\": \"{{user_id}}\",\n  \"request_status\": \"APPROVED\",\n  \"quantity\": 120,\n  \"quantity_metric\": \"bags\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/requests/{{request_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "requests",
+                "{{request_id}}"
+              ]
+            },
+            "description": "Update request details"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Request",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/requests/{{request_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "requests",
+                "{{request_id}}"
+              ]
+            },
+            "description": "Delete a request"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Complaints",
+      "item": [
+        {
+          "name": "Create Complaint",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pid\": \"{{project_id}}\",\n  \"sid\": \"{{stage_id}}\",\n  \"uid\": \"{{user_id}}\",\n  \"title\": \"Quality Issue\",\n  \"description\": \"Concrete quality is not as per specification\",\n  \"images\": [\"image_url_1\", \"image_url_2\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/complaints",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "complaints"
+              ]
+            },
+            "description": "Create a new complaint"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Complaints by Project",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/complaints/project/{{project_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "complaints",
+                "project",
+                "{{project_id}}"
+              ]
+            },
+            "description": "Retrieve all complaints for a project"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Complaints by Stage",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/complaints/stage/{{stage_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "complaints",
+                "stage",
+                "{{stage_id}}"
+              ]
+            },
+            "description": "Retrieve all complaints for a stage"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Complaint by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/complaints/{{complaint_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "complaints",
+                "{{complaint_id}}"
+              ]
+            },
+            "description": "Retrieve a specific complaint by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Complaint",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Quality Issue - Resolved\",\n  \"description\": \"Concrete quality issue has been resolved\",\n  \"uid\": \"{{user_id}}\",\n  \"status\": \"RESOLVED\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/complaints/{{complaint_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "complaints",
+                "{{complaint_id}}"
+              ]
+            },
+            "description": "Update complaint details"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Complaint",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/complaints/{{complaint_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "complaints",
+                "{{complaint_id}}"
+              ]
+            },
+            "description": "Delete a complaint"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Project Chat",
+      "item": [
+        {
+          "name": "Create Chat Message",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pid\": \"{{project_id}}\",\n  \"sid\": \"{{stage_id}}\",\n  \"uid\": \"{{user_id}}\",\n  \"comment\": \"Work is progressing well\",\n  \"images\": [\"image_url_1\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/projectchat",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projectchat"
+              ]
+            },
+            "description": "Create a new chat message in a project"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Chat by Project",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/projectchat/project/{{project_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projectchat",
+                "project",
+                "{{project_id}}"
+              ]
+            },
+            "description": "Retrieve all chat messages for a project"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Chat by Stage",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/projectchat/stage/{{stage_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projectchat",
+                "stage",
+                "{{stage_id}}"
+              ]
+            },
+            "description": "Retrieve all chat messages for a stage"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Chat by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/projectchat/{{chat_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projectchat",
+                "{{chat_id}}"
+              ]
+            },
+            "description": "Retrieve a specific chat message by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Chat Message",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/projectchat/{{chat_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "projectchat",
+                "{{chat_id}}"
+              ]
+            },
+            "description": "Delete a chat message"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Subcontracts",
+      "item": [
+        {
+          "name": "Create Subcontract",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pid\": \"{{project_id}}\",\n  \"sid\": \"{{stage_id}}\",\n  \"uid\": \"{{user_id}}\",\n  \"title\": \"Electrical Work\",\n  \"description\": \"Complete electrical installation for foundation stage\",\n  \"estimate\": 30000,\n  \"total_cost\": 0\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/subcontract",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "subcontract"
+              ]
+            },
+            "description": "Create a new subcontract"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Subcontracts by Project",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/subcontract/project/{{project_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "subcontract",
+                "project",
+                "{{project_id}}"
+              ]
+            },
+            "description": "Retrieve all subcontracts for a project"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Subcontracts by Stage",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/subcontract/stage/{{stage_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "subcontract",
+                "stage",
+                "{{stage_id}}"
+              ]
+            },
+            "description": "Retrieve all subcontracts for a stage"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Subcontract by ID",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/subcontract/{{subcontract_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "subcontract",
+                "{{subcontract_id}}"
+              ]
+            },
+            "description": "Retrieve a specific subcontract by ID"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Subcontract",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Electrical Work - Phase 1\",\n  \"description\": \"Complete electrical installation for foundation stage\",\n  \"estimate\": 35000,\n  \"total_cost\": 28000\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/subcontract/{{subcontract_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "subcontract",
+                "{{subcontract_id}}"
+              ]
+            },
+            "description": "Update subcontract details"
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Subcontract",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/subcontract/{{subcontract_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "subcontract",
+                "{{subcontract_id}}"
+              ]
+            },
+            "description": "Delete a subcontract"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Documents & Images",
+      "item": [
+        {
+          "name": "Upload Image",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "image",
+                  "type": "file",
+                  "src": ""
+                },
+                {
+                  "key": "pid",
+                  "value": "{{project_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "sid",
+                  "value": "{{stage_id}}",
+                  "type": "text"
+                },
+                {
+                  "key": "type",
+                  "value": "IMAGE",
+                  "type": "text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/documents/upload-image",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "documents",
+                "upload-image"
+              ]
+            },
+            "description": "Upload image for project/stage. Type can be: IMAGE, PROFILE_ICON, PROJECT_ICON, COMPLAINT_IMAGE"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Documents by Project",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/documents/project/{{project_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "documents",
+                "project",
+                "{{project_id}}"
+              ]
+            },
+            "description": "Retrieve all documents for a project"
+          },
+          "response": []
+        },
+        {
+          "name": "Get Documents by Stage",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/documents/stage/{{stage_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "documents",
+                "stage",
+                "{{stage_id}}"
+              ]
+            },
+            "description": "Retrieve all documents for a stage"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Invoices",
+      "item": [
+        {
+          "name": "Generate Invoice",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            },
+            "url": {
+              "raw": "{{base_url}}/invoices/transaction/{{transaction_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "invoices",
+                "transaction",
+                "{{transaction_id}}"
+              ]
+            },
+            "description": "Generate invoice from transaction ID. Creates a PDF invoice and saves the invoice record."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Global Configuration",
+      "item": [
+        {
+          "name": "Get Global Config",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "x-tenant-id",
+                "value": "{{x-tenant-id}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/globalconfig",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "globalconfig"
+              ]
+            },
+            "description": "Retrieve global configuration settings for roles, statuses, and constants"
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

@@ -21,29 +21,37 @@ function returnBaseDirectory(req) {
 }
 
 const storage = multer.diskStorage({
+
     destination: function (req, file, cb) {
+
         const tenantId = req.tenantId;
-        console.log("---------destination---------->");
         if (!tenantId) {
             return cb(new Error("Tenant ID missing"), null);
         }
         try {
             let tenantDir = returnBaseDirectory(req);
-            if (req.body.type === fileTypes.PROFILE_ICON) {
+            const fileType = req.headers['x-file-type'];
+            console.log("---------Type---------->", fileType);
+
+            if (fileType === fileTypes.PROFILE_ICON) {
                 tenantDir = `${tenantDir}/profileicon`;
-            }
-            if (req.body.type === fileTypes.PROJECT_ICON) {
+            } else if (fileType === fileTypes.PROJECT_ICON) {
                 tenantDir = `${tenantDir}/projecticon`;
-            }
-            if (req.body.type === fileTypes.IMAGE) {
+            } else if (fileType === fileTypes.IMAGE || fileType === fileTypes.COMPLAINT_IMAGE) {
                 tenantDir = `${tenantDir}/images`;
+            } else if (
+                fileType === fileTypes.CONSTRUCTION_FILES ||
+                fileType === fileTypes.CONTRACT_FILES
+            ) {
+                tenantDir = `${tenantDir}/documents`;
+            } else {
+                return cb(new Error(`Unknown x-file-type header: ${fileType}`), null);
             }
             tenantDir = path.join(tenantDir, tenantId);
 
             console.log("tenantDir:", tenantDir);
 
             if (!fs.existsSync(tenantDir)) {
-                console.log("---------fs---------->");
 
                 fs.mkdirSync(tenantDir, { recursive: true });
             }
@@ -54,6 +62,7 @@ const storage = multer.diskStorage({
     },
 
     filename: function (req, file, cb) {
+        console.log("---------filename---------->");
         const timestamp = new Date().toISOString().replace(/[-:.TZ]/g, "");
         const uuid = uuidv4();
         const ext = path.extname(file.originalname).toLowerCase();

@@ -1,4 +1,5 @@
 const UserModel = require("../models/user.model");
+const { BUSINESS_ACCOUNT } = require("../utilities/constants");
 const helper = require("../utilities/helper");
 const { status: userStatus } = require("../utilities/roles");
 const { roles } = require("../utilities/roles");
@@ -7,10 +8,22 @@ async function findUserWithUserName(username, tenantId) {
     return await UserModel.findOne(
         {
             username: username,
-            //role: { $ne: roles.SUPER_ADMIN },
+            role: { $nin: [roles.SUPER_ADMIN, roles.BUSINESS_ACCOUNT] },
             status: {
-                $in: [userStatus.ACTIVE, userStatus.UNVERIFIED],
+                $in: [userStatus.ACTIVE, userStatus.UNVERIFIED, userStatus.RESETPASSWORD],
             },
+        },
+        null,
+        {
+            tenantId,
+        },
+    );
+}
+async function findBusinessAccountUser(tenantId) {
+    return await UserModel.findOne(
+        {
+            username: BUSINESS_ACCOUNT,
+            role: roles.BUSINESS_ACCOUNT,
         },
         null,
         {
@@ -22,8 +35,10 @@ async function findActiveUserWithUserName(username, tenantId) {
     return await UserModel.findOne(
         {
             username: username,
-            //role: { $ne: roles.SUPER_ADMIN },
-            status: userStatus.ACTIVE,
+            role: { $nin: [roles.BUSINESS_ACCOUNT] },
+            status: {
+                $in: [userStatus.ACTIVE, userStatus.RESETPASSWORD],
+            },
         },
         null,
         {
@@ -35,7 +50,7 @@ async function findActiveUserWithUserName(username, tenantId) {
 async function findUsersForTenant(tenantId) {
     return await UserModel.find(
         {
-            role: { $ne: roles.SUPER_ADMIN },
+            role: { $nin: [roles.SUPER_ADMIN, roles.BUSINESS_ACCOUNT] },
             status: userStatus.ACTIVE,
         },
         null,
@@ -56,7 +71,14 @@ async function createUserForTenant(tenantId, userData) {
  * @returns {Promise<Array>} List of users matching filters
  */
 async function findUsersForTenantByFilters(tenantId, filters, includeunverified) {
-    const query = Object.fromEntries(Object.entries(filters).filter(([_, value]) => value != null));
+    const query = Object.fromEntries(Object.entries(filters).filter(([key, value]) => value != null && key !== 'role'));
+    const excludedRoles = [roles.SUPER_ADMIN, roles.BUSINESS_ACCOUNT];
+    if (filters.role != null) {
+        const allowedRoles = [].concat(filters.role).filter(r => !excludedRoles.includes(r));
+        query.role = { $in: allowedRoles };
+    } else {
+        query.role = { $nin: excludedRoles };
+    }
     query.tenantId = tenantId;
     if (includeunverified) {
         query.status = {
@@ -81,9 +103,39 @@ async function findUserById(tenantId, userId) {
         return false;
     }
 
-    const user = await UserModel.findOne({ _id: userId, status: userStatus.ACTIVE }, null, {
-        tenantId,
-    });
+    const user = await UserModel.findOne(
+        {
+            _id: userId,
+            role: { $nin: [roles.SUPER_ADMIN, roles.BUSINESS_ACCOUNT] },
+            status: userStatus.ACTIVE,
+        },
+        null,
+        { tenantId },
+    );
+
+    return user;
+}
+/**
+ * Finds a single unverified user by their ObjectId
+ *
+ * @param {String} tenantId - The tenant ID
+ * @param {String} userId - The MongoDB ObjectId of the user
+ * @returns {Promise<Object|null>} The user document or null if not found
+ */
+async function findUnverifiedUserById(tenantId, userId) {
+    if (!helper.isValidMongoId(userId)) {
+        return false;
+    }
+
+    const user = await UserModel.findOne(
+        {
+            _id: userId,
+            role: { $nin: [roles.SUPER_ADMIN, roles.BUSINESS_ACCOUNT] },
+            status: userStatus.UNVERIFIED,
+        },
+        null,
+        { tenantId },
+    );
 
     return user;
 }
@@ -117,4 +169,6 @@ module.exports = {
     findUsersForTenantByFilters,
     findUserById,
     findUserAndUpdateById,
+    findUnverifiedUserById,
+    findBusinessAccountUser
 };
