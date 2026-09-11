@@ -72,4 +72,5 @@ module.exports = Object.freeze({
     FAILED_TO_REFUND_PAYMENT: "Failed to process refund",
     FAILED_TO_FETCH_PAYMENT: "Failed to fetch payment details",
     RAZORPAY_TRANSACTION_CANNOT_EDIT: "Payment cannot be edited",
+    FAILED_TO_FETCH_ANALYTICS: "Failed to fetch analytics",
 });

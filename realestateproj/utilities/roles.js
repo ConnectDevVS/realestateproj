@@ -7,6 +7,7 @@ const roles = {
     SUB_CONTRACTOR: "SUB_CONTRACTOR",
     PURCHASE_MANAGER: "PURCHASE_MANAGER",
     CUSTOMER: "CUSTOMER",
+    VIEWER: "VIEWER"
 };
 
 const status = {
