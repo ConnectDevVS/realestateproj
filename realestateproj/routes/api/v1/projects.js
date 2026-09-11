@@ -18,6 +18,7 @@ router.post("/", async (req, res, next) => {
     let reqBody = {
         title: req.body.title,
         p_status: req.body.p_status,
+        project_type: req.body.project_type,
         customer: req.body.customer,
         location: req.body.location,
         start_date: req.body.start_date,

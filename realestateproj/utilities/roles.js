@@ -26,6 +26,11 @@ const projectStatus = {
     ABANDONED: "ABANDONED",
 };
 
+const projectType = {
+    NORMAL: "NORMAL",
+    BMS: "BMS",
+};
+
 const scope = {
     USER: "USER",
     PROPERTY: "PROPERTY",
@@ -103,6 +108,7 @@ module.exports = {
     roles: roles,
     status: status,
     projectStatus: projectStatus,
+    projectType: projectType,
     currency: currency,
     paymentStatus: paymentStatus,
     requestStatus: requestStatus,
