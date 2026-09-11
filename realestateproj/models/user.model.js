@@ -22,6 +22,7 @@ const UserSchema = createBaseSchema(
                 roles.SUB_CONTRACTOR,
                 roles.PURCHASE_MANAGER,
                 roles.CUSTOMER,
+                roles.VIEWER,
             ],
             default: roles.ADMIN,
         },

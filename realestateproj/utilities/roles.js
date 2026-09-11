@@ -7,6 +7,7 @@ const roles = {
     SUB_CONTRACTOR: "SUB_CONTRACTOR",
     PURCHASE_MANAGER: "PURCHASE_MANAGER",
     CUSTOMER: "CUSTOMER",
+    VIEWER: "VIEWER"
 };
 
 const status = {
@@ -23,6 +24,11 @@ const projectStatus = {
     ONHOLD: "ONHOLD",
     COMPLETED: "COMPLETED",
     ABANDONED: "ABANDONED",
+};
+
+const projectType = {
+    NORMAL: "NORMAL",
+    BMS: "BMS",
 };
 
 const scope = {
@@ -102,6 +108,7 @@ module.exports = {
     roles: roles,
     status: status,
     projectStatus: projectStatus,
+    projectType: projectType,
     currency: currency,
     paymentStatus: paymentStatus,
     requestStatus: requestStatus,

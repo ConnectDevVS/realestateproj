@@ -11,7 +11,8 @@ async function findProjectWithTitle(title, tenantId) {
     return await ProjectModel.findOne({ title: title }, null, { tenantId });
 }
 async function updateProjectById(reqBody, tenantId) {
-    const { id, ...fields } = reqBody;
+    // project_type is set only at creation and must never be changed via update
+    const { id, project_type, ...fields } = reqBody;
     // Remove null or undefined fields
     const updateData = Object.fromEntries(
         Object.entries(fields).filter(([_, value]) => value != null),

@@ -57,6 +57,7 @@ async function generateInvoicePdf({ invoice, tenantId, invoice_no, tenant }) {
 
             const doc = new PDFDocument({ size: "A4", margin: M });
             const stream = fs.createWriteStream(filePath);
+            doc.on("error", reject);
             doc.pipe(stream);
 
             const PW = doc.page.width;

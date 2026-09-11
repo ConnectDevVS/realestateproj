@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const { createBaseSchema } = require("./base.model");
 const tenantPlugin = require("../plugins/tenant.plugin");
 const hideSecureFieldsPlugin = require("../plugins/hidesecurefields.plugin");
-const { projectStatus, currency } = require("../utilities/roles");
+const { projectStatus, projectType, currency } = require("../utilities/roles");
 const { status } = require("../utilities/roles");
 
 const ProjectSchema = createBaseSchema(
@@ -18,6 +18,11 @@ const ProjectSchema = createBaseSchema(
                 projectStatus.ABANDONED,
             ],
             default: projectStatus.ONGOING,
+        },
+        project_type: {
+            type: String,
+            enum: [projectType.NORMAL, projectType.BMS],
+            default: projectType.NORMAL,
         },
         customer: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
         location: { type: String, required: true },

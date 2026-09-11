@@ -28,6 +28,7 @@ var v1TenantRouter = require("./routes/api/v1/tenant");
 var v1ShowcaseCatalogRouter = require("./routes/api/v1/showcase-catalog");
 var v1ContactUsRouter = require("./routes/api/v1/contactus");
 var v1PaymentRouter = require("./routes/api/v1/payment");
+var v1AnalyticsRouter = require("./routes/api/v1/analytics");
 
 /*************ROUTES FOR VERSION 1 ************/
 
@@ -71,6 +72,7 @@ app.use("/api/v1/tenants", v1TenantRouter);
 app.use("/api/v1/showcase-catalog", v1ShowcaseCatalogRouter);
 app.use("/api/v1/contactus", v1ContactUsRouter);
 app.use("/api/v1/payment", v1PaymentRouter);
+app.use("/api/v1/analytics", v1AnalyticsRouter);
 
 /*********************************************/
 
